@@ -1,0 +1,11 @@
+{
+  "name": "jfk-rag",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"python3 app.py\" \"cd frontend && npm run dev\"",
+    "install-all": "pip install -r requirements.txt && cd frontend && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
