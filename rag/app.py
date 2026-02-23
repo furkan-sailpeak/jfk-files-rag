@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import psycopg2
 from flask import Flask, request, jsonify, redirect, send_from_directory
@@ -43,6 +44,69 @@ def chat():
     conn = get_db_connection()
     cur = conn.cursor()
     try:
+        # Step 0: Check if query contains a document ID (e.g., 104-10433-10209)
+        doc_id_match = re.search(r'\b(\d{3}-\d{5}-\d{5})\b', query)
+        if doc_id_match:
+            doc_id = doc_id_match.group(1)
+            filename = f"{doc_id}.pdf"
+            print(f"Document ID detected: {doc_id}")
+
+            cur.execute(
+                "SELECT content, filename, page_number FROM jfk_pages WHERE filename = %s ORDER BY page_number",
+                (filename,)
+            )
+            doc_results = cur.fetchall()
+
+            if doc_results:
+                # Build context from all pages of this document
+                context_parts = []
+                for idx, r in enumerate(doc_results, 1):
+                    context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{r[0]}")
+                context = "\n\n".join(context_parts)
+
+                doc_instructions = f"""You are a senior Research Historian. The user is asking about a specific declassified document: {filename}.
+                All pages of this document have been retrieved below. Answer the user's question based SOLELY on this document's content.
+
+                STRICT SOURCE RULES:
+                - You may ONLY state facts explicitly written in this document.
+                - Do NOT use outside knowledge.
+                - If the document doesn't contain the requested information, say so.
+
+                IN-TEXT CITATION RULES:
+                - Cite page numbers using bracket notation: [1], [2], etc.
+                - The numbers correspond to the page entries below.
+                - Every factual sentence must have a citation.
+
+                FORMATTING:
+                - Use markdown: headers (##), **bold**, bullet points.
+                - Start with a brief overview of the document, then address the user's specific question.
+                """
+
+                messages_list = [{"role": "system", "content": doc_instructions}]
+                for msg in history[-20:]:
+                    role = msg.get('role', 'user')
+                    if role in ('user', 'assistant'):
+                        messages_list.append({"role": role, "content": msg['content']})
+                messages_list.append({"role": "user", "content": f"DOCUMENT PAGES:\n{context}\n\nUSER INQUIRY: {query}"})
+
+                completion = client.chat.completions.create(
+                    model=MODEL,
+                    messages=messages_list,
+                    temperature=0.3,
+                )
+
+                return jsonify({
+                    "answer": completion.choices[0].message.content,
+                    "sources": [{"filename": r[1], "page": r[2]} for r in doc_results],
+                    "query_type": "document"
+                })
+            else:
+                return jsonify({
+                    "answer": f"Document **{filename}** was not found in the archive. Please verify the document ID.",
+                    "sources": [],
+                    "query_type": "document"
+                })
+
         # Step 1: Analyze query intent and extract keywords
         analysis_prompt = f"""Analyze this user query for a RAG system searching JFK files: '{query}'
 

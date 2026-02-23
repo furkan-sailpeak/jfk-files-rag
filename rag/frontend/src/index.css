@@ -333,6 +333,100 @@ input::placeholder {
   text-decoration: underline;
 }
 
+/* Mobile toggle button */
+.mobile-toggle {
+  display: none;
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 40;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  .mobile-toggle {
+    display: flex;
+  }
+
+  .chat-history {
+    padding: 3.5rem 1rem 1rem 1rem;
+  }
+
+  .input-container {
+    padding: 1rem;
+  }
+
+  .message {
+    max-width: 95%;
+    padding: 1rem;
+  }
+
+  .welcome-screen {
+    padding: 0 1rem;
+  }
+
+  .welcome-screen h2 {
+    font-size: 0.8rem;
+  }
+
+  .msg-content h2, .msg-content h3 {
+    font-size: 0.8rem;
+  }
+
+  .msg-content table {
+    font-size: 0.7rem;
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;

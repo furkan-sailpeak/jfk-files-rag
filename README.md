@@ -21,6 +21,52 @@ A Retrieval-Augmented Generation (RAG) system for querying declassified JFK assa
 
 The system searches a PostgreSQL database of OCR-processed JFK document pages, retrieves relevant context, and generates structured research reports using an LLM. Source documents link directly to the National Archives via Google Cloud Storage.
 
+### Backend Flow (`app.py`)
+
+```
+User Query
+    │
+    ▼
+┌─────────────────────────┐
+│  Document ID Detection   │──── regex match (e.g., 104-10433-10209)
+│  (e.g., 104-XXXXX-XXXXX)│     │
+└─────────┬───────────────┘     ▼
+          │ no match       ┌──────────────────┐
+          ▼                │ Retrieve all     │
+┌─────────────────────┐    │ pages of that    │
+│  Query Analysis     │    │ specific document│
+│  (LLM: keyword      │    └────────┬─────────┘
+│   extraction + type) │             │
+└─────────┬───────────┘             │
+          ▼                         │
+┌─────────────────────┐             │
+│  PostgreSQL Search   │             │
+│  (ILIKE + ranking)   │             │
+│  Supabase / jfk_pages│             │
+└─────────┬───────────┘             │
+          ▼                         ▼
+┌─────────────────────────────────────┐
+│  Build Numbered Context             │
+│  [1] Source: file.pdf, Page N       │
+│  [2] Source: file.pdf, Page M       │
+└─────────────────┬───────────────────┘
+                  ▼
+┌─────────────────────────────────────┐
+│  LLM Generation (Groq/LLaMA 3.3)   │
+│  System prompt + conversation       │
+│  history + retrieved documents      │
+│  → Structured report with [N] cites │
+└─────────────────┬───────────────────┘
+                  ▼
+┌─────────────────────────────────────┐
+│  Response to Frontend               │
+│  { answer, sources[], query_type }  │
+│                                     │
+│  Frontend: [N] → clickable links    │
+│  to NARA PDFs (GCS) at exact page   │
+└─────────────────────────────────────┘
+```
+
 ## Setup
 
 ### Prerequisites

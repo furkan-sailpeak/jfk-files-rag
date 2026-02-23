@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import axios from 'axios';
-import { Send, Users, FileText, Search } from 'lucide-react';
+import { Send, Users, FileText, Search, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -35,6 +35,7 @@ function App() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -101,7 +102,11 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="sidebar">
+      <button className="mobile-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+      </button>
+      <div className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`} onClick={() => setSidebarOpen(false)} />
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="logo">
           JFK Files Research System
           <span className="logo-sub">Declassified Document Archive</span>
