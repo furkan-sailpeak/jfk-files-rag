@@ -110,9 +110,13 @@ def chat():
         # Step 1: Analyze query intent and extract keywords
         analysis_prompt = f"""Analyze this user query for a RAG system searching JFK files: '{query}'
 
-        Return a valid JSON object with two keys:
-        1. "keywords": A list of 1-3 most important search terms to find relevant documents.
-        2. "type": "simple" (if asking for a specific name, date, fact, definition, or single document verification) or "research" (if asking for analysis, summary, relationships, or details on a broad topic).
+        Return a valid JSON object with three keys:
+        1. "keywords": A list of 1-3 most important search terms to find relevant documents. Empty list if not a search query.
+        2. "type": "simple", "research", or "conversational".
+           - "conversational" = greetings, small talk, thanks, or questions about the system itself (not about JFK documents).
+           - "simple" = asking for a specific name, date, fact, or single document verification.
+           - "research" = asking for analysis, summary, relationships, or details on a broad topic.
+        3. "needs_retrieval": true if the query requires searching documents, false if it's just conversational.
 
         Reply ONLY with the JSON."""
 
@@ -126,10 +130,40 @@ def chat():
             analysis_data = json.loads(analysis_res.choices[0].message.content)
             search_terms = analysis_data.get('keywords', query.split())
             query_type = analysis_data.get('type', 'research')
+            needs_retrieval = analysis_data.get('needs_retrieval', True)
         except Exception as e:
             print(f"Query keyword analysis failed: {e}")
             search_terms = query.split()
             query_type = 'research'
+            needs_retrieval = True
+
+        # Handle conversational queries (greetings, thanks, etc.) without DB retrieval
+        if not needs_retrieval or query_type == "conversational":
+            print(f"Query type: CONVERSATIONAL — skipping retrieval")
+            conv_messages = [{"role": "system", "content": """You are the JFK Files Research System, a research assistant for querying declassified JFK assassination documents.
+            Respond naturally to greetings and conversational messages. Be friendly but brief.
+            If the user seems to want information, remind them they can ask about people, events, organizations, or specific document IDs (e.g., 104-10433-10209) from the JFK files."""}]
+            for msg in history[-20:]:
+                role = msg.get('role', 'user')
+                if role in ('user', 'assistant'):
+                    conv_messages.append({"role": role, "content": msg['content']})
+            conv_messages.append({"role": "user", "content": query})
+
+            completion = client.chat.completions.create(
+                model=MODEL,
+                messages=conv_messages,
+                temperature=0.5,
+            )
+            return jsonify({
+                "answer": completion.choices[0].message.content,
+                "sources": [],
+                "query_type": "conversational"
+            })
+
+        # Filter out empty strings
+        search_terms = [t for t in search_terms if t.strip()]
+        if not search_terms:
+            search_terms = [query]
 
         # Configure strategy based on query type
         if query_type == "simple":
