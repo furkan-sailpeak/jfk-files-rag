@@ -24,7 +24,10 @@ NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
 client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 # Load prompts from files (falls back to inline if file not found)
-PROMPTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts')
+# Check both: rag/prompts/ (Docker/local) and project-root/prompts/ (dev)
+_prompts_local = os.path.join(os.path.dirname(__file__), 'prompts')
+_prompts_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts')
+PROMPTS_DIR = _prompts_local if os.path.isdir(_prompts_local) else _prompts_root
 
 
 def load_prompt(filename, fallback=""):
@@ -415,7 +418,10 @@ ARCHIVE METADATA:
 
 USER INQUIRY: {query}
 
-Remember: respond directly with your answer. No reasoning steps, no LaTeX, no "Step 1/2/3"."""
+IMPORTANT REMINDERS:
+- You MUST cite sources using [1], [2], etc. for EVERY factual claim. A response without any citations is a failure.
+- ONLY use information from the RETRIEVED DOCUMENTS above. Do not use your own knowledge.
+- No reasoning steps, no LaTeX, no "Step 1/2/3"."""
 
         # Build messages with conversation history
         messages = [{"role": "system", "content": system_prompt}]
@@ -447,6 +453,36 @@ Remember: respond directly with your answer. No reasoning steps, no LaTeX, no "S
         answer_text = re.sub(r'\n{3,}', '\n\n', answer_text).strip()
 
         all_sources = [{"filename": r[1], "page": r[2]} for r in final_results]
+
+        # Safety net: if LLM produced no citations but we have sources, retry once
+        has_citations = bool(re.search(r'\[\d+\]', answer_text))
+        if not has_citations and final_results:
+            print("WARNING: No citations in answer, retrying with stricter prompt")
+            retry_prompt = f"""The previous answer had NO citations. This is unacceptable.
+
+RETRIEVED DOCUMENTS:
+{context}
+
+USER INQUIRY: {query}
+
+You MUST rewrite your answer using ONLY the documents above. Every single factual sentence MUST end with a citation like [1], [2], etc. If the documents don't contain relevant info, say so. Do NOT use your own knowledge."""
+
+            retry_messages = [{"role": "system", "content": system_prompt}]
+            retry_messages.append({"role": "user", "content": retry_prompt})
+            retry_completion = client.chat.completions.create(
+                model=MODEL,
+                messages=retry_messages,
+                temperature=0.2,
+            )
+            retry_text = retry_completion.choices[0].message.content
+            # Use retry if it has citations, otherwise keep original
+            if re.search(r'\[\d+\]', retry_text):
+                answer_text = retry_text
+                # Re-apply post-processing
+                answer_text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', answer_text)
+                answer_text = re.sub(r'(?m)^.*The final answer is:?.*$', '', answer_text)
+                answer_text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', answer_text)
+                answer_text = re.sub(r'\n{3,}', '\n\n', answer_text).strip()
 
         # Remap citations to only include actually-cited sources
         # Find which [N] indices appear in the answer

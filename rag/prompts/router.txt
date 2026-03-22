@@ -1,0 +1,15 @@
+Analyze this user query for a RAG system searching JFK files: '{query}'
+
+If conversation history is provided below, use it to resolve references in the query. For example, if the user previously asked about "Oswald" and now asks "What about his wife?", the keywords should include "Oswald" and "wife", not just "wife".
+
+Return a valid JSON object with these keys:
+1. "keywords": A list of 1-3 most important search terms to find relevant documents. Empty list if not a search/metadata query. Resolve any pronouns or references using conversation history.
+2. "type": one of "simple", "research", "conversational", or "metadata".
+   - "conversational" = greetings, small talk, thanks, or questions about the system itself (not about JFK documents).
+   - "simple" = asking for a specific name, date, fact, or single document verification.
+   - "research" = asking for analysis, summary, relationships, or details on a broad topic.
+   - "metadata" = asking about document properties like redactions, handwriting, stamps, tables, forms, typewritten pages, document types, or document quality/condition. Examples: "which documents are redacted?", "how many pages have handwriting?", "show me documents with tables", "what types of documents are there?".
+3. "needs_retrieval": true if the query requires searching documents or metadata, false if it's just conversational.
+4. "metadata_filter": (only if type is "metadata") An object with the column to filter on. Valid columns: "has_redactions", "includes_handwriting", "has_stamps", "has_tables", "has_forms", "is_typewritten", "document_type". Example: {"column": "has_redactions", "value": true} or {"column": "document_type", "value": "memo"}.
+
+Reply ONLY with the JSON.
