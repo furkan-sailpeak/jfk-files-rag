@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Send, Users, FileText, Search, Menu, X } from 'lucide-react';
+import { Send, Users, FileText, Search, Menu, X, Plus, Download, MessageSquare, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -31,13 +31,87 @@ function injectCitationLinks(text, sources) {
   });
 }
 
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function chatTitle(messages) {
+  const first = messages.find(m => m.role === 'user');
+  if (!first) return 'New Chat';
+  const text = first.content;
+  return text.length > 40 ? text.slice(0, 40) + '...' : text;
+}
+
+function downloadChat(messages) {
+  let md = '# JFK Files Research — Chat Export\n\n';
+  md += `_Exported: ${new Date().toLocaleString()}_\n\n---\n\n`;
+
+  for (const msg of messages) {
+    if (msg.role === 'user') {
+      md += `## Q: ${msg.content}\n\n`;
+    } else {
+      md += `${msg.content}\n\n`;
+      if (msg.sources && msg.sources.length > 0) {
+        md += '**Sources:**\n';
+        msg.sources.forEach((s, i) => {
+          md += `- [${i + 1}] ${s.filename}, Page ${s.page}\n`;
+        });
+        md += '\n';
+      }
+      md += '---\n\n';
+    }
+  }
+
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `jfk-research-${new Date().toISOString().slice(0, 10)}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [chats, setChats] = useState([{ id: generateId(), messages: [] }]);
+  const [activeChatId, setActiveChatId] = useState(chats[0].id);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const chatEndRef = useRef(null);
+
+  const activeChat = chats.find(c => c.id === activeChatId) || chats[0];
+  const messages = activeChat.messages;
+
+  const setMessages = (updater) => {
+    setChats(prev => prev.map(c =>
+      c.id === activeChatId
+        ? { ...c, messages: typeof updater === 'function' ? updater(c.messages) : updater }
+        : c
+    ));
+  };
+
+  const createNewChat = () => {
+    const newChat = { id: generateId(), messages: [] };
+    setChats(prev => [newChat, ...prev]);
+    setActiveChatId(newChat.id);
+    setSidebarOpen(false);
+  };
+
+  const deleteChat = (id, e) => {
+    e.stopPropagation();
+    if (chats.length === 1) {
+      // Last chat — just clear it
+      setChats([{ id: generateId(), messages: [] }]);
+      setActiveChatId(chats[0]?.id);
+      return;
+    }
+    const remaining = chats.filter(c => c.id !== id);
+    setChats(remaining);
+    if (activeChatId === id) {
+      setActiveChatId(remaining[0].id);
+    }
+  };
 
   useEffect(() => {
     fetchStats();
@@ -130,13 +204,43 @@ function App() {
               <span className="stat-value">{stats?.total_pages?.toLocaleString() || '---'}</span>
               <span className="stat-label">Pages</span>
             </div>
+          </div>
+        </div>
 
+        {/* Chat list */}
+        <div className="chats-section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+            <h3 style={{ color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Chats</h3>
+            <button className="tool-btn" onClick={createNewChat} style={{ padding: '0.3rem 0.5rem' }}>
+              <Plus size={12} /> New
+            </button>
+          </div>
+          <div className="chat-list">
+            {chats.map(chat => (
+              <div
+                key={chat.id}
+                className={`chat-list-item ${chat.id === activeChatId ? 'active' : ''}`}
+                onClick={() => { setActiveChatId(chat.id); setSidebarOpen(false); }}
+              >
+                <MessageSquare size={12} />
+                <span className="chat-list-title">{chatTitle(chat.messages)}</span>
+                <button
+                  className="chat-delete-btn"
+                  onClick={(e) => deleteChat(chat.id, e)}
+                >
+                  <Trash2 size={11} />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
         <div className="tools-section" style={{ marginTop: 'auto' }}>
-          <h3 style={{ marginBottom: '0.75rem', color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Analysis Tools</h3>
+          <h3 style={{ marginBottom: '0.75rem', color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Tools</h3>
           <div style={{ display: 'grid', gap: '0.5rem' }}>
+            <button className="tool-btn" onClick={() => downloadChat(messages)} disabled={messages.length === 0}>
+              <Download size={14} /> Export Chat
+            </button>
             <button className="tool-btn" onClick={() => analyzeContent(messages[messages.length - 1]?.content, 'names')} disabled={messages.length === 0}>
               <Users size={14} /> Extract Names
             </button>

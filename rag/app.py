@@ -104,12 +104,10 @@ def chat():
 
                 doc_instructions = load_prompt('document-agent.txt').replace('{filename}', filename)
 
-                messages_list = [{"role": "system", "content": doc_instructions}]
-                for msg in history[-20:]:
-                    role = msg.get('role', 'user')
-                    if role in ('user', 'assistant'):
-                        messages_list.append({"role": role, "content": msg['content']})
-                messages_list.append({"role": "user", "content": f"DOCUMENT PAGES:\n{context}\n\nUSER INQUIRY: {query}"})
+                messages_list = [
+                    {"role": "system", "content": doc_instructions},
+                    {"role": "user", "content": f"DOCUMENT PAGES:\n{context}\n\nUSER INQUIRY: {query}"},
+                ]
 
                 completion = client.chat.completions.create(
                     model=MODEL,
@@ -423,16 +421,13 @@ IMPORTANT REMINDERS:
 - ONLY use information from the RETRIEVED DOCUMENTS above. Do not use your own knowledge.
 - No reasoning steps, no LaTeX, no "Step 1/2/3"."""
 
-        # Build messages with conversation history
-        messages = [{"role": "system", "content": system_prompt}]
-
-        # Include recent history (last 10 exchanges to stay within token limits)
-        for msg in history[-20:]:
-            role = msg.get('role', 'user')
-            if role in ('user', 'assistant'):
-                messages.append({"role": role, "content": msg['content']})
-
-        messages.append({"role": "user", "content": user_prompt})
+        # Build messages — no conversation history for the RAG agent
+        # History is only used by the Router Agent to resolve follow-up queries.
+        # Including it here causes the LLM to mix in data from previous answers.
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
 
         completion = client.chat.completions.create(
             model=MODEL,

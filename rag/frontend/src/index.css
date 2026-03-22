@@ -343,6 +343,63 @@ input::placeholder {
   margin-bottom: 1.5rem;
 }
 
+/* Chat list */
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.chat-list-item:hover {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+.chat-list-item.active {
+  background: var(--bg-card);
+  border-color: var(--accent);
+  color: var(--text-main);
+}
+
+.chat-list-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.chat-list-item:hover .chat-delete-btn {
+  opacity: 1;
+}
+
+.chat-delete-btn:hover {
+  color: var(--red-stamp);
+}
+
 /* In-text citation links */
 .msg-content a {
   color: var(--red-stamp);
