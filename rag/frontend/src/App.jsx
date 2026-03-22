@@ -11,7 +11,7 @@ const NARA_BASE_URL = 'https://storage.googleapis.com/jfkweb-prod';
 
 function getNaraUrl(filename) {
   const fileId = filename.replace(/\.pdf$/i, '');
-  return `${NARA_BASE_URL}/${fileId}.pdf`;
+  return `${NARA_BASE_URL}/${encodeURIComponent(fileId)}.pdf`;
 }
 
 // Inject clickable citation links into markdown text
@@ -24,7 +24,8 @@ function injectCitationLinks(text, sources) {
     if (idx >= 0 && idx < sources.length) {
       const s = sources[idx];
       const url = getNaraUrl(s.filename) + `#page=${s.page}`;
-      return `[\\[${num}\\]](${url} "${s.filename}, p. ${s.page}")`;
+      const title = s.filename.replace(/"/g, '\\"');
+      return `[\\[${num}\\]](${url} "${title}, p. ${s.page}")`;
     }
     return match;
   });
@@ -130,27 +131,6 @@ function App() {
               <span className="stat-label">Pages</span>
             </div>
 
-            <div style={{ display: 'grid', gap: '0.5rem' }}>
-              <div className="mini-stat">
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span className="stat-label">Docs w/ Content</span>
-                  <span style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>{stats?.doc_content_pct}%</span>
-                </div>
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: `${stats?.doc_content_pct}%` }}></div>
-                </div>
-              </div>
-
-              <div className="mini-stat">
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span className="stat-label">Pages w/ Content</span>
-                  <span style={{ color: 'var(--accent)', fontSize: '0.7rem' }}>{stats?.page_content_pct}%</span>
-                </div>
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: `${stats?.page_content_pct}%` }}></div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
