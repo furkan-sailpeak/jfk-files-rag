@@ -185,6 +185,7 @@ def create_database():
     cur.execute("CREATE INDEX idx_jfk_pages_file_id ON jfk_pages (file_id)")
     cur.execute("CREATE INDEX idx_jfk_pages_document_type ON jfk_pages (document_type)")
     cur.execute("CREATE INDEX idx_jfk_pages_file_page ON jfk_pages (file_id, page_number)")
+    cur.execute("CREATE INDEX idx_jfk_pages_content_fts ON jfk_pages USING GIN (to_tsvector('english', content))")
     conn.commit()
 
     # Verify

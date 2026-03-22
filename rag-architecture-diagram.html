@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Agentic RAG Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #fff; font-family: 'Inter', sans-serif; color: #222; display: flex; justify-content: center; }
+
+  .page {
+    width: 1280px;
+    min-height: 720px;
+    padding: 40px 60px 32px;
+  }
+
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .thesis-sub { font-size: 11.5px; color: #888; font-style: italic; margin-bottom: 22px; }
+
+  .box {
+    border-radius: 10px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .box-label { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .box-sub { color: #666; font-size: 11px; }
+  .mono {
+    font-family: 'SF Mono','Consolas',monospace;
+    font-size: 9.5px;
+    background: rgba(0,0,0,0.05);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #555;
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  .agent { background: #FDF6E3; border: 1.5px solid #E8D9A8; padding: 12px 18px; }
+  .neutral { background: #fff; border: 1.5px solid #D0D0D0; padding: 10px 18px; }
+  .retrieval { background: #EEF6EE; border: 1.5px dashed #B8D4B8; padding: 12px 18px; }
+  .response { background: #EEF6EE; border: 1.5px solid #B8D4B8; padding: 10px 16px; }
+
+  .ic {
+    display: inline-block; width: 20px; height: 20px;
+    border: 1.5px solid #C0C0C0; border-radius: 4px;
+    background: #fff; vertical-align: middle; margin-right: 4px;
+    position: relative;
+  }
+  .ic::before {
+    content: ''; position: absolute; top: 4px; left: 3px;
+    width: 4px; height: 4px; background: #888; border-radius: 50%;
+    box-shadow: 7px 0 0 #888;
+  }
+  .ic::after {
+    content: ''; position: absolute; bottom: 2px; left: 4px;
+    width: 9px; height: 3px; border: 1.5px solid #888;
+    border-top: none; border-radius: 0 0 3px 3px;
+  }
+
+  .col { display: flex; flex-direction: column; align-items: center; }
+  .row { display: flex; align-items: flex-start; justify-content: center; }
+
+  .arrow-down { display: flex; flex-direction: column; align-items: center; }
+  .arrow-down .stem { width: 1.2px; background: #aaa; }
+  .arrow-down .head { width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #aaa; }
+
+  .arrow-right { display: flex; align-items: center; }
+  .arrow-right .stem { height: 1.2px; background: #aaa; }
+  .arrow-right .head { width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 5px solid #aaa; }
+
+  .branch-bar { height: 1.2px; background: #aaa; }
+  .branch-label { font-size: 10.5px; font-weight: 600; color: #222; margin-bottom: 3px; }
+
+  .bracket {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 4px 0 4px 12px;
+    border-left: 1.5px solid #D0D0D0;
+    margin-left: 10px;
+  }
+  .bracket-row { font-size: 11px; display: flex; align-items: center; gap: 4px; position: relative; }
+  .bracket-row::before { content: ''; position: absolute; left: -12px; width: 12px; height: 1px; background: #D0D0D0; }
+  .bracket-row strong { font-weight: 600; }
+  .bracket-row .dim { color: #999; font-size: 10px; }
+
+  .decision-label { font-size: 10.5px; color: #888; font-weight: 500; margin-left: 10px; margin-bottom: 1px; }
+
+  .hlist { font-size: 10px; color: #666; margin-top: 6px; }
+  .hlist div { margin-bottom: 2px; padding-left: 10px; position: relative; }
+  .hlist div::before { content: ''; position: absolute; left: 0; top: 6px; width: 7px; height: 1px; background: #C0C0C0; }
+
+  .note {
+    border: 1px dashed #D4CDA0; background: #FDFBF3; border-radius: 6px;
+    padding: 8px 12px; font-size: 10px; line-height: 1.45; color: #666; max-width: 220px;
+  }
+  .note b { color: #333; font-size: 10.5px; }
+
+  .footer {
+    margin-top: 16px; font-size: 10px; color: #aaa;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid #eee; padding-top: 6px;
+  }
+
+  /* Type details table */
+  .type-detail {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .type-detail td { padding: 1px 6px 1px 0; vertical-align: top; }
+  .type-detail td:first-child { font-weight: 500; color: #555; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>The Agentic RAG Flow</h1>
+  <div class="thesis-sub">Topic Modeling and Thematic Analysis of JFK Assassination Files Using NLP</div>
+
+  <div class="col">
+    <!-- User Question + Conversation Memory side by side -->
+    <div class="row" style="gap: 16px; align-items: center;">
+      <div class="box neutral" style="min-width: 160px;">
+        <div class="box-label">User Question</div>
+      </div>
+      <div style="font-size: 10.5px; color: #888;">+</div>
+      <div class="box neutral" style="min-width: 180px; border-style: dashed;">
+        <div class="box-label" style="font-size: 11.5px;">Conversation History</div>
+        <div class="box-sub" style="font-size: 10px;">Last 10 exchanges stored in memory.<br>Enables follow-up questions and<br>pronoun resolution ("his", "that doc").</div>
+      </div>
+    </div>
+
+    <div class="arrow-down"><div class="stem" style="height: 14px;"></div><div class="head"></div></div>
+
+    <!-- Router Agent + Bracket -->
+    <div class="row" style="gap: 0; align-items: center;">
+      <div class="box agent" style="min-width: 240px;">
+        <div class="box-label"><span class="ic"></span> Router Agent</div>
+        <div class="box-sub">Analyzes query intent, extracts search keywords.<br>Uses conversation history to resolve references.</div>
+        <div class="mono">LLaMA 3.3 70B, t=0, JSON mode</div>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div class="decision-label">Makes Decision</div>
+        <div class="bracket">
+          <div class="bracket-row"><strong>Query Type</strong> <span class="dim">(conversational / simple / research / metadata)</span></div>
+          <div class="bracket-row"><strong>Keywords</strong> <span class="dim">(1-3 optimized search terms)</span></div>
+          <div class="bracket-row"><strong>Needs Retrieval</strong> <span class="dim">(True / False)</span></div>
+          <div class="bracket-row"><strong>Metadata Filter</strong> <span class="dim">(column + value, if metadata query)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retrieval Query Trigger -->
+    <div class="arrow-down"><div class="stem" style="height: 10px;"></div></div>
+    <div style="font-size: 10.5px; color: #888; font-weight: 500; margin-bottom: 2px;">Retrieval Query Trigger</div>
+    <div class="branch-bar" style="width: 920px;"></div>
+
+    <!-- Three main branches -->
+    <div class="row" style="width: 920px; justify-content: space-between; align-items: flex-start;">
+
+      <!-- LEFT: Content search (simple/research) -->
+      <div class="col" style="max-width: 460px;">
+        <div class="arrow-down"><div class="stem" style="height: 8px;"></div><div class="head"></div></div>
+        <div class="branch-label">True (simple / research)</div>
+
+        <!-- Router generates query -->
+        <div class="box agent" style="min-width: 240px; margin-bottom: 0;">
+          <div class="box-label"><span class="ic"></span> Router Agent</div>
+          <div class="box-sub">Generates optimized retrieval query<br>from extracted keywords</div>
+        </div>
+
+        <div class="arrow-down"><div class="stem" style="height: 10px;"></div><div class="head"></div></div>
+
+        <!-- Retrieval Phase + DB side by side -->
+        <div class="row" style="gap: 14px; align-items: center;">
+          <div class="box retrieval" style="min-width: 230px; text-align: left;">
+            <div class="box-label" style="text-align: center;">Retrieval Phase</div>
+            <div class="box-sub" style="text-align: left; margin-top: 2px;">
+              PostgreSQL full-text search<br>
+              <span class="mono">to_tsvector / ts_rank_cd</span><br>
+              Fetches 30 candidate pages,<br>
+              ranked by relevance, deduplicated
+            </div>
+          </div>
+
+          <div class="arrow-right"><div class="stem" style="width: 16px;"></div><div class="head"></div></div>
+
+          <div class="box neutral" style="min-width: 180px; text-align: left;">
+            <div class="box-label" style="font-size: 11.5px; text-align: center;">PostgreSQL (Supabase)</div>
+            <div class="box-sub" style="text-align: left; font-size: 10px;">
+              ~70,000 OCR-processed pages<br>
+              Table: <span class="mono">jfk_pages</span><br>
+              Content + metadata<br>(handwriting, stamps, redactions)
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"><div class="stem" style="height: 10px;"></div><div class="head"></div></div>
+
+        <!-- Re-Ranking Agent -->
+        <div class="box agent" style="min-width: 240px;">
+          <div class="box-label"><span class="ic"></span> Re-Ranking Agent</div>
+          <div class="box-sub">
+            Scores 30 candidates by relevance<br>
+            to user query, selects top results
+          </div>
+          <div class="mono">LLaMA 3.3 70B, t=0, JSON mode</div>
+        </div>
+
+        <div class="arrow-down"><div class="stem" style="height: 10px;"></div></div>
+
+        <!-- Simple / Research split -->
+        <div style="font-size: 10px; color: #888; font-weight: 500; margin-bottom: 2px;">Based on Query Type</div>
+        <div class="branch-bar" style="width: 440px;"></div>
+
+        <div class="row" style="width: 440px; justify-content: space-between; align-items: flex-start;">
+
+          <!-- Simple -->
+          <div class="col" style="max-width: 200px;">
+            <div class="arrow-down"><div class="stem" style="height: 6px;"></div><div class="head"></div></div>
+            <div class="branch-label">simple</div>
+            <div class="box agent" style="min-width: 190px;">
+              <div class="box-label"><span class="ic"></span> RAG Answer Agent</div>
+              <div class="box-sub">Direct answer with citations</div>
+              <table class="type-detail" style="margin-top: 4px;">
+                <tr><td>Context:</td><td>10 results</td></tr>
+                <tr><td>Trigger:</td><td>specific name, date, fact</td></tr>
+              </table>
+              <div class="mono">LLaMA 3.3 70B, t=0.3</div>
+            </div>
+          </div>
+
+          <!-- Research -->
+          <div class="col" style="max-width: 220px;">
+            <div class="arrow-down"><div class="stem" style="height: 6px;"></div><div class="head"></div></div>
+            <div class="branch-label">research</div>
+            <div class="box agent" style="min-width: 210px;">
+              <div class="box-label"><span class="ic"></span> RAG Answer Agent</div>
+              <div class="box-sub">Structured research report</div>
+              <table class="type-detail" style="margin-top: 4px;">
+                <tr><td>Context:</td><td>20 results</td></tr>
+                <tr><td>Trigger:</td><td>analysis, summary, broad topic</td></tr>
+                <tr><td>Sections:</td><td>Summary, Findings,<br>Cross-Refs, Archival Notes</td></tr>
+              </table>
+              <div class="mono">LLaMA 3.3 70B, t=0.3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Both converge to Response -->
+        <div class="branch-bar" style="width: 440px; margin-top: 0;"></div>
+        <div class="arrow-down"><div class="stem" style="height: 8px;"></div><div class="head"></div></div>
+
+        <div class="box response" style="min-width: 230px; text-align: left;">
+          <div class="box-label" style="text-align: center;">Response with Citations</div>
+          <div class="box-sub" style="text-align: left;">
+            Every fact cited as [1], [2], etc.<br>
+            Only cited sources returned to frontend.<br>
+            Citations become clickable links to<br>
+            NARA archive PDFs (specific page).
+          </div>
+        </div>
+      </div>
+
+      <!-- MIDDLE: metadata query -->
+      <div class="col" style="max-width: 200px;">
+        <div class="arrow-down"><div class="stem" style="height: 8px;"></div><div class="head"></div></div>
+        <div class="branch-label">True (metadata)</div>
+
+        <div class="box retrieval" style="min-width: 190px;">
+          <div class="box-label">Metadata Query</div>
+          <div class="box-sub" style="text-align: left;">
+            Queries boolean/category columns<br>
+            directly via SQL (no FTS needed)<br>
+            <span style="font-size: 9.5px; color: #999;">has_redactions, has_stamps,<br>includes_handwriting, has_tables,<br>is_typewritten, document_type</span>
+          </div>
+        </div>
+
+        <div class="arrow-down"><div class="stem" style="height: 8px;"></div><div class="head"></div></div>
+
+        <div class="box agent" style="min-width: 190px;">
+          <div class="box-label"><span class="ic"></span> Metadata Agent</div>
+          <div class="box-sub">Presents statistics + sample<br>documents from query results</div>
+          <div class="mono">LLaMA 3.3 70B, t=0.3</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: needs_retrieval = False -->
+      <div class="col" style="max-width: 200px;">
+        <div class="arrow-down"><div class="stem" style="height: 8px;"></div><div class="head"></div></div>
+        <div class="branch-label">False</div>
+
+        <div class="box agent" style="min-width: 190px;">
+          <div class="box-label"><span class="ic"></span> Conversational Agent</div>
+          <div class="box-sub">Responds without database access<br>using conversation context only</div>
+          <div class="mono">LLaMA 3.3 70B, t=0.5</div>
+        </div>
+
+        <div class="hlist">
+          <div>Greetings</div>
+          <div>Off-Topic <span style="color:#aaa;font-size:9px;">(guardrail)</span></div>
+          <div>System Questions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes row -->
+    <div class="row" style="gap: 20px; margin-top: 14px; width: 920px; justify-content: flex-start;">
+      <div class="note">
+        <b>Note:</b> User Question != Search Query.
+        Questions from users can be verbose and messy.
+        The Router Agent extracts optimal keywords
+        for precise database retrieval.
+      </div>
+      <div class="note">
+        <b>Strict Source Rules</b><br>
+        Every factual claim must cite a source [N].
+        No outside knowledge or hallucination.
+        If documents lack the info, state so explicitly.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>KU Leuven | Master of Statistics & Data Science</span>
+    <span>JFK Files Research System</span>
+  </div>
+</div>
+</body>
+</html>

@@ -23,6 +23,41 @@ NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
 
 client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
+# Load prompts from files (falls back to inline if file not found)
+PROMPTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts')
+
+
+def load_prompt(filename, fallback=""):
+    """Load a prompt from the prompts directory, preferring optimized version."""
+    optimized_path = os.path.join(PROMPTS_DIR, 'optimized', filename)
+    base_path = os.path.join(PROMPTS_DIR, filename)
+    for path in [optimized_path, base_path]:
+        if os.path.exists(path):
+            with open(path) as f:
+                return f.read()
+    return fallback
+
+
+def ensure_fts_index():
+    """Create full-text search GIN index if it doesn't exist."""
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_jfk_pages_content_fts
+            ON jfk_pages USING GIN (to_tsvector('english', content))
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("FTS index ready.")
+    except Exception as e:
+        print(f"FTS index creation skipped: {e}")
+
+
+if DATABASE_URL:
+    ensure_fts_index()
+
 
 def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL)
@@ -64,23 +99,7 @@ def chat():
                     context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{r[0]}")
                 context = "\n\n".join(context_parts)
 
-                doc_instructions = f"""You are a senior Research Historian. The user is asking about a specific declassified document: {filename}.
-                All pages of this document have been retrieved below. Answer the user's question based SOLELY on this document's content.
-
-                STRICT SOURCE RULES:
-                - You may ONLY state facts explicitly written in this document.
-                - Do NOT use outside knowledge.
-                - If the document doesn't contain the requested information, say so.
-
-                IN-TEXT CITATION RULES:
-                - Cite page numbers using bracket notation: [1], [2], etc.
-                - The numbers correspond to the page entries below.
-                - Every factual sentence must have a citation.
-
-                FORMATTING:
-                - Use markdown: headers (##), **bold**, bullet points.
-                - Start with a brief overview of the document, then address the user's specific question.
-                """
+                doc_instructions = load_prompt('document-agent.txt').replace('{filename}', filename)
 
                 messages_list = [{"role": "system", "content": doc_instructions}]
                 for msg in history[-20:]:
@@ -108,17 +127,22 @@ def chat():
                 })
 
         # Step 1: Analyze query intent and extract keywords
-        analysis_prompt = f"""Analyze this user query for a RAG system searching JFK files: '{query}'
+        # Include recent conversation history so the router can resolve
+        # follow-up references like "his", "that document", "tell me more"
+        history_context = ""
+        if history:
+            recent = history[-6:]  # last 3 exchanges
+            history_lines = []
+            for msg in recent:
+                role = msg.get('role', 'user')
+                if role in ('user', 'assistant'):
+                    # Truncate long assistant messages
+                    content = msg['content'][:200] if role == 'assistant' else msg['content']
+                    history_lines.append(f"{role}: {content}")
+            if history_lines:
+                history_context = "\n\nConversation history (for context):\n" + "\n".join(history_lines)
 
-        Return a valid JSON object with three keys:
-        1. "keywords": A list of 1-3 most important search terms to find relevant documents. Empty list if not a search query.
-        2. "type": "simple", "research", or "conversational".
-           - "conversational" = greetings, small talk, thanks, or questions about the system itself (not about JFK documents).
-           - "simple" = asking for a specific name, date, fact, or single document verification.
-           - "research" = asking for analysis, summary, relationships, or details on a broad topic.
-        3. "needs_retrieval": true if the query requires searching documents, false if it's just conversational.
-
-        Reply ONLY with the JSON."""
+        analysis_prompt = load_prompt('router.txt').replace('{query}', query) + history_context
 
         try:
             analysis_res = client.chat.completions.create(
@@ -131,18 +155,102 @@ def chat():
             search_terms = analysis_data.get('keywords', query.split())
             query_type = analysis_data.get('type', 'research')
             needs_retrieval = analysis_data.get('needs_retrieval', True)
+            metadata_filter = analysis_data.get('metadata_filter', None)
         except Exception as e:
             print(f"Query keyword analysis failed: {e}")
             search_terms = query.split()
             query_type = 'research'
             needs_retrieval = True
+            metadata_filter = None
+
+        # Handle metadata queries (redactions, handwriting, stamps, tables, etc.)
+        if query_type == "metadata" and metadata_filter:
+            print(f"Query type: METADATA — {metadata_filter}")
+            allowed_columns = {
+                'has_redactions', 'includes_handwriting', 'has_stamps',
+                'has_tables', 'has_forms', 'is_typewritten', 'document_type'
+            }
+            col = metadata_filter.get('column', '')
+            val = metadata_filter.get('value', True)
+
+            if col not in allowed_columns:
+                # Fallback to regular search if column is invalid
+                query_type = 'simple'
+            else:
+                # Get count
+                if isinstance(val, bool):
+                    cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} = %s", (val,))
+                    total_matching = cur.fetchone()[0]
+                    cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} = %s", (val,))
+                    docs_matching = cur.fetchone()[0]
+
+                    # Get sample documents
+                    cur.execute(f"""
+                        SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
+                        FROM jfk_pages WHERE {col} = %s AND content IS NOT NULL
+                        ORDER BY file_id, page_number
+                        LIMIT 10
+                    """, (val,))
+                else:
+                    cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
+                    total_matching = cur.fetchone()[0]
+                    cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
+                    docs_matching = cur.fetchone()[0]
+
+                    cur.execute(f"""
+                        SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
+                        FROM jfk_pages WHERE {col} ILIKE %s AND content IS NOT NULL
+                        ORDER BY file_id, page_number
+                        LIMIT 10
+                    """, (f"%{val}%",))
+
+                sample_results = cur.fetchall()
+
+                # Build context with metadata stats + samples
+                context_parts = [
+                    f"METADATA QUERY RESULTS for {col} = {val}:",
+                    f"Total matching pages: {total_matching}",
+                    f"Total matching documents: {docs_matching}",
+                    "",
+                    "SAMPLE DOCUMENTS:"
+                ]
+                sources_list = []
+                for idx, r in enumerate(sample_results, 1):
+                    snippet = r[0][:500] if r[0] else "(no content)"
+                    context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{snippet}")
+                    sources_list.append({"filename": r[1], "page": r[2]})
+                context = "\n\n".join(context_parts)
+
+                meta_prompt = f"""You are a research historian answering questions about the JFK document archive.
+The user asked a question about document metadata. Below are the query results from the database.
+Present the statistics clearly, then briefly describe the sample documents found.
+
+CRITICAL FORMATTING RULES:
+- NEVER show reasoning steps. No "Step 1:", no LaTeX, no "The final answer is".
+- Write your answer directly.
+- Cite sample documents as [1], [2], etc.
+
+{context}
+
+USER INQUIRY: {query}"""
+
+                messages_list = [{"role": "user", "content": meta_prompt}]
+                completion = client.chat.completions.create(
+                    model=MODEL,
+                    messages=messages_list,
+                    temperature=0.3,
+                )
+
+                return jsonify({
+                    "answer": completion.choices[0].message.content,
+                    "sources": sources_list,
+                    "query_type": "metadata"
+                })
 
         # Handle conversational queries (greetings, thanks, etc.) without DB retrieval
         if not needs_retrieval or query_type == "conversational":
             print(f"Query type: CONVERSATIONAL — skipping retrieval")
-            conv_messages = [{"role": "system", "content": """You are the JFK Files Research System, a research assistant for querying declassified JFK assassination documents.
-            Respond naturally to greetings and conversational messages. Be friendly but brief.
-            If the user seems to want information, remind them they can ask about people, events, organizations, or specific document IDs (e.g., 104-10433-10209) from the JFK files."""}]
+            conv_messages = [{"role": "system", "content": load_prompt('conversational.txt')}]
             for msg in history[-20:]:
                 role = msg.get('role', 'user')
                 if role in ('user', 'assistant'):
@@ -173,25 +281,23 @@ def chat():
             context_limit = 20
             print(f"Query type: RESEARCH (Terms: {search_terms})")
 
-        # Build search query with PostgreSQL parameterized queries
-        where_clauses = [f"content ILIKE %s" for _ in search_terms]
-        ranking_clauses = [f"(CASE WHEN content ILIKE %s THEN 1 ELSE 0 END)" for _ in search_terms]
-        rank_expr = f"({' + '.join(ranking_clauses)})"
+        # Build search query using PostgreSQL full-text search for relevance ranking
+        # Use plainto_tsquery which safely handles multi-word terms and natural language
+        # Combine all search terms into one query string for plainto_tsquery
+        ts_query_input = ' '.join(search_terms)
 
-        search_query = f"""
+        search_query = """
             SELECT content, filename, page_number
             FROM (
                 SELECT DISTINCT ON (left(content, 200)) content, filename, page_number,
-                    {rank_expr} AS rank_score
+                    ts_rank_cd(to_tsvector('english', content), plainto_tsquery('english', %s)) AS rank_score
                 FROM jfk_pages
-                WHERE ({' OR '.join(where_clauses)})
+                WHERE to_tsvector('english', content) @@ plainto_tsquery('english', %s)
             ) sub
             ORDER BY rank_score DESC, length(content) DESC
             LIMIT 30
         """
-        search_params = [f"%{term}%" for term in search_terms]
-        ranking_params = [f"%{term}%" for term in search_terms]
-        full_params = ranking_params + search_params
+        full_params = [ts_query_input, ts_query_input]
 
         # Step 2: Get global stats
         cur.execute("SELECT COUNT(*) FROM jfk_pages")
@@ -206,6 +312,24 @@ def chat():
         cur.execute(search_query, full_params)
         results = cur.fetchall()
 
+        # Fallback to ILIKE if full-text search returns no results (handles OCR artifacts)
+        if not results:
+            print("Full-text search returned 0 results, falling back to ILIKE")
+            where_clauses = [f"content ILIKE %s" for _ in search_terms]
+            fallback_query = f"""
+                SELECT content, filename, page_number
+                FROM (
+                    SELECT DISTINCT ON (left(content, 200)) content, filename, page_number
+                    FROM jfk_pages
+                    WHERE ({' OR '.join(where_clauses)})
+                ) sub
+                ORDER BY length(content) DESC
+                LIMIT 30
+            """
+            fallback_params = [f"%{term}%" for term in search_terms]
+            cur.execute(fallback_query, fallback_params)
+            results = cur.fetchall()
+
         # Deduplicate and clean results
         unique_results = []
         seen_content = set()
@@ -215,7 +339,45 @@ def chat():
                 unique_results.append(r)
                 seen_content.add(content_snippet)
 
-        final_results = unique_results[:context_limit]
+        # Re-rank: ask LLM to pick the most relevant results for the query
+        if len(unique_results) > context_limit:
+            snippets_for_rerank = []
+            for idx, r in enumerate(unique_results):
+                # Send first 300 chars of each result to keep token usage low
+                snippet = r[0][:300].replace('\n', ' ').strip()
+                snippets_for_rerank.append(f"[{idx}] {r[1]}, Page {r[2]}: {snippet}")
+
+            rerank_prompt = f"""You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
+
+User query: "{query}"
+
+Snippets:
+{chr(10).join(snippets_for_rerank)}
+
+Return ONLY a JSON array of integers, e.g. [3, 0, 7, 1, ...]"""
+
+            try:
+                rerank_res = client.chat.completions.create(
+                    model=MODEL,
+                    messages=[{"role": "user", "content": rerank_prompt}],
+                    temperature=0,
+                    response_format={"type": "json_object"}
+                )
+                rerank_raw = json.loads(rerank_res.choices[0].message.content)
+                # Handle both {"indices": [...]} and plain [...]
+                if isinstance(rerank_raw, dict):
+                    indices = list(rerank_raw.values())[0]
+                else:
+                    indices = rerank_raw
+                # Filter valid indices and rebuild results in reranked order
+                valid_indices = [i for i in indices if isinstance(i, int) and 0 <= i < len(unique_results)]
+                final_results = [unique_results[i] for i in valid_indices[:context_limit]]
+                print(f"Re-ranked: selected {len(final_results)} from {len(unique_results)} candidates")
+            except Exception as e:
+                print(f"Re-ranking failed, using FTS order: {e}")
+                final_results = unique_results[:context_limit]
+        else:
+            final_results = unique_results[:context_limit]
 
         # Build numbered source context for in-text citations
         context = ""
@@ -227,62 +389,33 @@ def chat():
         else:
             context = "NO SEARCH RESULTS FOUND."
 
-        # Construct dynamic prompt instructions
-        strict_rules = """
-        STRICT SOURCE RULES:
-        - You may ONLY state facts that are explicitly written in the RETRIEVED DOCUMENTS below.
-        - Do NOT use any outside knowledge, prior training data, or general knowledge.
-        - If the documents do not contain enough information to answer, say: "The retrieved documents do not contain sufficient information to answer this query."
-        - Do NOT guess, infer beyond what is written, or fill gaps with external knowledge.
-        - If a document is ambiguous, note the ambiguity rather than interpreting it.
-
-        IN-TEXT CITATION RULES (MANDATORY):
-        - Every claim, fact, or detail MUST have an in-text citation: [1], [2], etc.
-        - The numbers correspond to the numbered sources in the RETRIEVED DOCUMENTS section.
-        - Place citations at the end of the sentence they support: "Oswald traveled to Mexico City [3]."
-        - If a fact appears in multiple sources, cite all: [1][4].
-        - NEVER write a factual sentence without a citation.
-        - NEVER cite a source for information that does not appear in that source's text.
-        """
-
+        # Load prompt based on query type
         if query_type == "simple":
-            instructions = f"""You are a senior Research Historian. You answer questions about JFK assassination files based SOLELY on retrieved archival documents.
-
-            FORMATTING:
-            - Use markdown: headers (##), **bold** for key names/dates/places, and bullet points.
-            - Start with a direct answer, then elaborate with supporting evidence from the documents.
-            - Synthesize information across multiple sources when relevant.
-
-            {strict_rules}"""
+            instructions = load_prompt('rag-simple.txt')
         else:
-            instructions = f"""You are a senior Research Historian. You produce structured research reports about JFK assassination files based SOLELY on retrieved archival documents.
-
-            REPORT STRUCTURE:
-            1. **Executive Summary** — 2-3 sentence overview of key findings from the documents.
-            2. **Detailed Findings** — Organized into logical sections with descriptive headers.
-            3. **Cross-References** — Connections or contradictions between documents.
-            4. **Archival Notes** — Mention any redactions, handwriting, or stamps noted in metadata.
-
-            FORMATTING:
-            - Use markdown: headers (##), **bold**, bullet points, and tables where appropriate.
-            - Be comprehensive — extract every relevant detail from the documents.
-            - Do NOT repeat the same fact in multiple sections.
-
-            {strict_rules}"""
+            instructions = load_prompt('rag-research.txt')
 
         system_prompt = f"""{instructions}
 
-        ARCHIVE METADATA:
-        - Total Archive: {total_p:,} pages across the collection
-        - Pages with Handwriting: {hw_p:,}
-        - Pages with Official Stamps: {stamp_p:,}
-        - Pages with Redactions: {redact_p:,}
-        """
+CRITICAL FORMATTING RULES:
+- NEVER show your reasoning process. No "Step 1:", "Step 2:", "Let me analyze", etc.
+- NEVER use LaTeX, $\\boxed{{}}$, or math formatting.
+- NEVER write "The final answer is".
+- Write your answer directly as a research historian would present findings to a reader.
+
+ARCHIVE METADATA:
+- Total Archive: {total_p:,} pages across the collection
+- Pages with Handwriting: {hw_p:,}
+- Pages with Official Stamps: {stamp_p:,}
+- Pages with Redactions: {redact_p:,}
+"""
 
         user_prompt = f"""RETRIEVED DOCUMENTS:
-        {context}
+{context}
 
-        USER INQUIRY: {query}"""
+USER INQUIRY: {query}
+
+Remember: respond directly with your answer. No reasoning steps, no LaTeX, no "Step 1/2/3"."""
 
         # Build messages with conversation history
         messages = [{"role": "system", "content": system_prompt}]
@@ -301,9 +434,46 @@ def chat():
             temperature=0.3,
         )
 
+        answer_text = completion.choices[0].message.content
+
+        # Post-process: strip chain-of-thought artifacts that LLaMA sometimes produces
+        # Remove LaTeX $\boxed{...}$ patterns
+        answer_text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', answer_text)
+        # Remove "The final answer is: ..." lines
+        answer_text = re.sub(r'(?m)^.*The final answer is:?.*$', '', answer_text)
+        # Remove "Step N:" reasoning headers
+        answer_text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', answer_text)
+        # Clean up excessive blank lines left behind
+        answer_text = re.sub(r'\n{3,}', '\n\n', answer_text).strip()
+
+        all_sources = [{"filename": r[1], "page": r[2]} for r in final_results]
+
+        # Remap citations to only include actually-cited sources
+        # Find which [N] indices appear in the answer
+        cited_nums = sorted(set(int(m) for m in re.findall(r'\[(\d+)\]', answer_text)))
+        if cited_nums:
+            # Build new sources list with only cited ones, and remap [old] -> [new] in text
+            new_sources = []
+            remap = {}
+            for new_idx, old_num in enumerate(cited_nums, 1):
+                old_idx = old_num - 1
+                if 0 <= old_idx < len(all_sources):
+                    new_sources.append(all_sources[old_idx])
+                    remap[old_num] = new_idx
+
+            # Replace citation numbers in answer text (largest first to avoid [1] replacing inside [10])
+            for old_num in sorted(remap.keys(), reverse=True):
+                answer_text = answer_text.replace(f'[{old_num}]', f'[__CITE_{remap[old_num]}__]')
+            for new_num in remap.values():
+                answer_text = answer_text.replace(f'[__CITE_{new_num}__]', f'[{new_num}]')
+
+            sources_out = new_sources
+        else:
+            sources_out = all_sources
+
         return jsonify({
-            "answer": completion.choices[0].message.content,
-            "sources": [{"filename": r[1], "page": r[2]} for r in final_results],
+            "answer": answer_text,
+            "sources": sources_out,
             "query_type": query_type
         })
     except Exception as e:

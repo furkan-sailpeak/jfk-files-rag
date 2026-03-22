@@ -174,6 +174,24 @@ function App() {
               <div className="welcome-stamp">Declassified</div>
               <h2>JFK Files Research System</h2>
               <p>Query the declassified JFK assassination document archive. Ask about specific documents, individuals, events, or request analysis of classified materials.</p>
+              <div className="sample-prompts">
+                {[
+                  "What was Oswald's connection to the Soviet embassy in Mexico City?",
+                  "Which documents contain redacted information?",
+                  "Analyze the CIA's surveillance activities related to the assassination",
+                  "Show me document 104-10004-10143",
+                  "How many pages include handwriting?",
+                  "What role did Jack Ruby play according to the files?",
+                ].map((prompt, i) => (
+                  <button
+                    key={i}
+                    className="sample-prompt-btn"
+                    onClick={() => { setInput(prompt); }}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
           <AnimatePresence>
