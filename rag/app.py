@@ -1,10 +1,15 @@
 import os
 import re
 import json
+import time
+import threading
+from contextlib import contextmanager
+
 import psycopg2
-from flask import Flask, request, jsonify, redirect, send_from_directory
+from flask import Flask, request, jsonify, redirect, send_from_directory, Response, stream_with_context
 from flask_cors import CORS
 from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,26 +17,66 @@ load_dotenv()
 app = Flask(__name__, static_folder='frontend/dist', static_url_path='/')
 CORS(app)
 
+# ---------------------------------------------------------------------------
 # Configuration
+# ---------------------------------------------------------------------------
 DATABASE_URL = os.getenv("DATABASE_URL")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    print("WARNING: GROQ_API_KEY not found in environment or .env file.")
-MODEL = "llama-3.3-70b-versatile"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
 
-client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
+# Main LLM client: Groq + llama for everything.
+if GROQ_API_KEY:
+    client = Groq(api_key=GROQ_API_KEY)
+    MODEL = "llama-3.3-70b-versatile"
+    LLM_PROVIDER = "groq"
+    print(f"LLM provider: Groq, model={MODEL}")
+else:
+    print("WARNING: GROQ_API_KEY not found; /api/chat will 500.")
+    client = None
+    MODEL = "llama-3.3-70b-versatile"
+    LLM_PROVIDER = "none"
 
-# Load prompts from files (falls back to inline if file not found)
-# Check both: rag/prompts/ (Docker/local) and project-root/prompts/ (dev)
+# Judge/rerank/router/expansion/citation-verify calls always go to Groq + llama.
+# These are cheap, high-volume utility calls; using the premium MODEL for them
+# balloons cost without measurable quality gain.
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "llama-3.3-70b-versatile")
+if GROQ_API_KEY:
+    judge_client = Groq(api_key=GROQ_API_KEY)
+    print(f"Judge/rerank provider: Groq, model={JUDGE_MODEL}")
+else:
+    # No Groq key — fall back to the main client so judges still work (at main-model cost).
+    judge_client = client
+    JUDGE_MODEL = MODEL
+    print(f"Judge/rerank fallback: using main client ({MODEL}) — set GROQ_API_KEY for cheap judges")
+
+
+# Embedding client — used for hybrid retrieval (FTS ∪ vector).
+# Same model used to backfill jfk_pages.embedding; query-side must match.
+EMBED_MODEL = "text-embedding-3-small"
+EMBED_DIM = 512  # Matryoshka-truncated; stored on-disk as halfvec(512) for ~6x disk savings.
+embed_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
+if not embed_client:
+    print("WARNING: OPENAI_API_KEY not set; hybrid retrieval will fall back to FTS-only.")
+
+
+def token_limit_kwargs(limit):
+    """OpenAI's GPT-5 family renamed `max_tokens` → `max_completion_tokens`.
+    Groq still uses `max_tokens`. Branch so the same cap works everywhere."""
+    if LLM_PROVIDER == "openai":
+        return {"max_completion_tokens": limit}
+    return {"max_tokens": limit}
+
+# ---------------------------------------------------------------------------
+# Prompts
+# ---------------------------------------------------------------------------
 _prompts_local = os.path.join(os.path.dirname(__file__), 'prompts')
 _prompts_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts')
 PROMPTS_DIR = _prompts_local if os.path.isdir(_prompts_local) else _prompts_root
 
 
 def load_prompt(filename, fallback=""):
-    """Load a prompt from the prompts directory, preferring optimized version."""
     optimized_path = os.path.join(PROMPTS_DIR, 'optimized', filename)
     base_path = os.path.join(PROMPTS_DIR, filename)
     for path in [optimized_path, base_path]:
@@ -41,8 +86,10 @@ def load_prompt(filename, fallback=""):
     return fallback
 
 
+# ---------------------------------------------------------------------------
+# Database
+# ---------------------------------------------------------------------------
 def ensure_fts_index():
-    """Create full-text search GIN index if it doesn't exist."""
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
@@ -62,262 +109,95 @@ if DATABASE_URL:
     ensure_fts_index()
 
 
-def get_db_connection():
+@contextmanager
+def db_cursor():
+    """Short-lived connection. Held ONLY for the duration of a DB read.
+    Prevents holding idle connections across multi-second LLM roundtrips."""
     conn = psycopg2.connect(DATABASE_URL)
-    return conn
-
-
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    data = request.json
-    query = data.get('query')
-    history = data.get('history', [])
-
-    if not query:
-        return jsonify({"error": "No query provided"}), 400
-
-    if not client:
-        return jsonify({"error": "GROQ_API_KEY not configured"}), 500
-
-    conn = get_db_connection()
-    cur = conn.cursor()
     try:
-        # Step 0: Check if query contains a document ID (e.g., 104-10433-10209)
-        doc_id_match = re.search(r'\b(\d{3}-\d{5}-\d{5})\b', query)
-        if doc_id_match:
-            doc_id = doc_id_match.group(1)
-            filename = f"{doc_id}.pdf"
-            print(f"Document ID detected: {doc_id}")
+        cur = conn.cursor()
+        yield cur
+        cur.close()
+    finally:
+        conn.close()
 
-            cur.execute(
-                "SELECT content, filename, page_number FROM jfk_pages WHERE filename = %s ORDER BY page_number",
-                (filename,)
-            )
-            doc_results = cur.fetchall()
 
-            if doc_results:
-                # Build context from all pages of this document
-                context_parts = []
-                for idx, r in enumerate(doc_results, 1):
-                    context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{r[0]}")
-                context = "\n\n".join(context_parts)
+_stats_cache = {"ts": 0, "total_p": 0, "hw_p": 0, "stamp_p": 0, "redact_p": 0}
+_STATS_TTL = 300
+_stats_lock = threading.Lock()
 
-                doc_instructions = load_prompt('document-agent.txt').replace('{filename}', filename)
 
-                messages_list = [
-                    {"role": "system", "content": doc_instructions},
-                    {"role": "user", "content": f"DOCUMENT PAGES:\n{context}\n\nUSER INQUIRY: {query}"},
-                ]
-
-                completion = client.chat.completions.create(
-                    model=MODEL,
-                    messages=messages_list,
-                    temperature=0.3,
-                )
-
-                return jsonify({
-                    "answer": completion.choices[0].message.content,
-                    "sources": [{"filename": r[1], "page": r[2]} for r in doc_results],
-                    "query_type": "document"
-                })
-            else:
-                return jsonify({
-                    "answer": f"Document **{filename}** was not found in the archive. Please verify the document ID.",
-                    "sources": [],
-                    "query_type": "document"
-                })
-
-        # Step 1: Analyze query intent and extract keywords
-        # Include recent conversation history so the router can resolve
-        # follow-up references like "his", "that document", "tell me more"
-        history_context = ""
-        if history:
-            recent = history[-6:]  # last 3 exchanges
-            history_lines = []
-            for msg in recent:
-                role = msg.get('role', 'user')
-                if role in ('user', 'assistant'):
-                    # Truncate long assistant messages
-                    content = msg['content'][:200] if role == 'assistant' else msg['content']
-                    history_lines.append(f"{role}: {content}")
-            if history_lines:
-                history_context = "\n\nConversation history (for context):\n" + "\n".join(history_lines)
-
-        analysis_prompt = load_prompt('router.txt').replace('{query}', query) + history_context
-
-        try:
-            analysis_res = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[{"role": "user", "content": analysis_prompt}],
-                temperature=0,
-                response_format={"type": "json_object"}
-            )
-            analysis_data = json.loads(analysis_res.choices[0].message.content)
-            search_terms = analysis_data.get('keywords', query.split())
-            query_type = analysis_data.get('type', 'research')
-            needs_retrieval = analysis_data.get('needs_retrieval', True)
-            metadata_filter = analysis_data.get('metadata_filter', None)
-        except Exception as e:
-            print(f"Query keyword analysis failed: {e}")
-            search_terms = query.split()
-            query_type = 'research'
-            needs_retrieval = True
-            metadata_filter = None
-
-        # Handle metadata queries (redactions, handwriting, stamps, tables, etc.)
-        if query_type == "metadata" and metadata_filter:
-            print(f"Query type: METADATA — {metadata_filter}")
-            allowed_columns = {
-                'has_redactions', 'includes_handwriting', 'has_stamps',
-                'has_tables', 'has_forms', 'is_typewritten', 'document_type'
-            }
-            col = metadata_filter.get('column', '')
-            val = metadata_filter.get('value', True)
-
-            if col not in allowed_columns:
-                # Fallback to regular search if column is invalid
-                query_type = 'simple'
-            else:
-                # Get count
-                if isinstance(val, bool):
-                    cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} = %s", (val,))
-                    total_matching = cur.fetchone()[0]
-                    cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} = %s", (val,))
-                    docs_matching = cur.fetchone()[0]
-
-                    # Get sample documents
-                    cur.execute(f"""
-                        SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
-                        FROM jfk_pages WHERE {col} = %s AND content IS NOT NULL
-                        ORDER BY file_id, page_number
-                        LIMIT 10
-                    """, (val,))
-                else:
-                    cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
-                    total_matching = cur.fetchone()[0]
-                    cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
-                    docs_matching = cur.fetchone()[0]
-
-                    cur.execute(f"""
-                        SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
-                        FROM jfk_pages WHERE {col} ILIKE %s AND content IS NOT NULL
-                        ORDER BY file_id, page_number
-                        LIMIT 10
-                    """, (f"%{val}%",))
-
-                sample_results = cur.fetchall()
-
-                # Build context with metadata stats + samples
-                context_parts = [
-                    f"METADATA QUERY RESULTS for {col} = {val}:",
-                    f"Total matching pages: {total_matching}",
-                    f"Total matching documents: {docs_matching}",
-                    "",
-                    "SAMPLE DOCUMENTS:"
-                ]
-                sources_list = []
-                for idx, r in enumerate(sample_results, 1):
-                    snippet = r[0][:500] if r[0] else "(no content)"
-                    context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{snippet}")
-                    sources_list.append({"filename": r[1], "page": r[2]})
-                context = "\n\n".join(context_parts)
-
-                meta_prompt = f"""You are a research historian answering questions about the JFK document archive.
-The user asked a question about document metadata. Below are the query results from the database.
-Present the statistics clearly, then briefly describe the sample documents found.
-
-CRITICAL FORMATTING RULES:
-- NEVER show reasoning steps. No "Step 1:", no LaTeX, no "The final answer is".
-- Write your answer directly.
-- Cite sample documents as [1], [2], etc.
-
-{context}
-
-USER INQUIRY: {query}"""
-
-                messages_list = [{"role": "user", "content": meta_prompt}]
-                completion = client.chat.completions.create(
-                    model=MODEL,
-                    messages=messages_list,
-                    temperature=0.3,
-                )
-
-                return jsonify({
-                    "answer": completion.choices[0].message.content,
-                    "sources": sources_list,
-                    "query_type": "metadata"
-                })
-
-        # Handle conversational queries (greetings, thanks, etc.) without DB retrieval
-        if not needs_retrieval or query_type == "conversational":
-            print(f"Query type: CONVERSATIONAL — skipping retrieval")
-            conv_messages = [{"role": "system", "content": load_prompt('conversational.txt')}]
-            for msg in history[-20:]:
-                role = msg.get('role', 'user')
-                if role in ('user', 'assistant'):
-                    conv_messages.append({"role": role, "content": msg['content']})
-            conv_messages.append({"role": "user", "content": query})
-
-            completion = client.chat.completions.create(
-                model=MODEL,
-                messages=conv_messages,
-                temperature=0.5,
-            )
-            return jsonify({
-                "answer": completion.choices[0].message.content,
-                "sources": [],
-                "query_type": "conversational"
+def get_archive_stats():
+    """Cached archive-level counts (5-min TTL). Thread-safe refresh."""
+    now = time.time()
+    if now - _stats_cache["ts"] < _STATS_TTL and _stats_cache["ts"] > 0:
+        return dict(_stats_cache)
+    with _stats_lock:
+        if now - _stats_cache["ts"] < _STATS_TTL and _stats_cache["ts"] > 0:
+            return dict(_stats_cache)
+        with db_cursor() as cur:
+            cur.execute("""
+                SELECT
+                    COUNT(*),
+                    COUNT(*) FILTER (WHERE includes_handwriting = true),
+                    COUNT(*) FILTER (WHERE has_stamps = true),
+                    COUNT(*) FILTER (WHERE has_redactions = true)
+                FROM jfk_pages
+            """)
+            row = cur.fetchone()
+            _stats_cache.update({
+                "ts": now,
+                "total_p": row[0],
+                "hw_p": row[1],
+                "stamp_p": row[2],
+                "redact_p": row[3],
             })
+    return dict(_stats_cache)
 
-        # Filter out empty strings
-        search_terms = [t for t in search_terms if t.strip()]
-        if not search_terms:
-            search_terms = [query]
 
-        # Configure strategy based on query type
-        if query_type == "simple":
-            context_limit = 10
-            print(f"Query type: SIMPLE (Terms: {search_terms})")
-        else:
-            context_limit = 20
-            print(f"Query type: RESEARCH (Terms: {search_terms})")
+# Minimal English stopword set for expansion-term filtering.
+_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has",
+    "have", "he", "his", "her", "in", "is", "it", "its", "of", "on", "or",
+    "that", "the", "their", "they", "this", "to", "was", "were", "will",
+    "who", "whom", "with", "would", "you", "your", "i", "me", "my", "we",
+    "us", "our", "what", "when", "where", "why", "how", "did", "do", "does",
+    "about", "but", "not", "no", "yes", "s", "t", "re", "d", "ll", "m",
+}
 
-        # Build search query using PostgreSQL full-text search for relevance ranking
-        # Use plainto_tsquery which safely handles multi-word terms and natural language
-        # Combine all search terms into one query string for plainto_tsquery
-        ts_query_input = ' '.join(search_terms)
 
-        search_query = """
+def _tokenize_terms(text):
+    """Split query text into content terms for ILIKE fallback. Strips
+    stopwords/punctuation so naive OR queries don't explode into noise."""
+    words = re.findall(r"[A-Za-z][A-Za-z'-]+", text)
+    terms = [w for w in words if w.lower() not in _STOPWORDS and len(w) > 2]
+    return terms[:6]  # cap to keep fallback query tractable
+
+
+def fts_search(ts_input, ilike_terms=None):
+    """FTS leg of hybrid retrieval. Strong on proper nouns and rare terms;
+    weak on semantic/paraphrase match. ILIKE fallback when tsquery returns nothing."""
+    ilike_terms = ilike_terms or _tokenize_terms(ts_input)
+    with db_cursor() as cur:
+        cur.execute(
+            """
             SELECT content, filename, page_number
             FROM (
                 SELECT DISTINCT ON (left(content, 200)) content, filename, page_number,
-                    ts_rank_cd(to_tsvector('english', content), plainto_tsquery('english', %s)) AS rank_score
+                    ts_rank_cd(to_tsvector('english', content), plainto_tsquery('english', %s), 2) AS rank_score
                 FROM jfk_pages
                 WHERE to_tsvector('english', content) @@ plainto_tsquery('english', %s)
             ) sub
-            ORDER BY rank_score DESC, length(content) DESC
+            ORDER BY rank_score DESC, length(content) ASC
             LIMIT 30
-        """
-        full_params = [ts_query_input, ts_query_input]
-
-        # Step 2: Get global stats
-        cur.execute("SELECT COUNT(*) FROM jfk_pages")
-        total_p = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE includes_handwriting = true")
-        hw_p = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_stamps = true")
-        stamp_p = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_redactions = true")
-        redact_p = cur.fetchone()[0]
-
-        cur.execute(search_query, full_params)
-        results = cur.fetchall()
-
-        # Fallback to ILIKE if full-text search returns no results (handles OCR artifacts)
-        if not results:
-            print("Full-text search returned 0 results, falling back to ILIKE")
-            where_clauses = [f"content ILIKE %s" for _ in search_terms]
-            fallback_query = f"""
+            """,
+            [ts_input, ts_input],
+        )
+        rows = cur.fetchall()
+        if not rows and ilike_terms:
+            where_clauses = [f"content ILIKE %s" for _ in ilike_terms]
+            cur.execute(
+                f"""
                 SELECT content, filename, page_number
                 FROM (
                     SELECT DISTINCT ON (left(content, 200)) content, filename, page_number
@@ -326,77 +206,255 @@ USER INQUIRY: {query}"""
                 ) sub
                 ORDER BY length(content) DESC
                 LIMIT 30
+                """,
+                [f"%{t}%" for t in ilike_terms],
+            )
+            rows = cur.fetchall()
+    return rows
+
+
+def _embed_query(text):
+    """Embed a single query string. Returns list[float] or None on failure."""
+    if not embed_client or not text or not text.strip():
+        return None
+    try:
+        resp = embed_client.embeddings.create(
+            model=EMBED_MODEL,
+            input=text[:8000],
+            dimensions=EMBED_DIM,
+        )
+        return resp.data[0].embedding
+    except Exception as e:
+        print(f"[rag] embed failed: {e}")
+        return None
+
+
+def vector_search(query_text, limit=30):
+    """Vector leg of hybrid retrieval. Strong on semantic/paraphrase and
+    summary-style content; weak on exact name matching."""
+    vec = _embed_query(query_text)
+    if vec is None:
+        return []
+    vec_lit = "[" + ",".join(f"{x:.7f}" for x in vec) + "]"
+    with db_cursor() as cur:
+        cur.execute(
             """
-            fallback_params = [f"%{term}%" for term in search_terms]
-            cur.execute(fallback_query, fallback_params)
-            results = cur.fetchall()
+            SELECT content, filename, page_number
+            FROM jfk_pages
+            WHERE embedding IS NOT NULL
+            ORDER BY embedding <=> %s::halfvec
+            LIMIT %s
+            """,
+            [vec_lit, limit],
+        )
+        return cur.fetchall()
 
-        # Deduplicate and clean results
-        unique_results = []
-        seen_content = set()
-        for r in results:
-            content_snippet = r[0][:200].strip()
-            if content_snippet not in seen_content:
-                unique_results.append(r)
-                seen_content.add(content_snippet)
 
-        # Re-rank: ask LLM to pick the most relevant results for the query
-        if len(unique_results) > context_limit:
-            snippets_for_rerank = []
-            for idx, r in enumerate(unique_results):
-                # Send first 300 chars of each result to keep token usage low
-                snippet = r[0][:300].replace('\n', ' ').strip()
-                snippets_for_rerank.append(f"[{idx}] {r[1]}, Page {r[2]}: {snippet}")
+def hybrid_search(ts_input, semantic_query, ilike_terms=None):
+    """Union of FTS + vector candidates, deduped on (filename, page_number).
+    FTS gets keyword-only input; vector gets the full rewritten question —
+    each leg is fed what it's best at."""
+    fts_rows = fts_search(ts_input, ilike_terms)
+    vec_rows = vector_search(semantic_query, limit=30)
 
-            rerank_prompt = f"""You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
+    merged, seen = [], set()
+    # Interleave FTS-first so exact matches aren't drowned by semantic neighbors.
+    for rows in (fts_rows, vec_rows):
+        for r in rows:
+            key = (r[1], r[2])
+            if key in seen:
+                continue
+            # Also dedupe near-identical content (same first 200 chars).
+            content_key = r[0][:200].strip()
+            if content_key in seen:
+                continue
+            seen.add(key)
+            seen.add(content_key)
+            merged.append(r)
+    return merged
 
-User query: "{query}"
+
+# ---------------------------------------------------------------------------
+# SSE helpers
+# ---------------------------------------------------------------------------
+def sse(event, payload):
+    return f"event: {event}\ndata: {json.dumps(payload)}\n\n"
+
+
+def final_event(answer, sources, query_type, timings=None):
+    """Produce a final `done` SSE event. Answer sent whole — caller decides
+    whether tokens were streamed incrementally beforehand."""
+    body = {"answer": answer, "sources": sources, "query_type": query_type}
+    if timings:
+        body["timings"] = timings
+    return sse("done", body)
+
+
+# ---------------------------------------------------------------------------
+# Text post-processing
+# ---------------------------------------------------------------------------
+def strip_artifacts(text):
+    text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', text)
+    text = re.sub(r'(?m)^.*The final answer is:?.*$', '', text)
+    text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', text)
+    # Refusal line should never carry citations — it claims no facts.
+    text = re.sub(
+        r'(The retrieved documents do not contain sufficient information to answer this query\.?)(\s*\[\d+\])+',
+        r'\1',
+        text,
+    )
+    return re.sub(r'\n{3,}', '\n\n', text).strip()
+
+
+def strip_doc_echo(text):
+    text = re.sub(
+        r'^\s*(?:#+\s*)?(?:User\s*Inquiry|USER\s*INQUIRY|The user (?:has requested|is asking)|Based on your question|The provided document pages?)[^\n]*\n+',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    return strip_artifacts(text)
+
+
+def remap_citations(answer_text, all_sources):
+    """Keep only actually-cited sources and renumber them 1..N."""
+    cited_nums = sorted(set(int(m) for m in re.findall(r'\[(\d+)\]', answer_text)))
+    if not cited_nums:
+        return answer_text, all_sources
+    new_sources, remap = [], {}
+    for new_idx, old_num in enumerate(cited_nums, 1):
+        old_idx = old_num - 1
+        if 0 <= old_idx < len(all_sources):
+            new_sources.append(all_sources[old_idx])
+            remap[old_num] = new_idx
+    for old_num in sorted(remap.keys(), reverse=True):
+        answer_text = answer_text.replace(f'[{old_num}]', f'[__CITE_{remap[old_num]}__]')
+    for new_num in remap.values():
+        answer_text = answer_text.replace(f'[__CITE_{new_num}__]', f'[{new_num}]')
+    return answer_text, new_sources
+
+
+# ---------------------------------------------------------------------------
+# Router / history
+# ---------------------------------------------------------------------------
+def build_history_context(history, user_truncate=800, assistant_truncate=600):
+    """Serialize recent turns for router. Gives more assistant content than
+    before so 'tell me more' references resolve meaningfully — now uses a
+    head+tail slice when an answer is long."""
+    if not history:
+        return ""
+    recent = history[-6:]
+    lines = []
+    for msg in recent:
+        role = msg.get('role', 'user')
+        if role not in ('user', 'assistant'):
+            continue
+        content = msg.get('content', '') or ''
+        cap = assistant_truncate if role == 'assistant' else user_truncate
+        if len(content) > cap:
+            # head + tail — tail often has the concrete sources/details the
+            # follow-up is about to reference.
+            half = cap // 2
+            content = content[:half] + ' ... ' + content[-half:]
+        lines.append(f"{role}: {content}")
+    return "\n\nConversation history (for context):\n" + "\n".join(lines)
+
+
+def summarize_last_answer(history, char_cap=900):
+    """Short summary of the most recent assistant answer, for the RAG agent
+    so follow-ups like 'tell me more' can add information without repeating
+    what was already said."""
+    for msg in reversed(history):
+        if msg.get('role') == 'assistant':
+            content = (msg.get('content') or '').strip()
+            if not content:
+                return ""
+            if len(content) <= char_cap:
+                return content
+            half = char_cap // 2
+            return content[:half] + ' ... ' + content[-half:]
+    return ""
+
+
+def route_query(query, history):
+    """Router agent: classifies query type, rewrites pronouns, extracts keywords."""
+    analysis_prompt = load_prompt('router.txt').replace('{query}', query) + build_history_context(history)
+    try:
+        res = judge_client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=[{"role": "user", "content": analysis_prompt}],
+            temperature=0,
+            response_format={"type": "json_object"},
+        )
+        data = json.loads(res.choices[0].message.content)
+        return {
+            "search_terms": data.get('keywords', query.split()),
+            "query_type": data.get('type', 'research'),
+            "needs_retrieval": data.get('needs_retrieval', True),
+            "metadata_filter": data.get('metadata_filter', None),
+            "rewritten_query": data.get('rewritten_query', query) or query,
+        }
+    except Exception as e:
+        print(f"Router failed: {e}")
+        return {
+            "search_terms": query.split(),
+            "query_type": 'research',
+            "needs_retrieval": True,
+            "metadata_filter": None,
+            "rewritten_query": query,
+        }
+
+
+# ---------------------------------------------------------------------------
+# RAG pipeline helpers
+# ---------------------------------------------------------------------------
+def rerank(candidates, rewritten_query, context_limit):
+    if len(candidates) <= context_limit:
+        return candidates[:context_limit]
+    snippets = [
+        f"[{idx}] {r[1]}, Page {r[2]}: {r[0][:300].replace(chr(10), ' ').strip()}"
+        for idx, r in enumerate(candidates)
+    ]
+    prompt = f"""You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
+
+RANKING RULES:
+- A snippet that SUBSTANTIVELY DISCUSSES the query subject (facts, actions, testimony, analysis) is FAR more relevant than a snippet that merely MENTIONS the subject's name in a list, index, header, declassification cover page, footer, or document-control metadata.
+- Rank discussion > mention. Rank mention > name-only appearance.
+- Snippets that only contain the subject's name inside administrative text (e.g. "Documents concerning X were declassified", "File index: X", "See folder X-12") should be ranked LAST, even if they match keywords.
+- Prefer snippets with specific facts, dates, names of other people, or direct quotes over generic procedural text.
+
+User query: "{rewritten_query}"
 
 Snippets:
-{chr(10).join(snippets_for_rerank)}
+{chr(10).join(snippets)}
 
 Return ONLY a JSON array of integers, e.g. [3, 0, 7, 1, ...]"""
+    try:
+        res = judge_client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            response_format={"type": "json_object"},
+        )
+        raw = json.loads(res.choices[0].message.content)
+        indices = list(raw.values())[0] if isinstance(raw, dict) else raw
+        valid = [i for i in indices if isinstance(i, int) and 0 <= i < len(candidates)]
+        return [candidates[i] for i in valid[:context_limit]]
+    except Exception as e:
+        print(f"Rerank failed, using FTS order: {e}")
+        return candidates[:context_limit]
 
-            try:
-                rerank_res = client.chat.completions.create(
-                    model=MODEL,
-                    messages=[{"role": "user", "content": rerank_prompt}],
-                    temperature=0,
-                    response_format={"type": "json_object"}
-                )
-                rerank_raw = json.loads(rerank_res.choices[0].message.content)
-                # Handle both {"indices": [...]} and plain [...]
-                if isinstance(rerank_raw, dict):
-                    indices = list(rerank_raw.values())[0]
-                else:
-                    indices = rerank_raw
-                # Filter valid indices and rebuild results in reranked order
-                valid_indices = [i for i in indices if isinstance(i, int) and 0 <= i < len(unique_results)]
-                final_results = [unique_results[i] for i in valid_indices[:context_limit]]
-                print(f"Re-ranked: selected {len(final_results)} from {len(unique_results)} candidates")
-            except Exception as e:
-                print(f"Re-ranking failed, using FTS order: {e}")
-                final_results = unique_results[:context_limit]
-        else:
-            final_results = unique_results[:context_limit]
 
-        # Build numbered source context for in-text citations
-        context = ""
-        if final_results:
-            context_parts = []
-            for idx, r in enumerate(final_results, 1):
-                context_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{r[0]}")
-            context = "\n\n".join(context_parts)
-        else:
-            context = "NO SEARCH RESULTS FOUND."
+def build_context(picked):
+    if not picked:
+        return "NO SEARCH RESULTS FOUND."
+    parts = [f"[{i}] Source: {r[1]}, Page {r[2]}\n{r[0]}" for i, r in enumerate(picked, 1)]
+    return "\n\n".join(parts)
 
-        # Load prompt based on query type
-        if query_type == "simple":
-            instructions = load_prompt('rag-simple.txt')
-        else:
-            instructions = load_prompt('rag-research.txt')
 
-        system_prompt = f"""{instructions}
+def build_rag_system_prompt(query_type, stats):
+    instructions = load_prompt('rag-simple.txt' if query_type == 'simple' else 'rag-research.txt')
+    return f"""{instructions}
 
 CRITICAL FORMATTING RULES:
 - NEVER show your reasoning process. No "Step 1:", "Step 2:", "Let me analyze", etc.
@@ -405,161 +463,643 @@ CRITICAL FORMATTING RULES:
 - Write your answer directly as a research historian would present findings to a reader.
 
 ARCHIVE METADATA:
-- Total Archive: {total_p:,} pages across the collection
-- Pages with Handwriting: {hw_p:,}
-- Pages with Official Stamps: {stamp_p:,}
-- Pages with Redactions: {redact_p:,}
+- Total Archive: {stats['total_p']:,} pages across the collection
+- Pages with Handwriting: {stats['hw_p']:,}
+- Pages with Official Stamps: {stats['stamp_p']:,}
+- Pages with Redactions: {stats['redact_p']:,}
 """
 
-        user_prompt = f"""RETRIEVED DOCUMENTS:
-{context}
+
+def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research"):
+    prior_block = ""
+    if prior_answer_summary:
+        prior_block = (
+            "PREVIOUS ASSISTANT ANSWER (for reference only — do NOT repeat, add NEW information):\n"
+            f"\"\"\"\n{prior_answer_summary}\n\"\"\"\n\n"
+        )
+
+    # Format reminder goes LAST because small models weight the tail of the
+    # prompt far more than the head; the long system prompt's format rules
+    # are otherwise forgotten by the time llama starts generating.
+    if query_type == "simple":
+        format_reminder = """
+
+FORMAT REMINDER — YOUR OUTPUT MUST LOOK EXACTLY LIKE THIS:
+
+**[One bold sentence giving the direct answer.]**
+
+- [First supporting fact, one sentence, ending with a single citation like [2].]
+- [Second supporting fact, one sentence, ending with a citation.]
+- [Third supporting fact, one sentence, ending with a citation.]
+- (2 to 5 bullets total — no more, no fewer.)
+
+*[Optional one-line italic gap note, only if the sources leave an obvious part of the question unanswered. Omit entirely otherwise.]*
+
+HARD RULES:
+- NO prose paragraphs. Only one bold line + bullets (+ optional italic gap).
+- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
+- Each bullet gets its OWN specific citation, not a shared dump at the end of the answer."""
+    else:
+        format_reminder = """
+
+FORMAT REMINDER — YOUR OUTPUT MUST START WITH THESE TWO HEADINGS, IN THIS ORDER:
+
+## Executive Summary
+2–3 sentences. Direct answer, flag contradictions. No preamble above this heading.
+
+## Detailed Findings
+Use `###` subheadings per topic. Within each, choose short paragraphs, bullets, or a markdown table based on what fits.
+
+HARD RULES:
+- NO meta-preamble ("The user is inquiring...", "To address this...", "Based on the documents...").
+- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
+- Each factual claim gets its OWN specific citation — not a shared dump of every source number at the end."""
+
+    return f"""{prior_block}RETRIEVED DOCUMENTS:
+{ctx}
 
 USER INQUIRY: {query}
 
 IMPORTANT REMINDERS:
 - You MUST cite sources using [1], [2], etc. for EVERY factual claim. A response without any citations is a failure.
 - ONLY use information from the RETRIEVED DOCUMENTS above. Do not use your own knowledge.
-- No reasoning steps, no LaTeX, no "Step 1/2/3"."""
+- No reasoning steps, no LaTeX, no "Step 1/2/3".
 
-        # Build messages — no conversation history for the RAG agent
-        # History is only used by the Router Agent to resolve follow-up queries.
-        # Including it here causes the LLM to mix in data from previous answers.
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+ANSWERING GUIDANCE:
+- The retrieved documents above very likely contain SOME material relevant to the subject of the inquiry, even if no single document answers it fully. Scan every source for any fact, quote, reference, or detail that touches the subject — direct or indirect.
+- Synthesize a partial answer from whatever is present. State clearly what the documents do cover, and note gaps with phrasings like "The records do not directly describe X; however, they mention Y in connection with the subject."
+- Do NOT refuse just because no single source gives a complete biography, narrative, or overview. Tangential facts ARE useful content.
+- Only use the exact refusal line if the retrieved documents truly do not mention the subject at all, or only share unrelated keywords.{format_reminder}"""
 
-        completion = client.chat.completions.create(
+
+def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, query_type="research"):
+    """Stream the generation. Yields (kind, payload) tuples:
+    ("token", text) for incremental text, ("done", full_text) at end."""
+    ctx = build_context(picked)
+    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type)
+    full_text = ""
+    try:
+        stream = client.chat.completions.create(
             model=MODEL,
-            messages=messages,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=0.3,
+            stream=True,
+        )
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content if chunk.choices else None
+            if delta:
+                full_text += delta
+                yield ("token", delta)
+    except Exception as e:
+        print(f"Streaming failed, falling back to non-streaming: {e}")
+        res = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
             temperature=0.3,
         )
+        full_text = res.choices[0].message.content
+        yield ("token", full_text)
+    yield ("done", full_text)
 
-        answer_text = completion.choices[0].message.content
 
-        # Post-process: strip chain-of-thought artifacts that LLaMA sometimes produces
-        # Remove LaTeX $\boxed{...}$ patterns
-        answer_text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', answer_text)
-        # Remove "The final answer is: ..." lines
-        answer_text = re.sub(r'(?m)^.*The final answer is:?.*$', '', answer_text)
-        # Remove "Step N:" reasoning headers
-        answer_text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', answer_text)
-        # Clean up excessive blank lines left behind
-        answer_text = re.sub(r'\n{3,}', '\n\n', answer_text).strip()
-
-        all_sources = [{"filename": r[1], "page": r[2]} for r in final_results]
-
-        # Safety net: if LLM produced no citations but we have sources, retry once
-        has_citations = bool(re.search(r'\[\d+\]', answer_text))
-        if not has_citations and final_results:
-            print("WARNING: No citations in answer, retrying with stricter prompt")
-            retry_prompt = f"""The previous answer had NO citations. This is unacceptable.
+def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary, query_type="research"):
+    ctx = build_context(picked)
+    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type)
+    res = client.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        temperature=0.3,
+    )
+    text = strip_artifacts(res.choices[0].message.content)
+    if picked and not re.search(r'\[\d+\]', text):
+        retry_prompt = f"""The previous answer had NO citations. This is unacceptable.
 
 RETRIEVED DOCUMENTS:
-{context}
+{ctx}
 
 USER INQUIRY: {query}
 
-You MUST rewrite your answer using ONLY the documents above. Every single factual sentence MUST end with a citation like [1], [2], etc. If the documents don't contain relevant info, say so. Do NOT use your own knowledge."""
+You MUST rewrite your answer using ONLY the documents above. Every factual sentence MUST end with a citation like [1], [2], etc."""
+        retry = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": retry_prompt},
+            ],
+            temperature=0.2,
+            max_tokens=1500,
+        )
+        retry_text = strip_artifacts(retry.choices[0].message.content)
+        if re.search(r'\[\d+\]', retry_text):
+            text = retry_text
+    return text
 
-            retry_messages = [{"role": "system", "content": system_prompt}]
-            retry_messages.append({"role": "user", "content": retry_prompt})
-            retry_completion = client.chat.completions.create(
-                model=MODEL,
-                messages=retry_messages,
-                temperature=0.2,
-            )
-            retry_text = retry_completion.choices[0].message.content
-            # Use retry if it has citations, otherwise keep original
-            if re.search(r'\[\d+\]', retry_text):
-                answer_text = retry_text
-                # Re-apply post-processing
-                answer_text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', answer_text)
-                answer_text = re.sub(r'(?m)^.*The final answer is:?.*$', '', answer_text)
-                answer_text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', answer_text)
-                answer_text = re.sub(r'\n{3,}', '\n\n', answer_text).strip()
 
-        # Remap citations to only include actually-cited sources
-        # Find which [N] indices appear in the answer
-        cited_nums = sorted(set(int(m) for m in re.findall(r'\[(\d+)\]', answer_text)))
-        if cited_nums:
-            # Build new sources list with only cited ones, and remap [old] -> [new] in text
-            new_sources = []
-            remap = {}
-            for new_idx, old_num in enumerate(cited_nums, 1):
-                old_idx = old_num - 1
-                if 0 <= old_idx < len(all_sources):
-                    new_sources.append(all_sources[old_idx])
-                    remap[old_num] = new_idx
+def check_answer_grounded(answer, picked, rewritten_query, query_type):
+    """Grounded = (a) addresses the correct subject AND (b) claims are supported
+    by the retrieved sources. Judge sees both answer and sources, so it can
+    spot hallucinations/subject drift, not just refusals."""
+    if query_type not in ("simple", "research"):
+        return True, ""
+    sources_block = build_context(picked)[:4000]
+    judge_prompt = f"""You are judging whether an assistant's answer to a user question is (a) on-topic and (b) grounded in the retrieved sources.
 
-            # Replace citation numbers in answer text (largest first to avoid [1] replacing inside [10])
-            for old_num in sorted(remap.keys(), reverse=True):
-                answer_text = answer_text.replace(f'[{old_num}]', f'[__CITE_{remap[old_num]}__]')
-            for new_num in remap.values():
-                answer_text = answer_text.replace(f'[__CITE_{new_num}__]', f'[{new_num}]')
+User question: "{rewritten_query}"
 
-            sources_out = new_sources
-        else:
+Retrieved sources (numbered):
+{sources_block}
+
+Assistant answer:
+\"\"\"
+{answer[:3500]}
+\"\"\"
+
+Return JSON: {{"grounded": true|false, "reason": "<one short sentence>"}}
+
+Mark "grounded": true if:
+- The answer covers the correct SUBJECT (the person/event/entity asked about), AND
+- The specific factual claims in the answer are supported by content in the retrieved sources (they can be partial/incomplete, but they must not contradict or fabricate).
+
+Mark "grounded": false if:
+- The answer says it cannot find the information, or explicitly refuses.
+- The answer is about a different subject than the question.
+- The answer contains factual claims not supported by any of the retrieved sources (hallucination).
+- The answer is generic filler with no specific facts from the sources.
+
+When in doubt, lean grounded=true. Only reject clear subject mismatches, outright refusals, or obvious hallucinations."""
+    try:
+        res = judge_client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=[{"role": "user", "content": judge_prompt}],
+            temperature=0,
+            response_format={"type": "json_object"},
+        )
+        data = json.loads(res.choices[0].message.content)
+        return bool(data.get("grounded", True)), data.get("reason", "")
+    except Exception as e:
+        print(f"Grounding check skipped: {e}")
+        return True, ""
+
+
+def verify_citations(answer, picked):
+    """Per-citation check: does source [N] actually support the sentence that
+    cites it? Returns a list of unsupported citation numbers. Cheap safeguard
+    against the LLM attaching arbitrary [N] to fabricated claims."""
+    if not picked or not re.search(r'\[\d+\]', answer):
+        return []
+    # Give the verifier every source, each capped so no single doc dominates.
+    # A global char cap would silently hide later sources and falsely mark
+    # their citations unsupported.
+    per_source_cap = 3500
+    parts = [
+        f"[{i}] Source: {r[1]}, Page {r[2]}\n{r[0][:per_source_cap]}"
+        for i, r in enumerate(picked, 1)
+    ]
+    sources_block = "\n\n".join(parts)
+    prompt = f"""You are auditing citations. For each [N] citation in the answer, decide whether source [N] reasonably supports the sentence it is attached to.
+
+Retrieved sources (numbered):
+{sources_block}
+
+Answer with citations:
+\"\"\"
+{answer[:3500]}
+\"\"\"
+
+JUDGING RULES — be LENIENT, not strict:
+- A citation is SUPPORTED if source [N] contains the core fact, even if the wording differs, the answer paraphrases, or the source gives more/less detail.
+- A citation is SUPPORTED if source [N] contains material the sentence could reasonably be drawn from, even in a summary or glancing mention.
+- Only mark UNSUPPORTED when source [N] clearly does not contain the claimed fact at all — i.e. a topic mismatch or an outright fabrication.
+- When uncertain, mark as SUPPORTED. False-unsupported flags are worse than false-supported flags.
+- Do NOT penalize citations for imprecision, extra context, or minor discrepancies. Only flag clear mismatches.
+
+Return JSON: {{"unsupported": [N1, N2, ...]}} — each N is a citation number whose sentence is clearly not supported by source [N]. Return empty list if all citations are reasonable."""
+    try:
+        res = judge_client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            response_format={"type": "json_object"},
+        )
+        data = json.loads(res.choices[0].message.content)
+        bad = data.get("unsupported", [])
+        return [int(x) for x in bad if isinstance(x, (int, str)) and str(x).isdigit()]
+    except Exception as e:
+        print(f"Citation verification skipped: {e}")
+        return []
+
+
+def expand_and_retrieve(rewritten_query, reason, seed_results):
+    """Generate 3 alternative phrasings, retrieve, merge with seed_results."""
+    prompt = f"""The user asked: "{rewritten_query}"
+
+A first-pass answer was unsatisfactory because: {reason}.
+
+Generate 3 ALTERNATIVE search queries likely to find relevant documents in a JFK-assassination archive. Use synonyms, related entities, and domain vocabulary likely to appear in CIA/FBI/Warren Commission files.
+
+Return JSON: {{"queries": ["query 1", "query 2", "query 3"]}}"""
+    try:
+        res = judge_client.chat.completions.create(
+            model=JUDGE_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.4,
+            response_format={"type": "json_object"},
+        )
+        data = json.loads(res.choices[0].message.content)
+        expanded = [q for q in data.get("queries", []) if isinstance(q, str) and q.strip()]
+    except Exception as e:
+        print(f"Expansion failed: {e}")
+        return seed_results
+    if not expanded:
+        return seed_results
+    print(f"Expansion queries: {expanded}")
+    merged = list(seed_results)
+    seen = {r[0][:200].strip() for r in merged}
+    for eq in expanded:
+        # Expansion queries are LLM-generated full sentences — feed them to
+        # both legs so we gain semantic recall, not just keyword matches.
+        for r in hybrid_search(eq, eq, _tokenize_terms(eq)):
+            key = r[0][:200].strip()
+            if key not in seen:
+                merged.append(r)
+                seen.add(key)
+    return merged
+
+
+# ---------------------------------------------------------------------------
+# Main chat endpoint — SSE streaming with stage events
+# ---------------------------------------------------------------------------
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    data = request.json or {}
+    query = data.get('query')
+    history = data.get('history', [])
+
+    if not query:
+        return jsonify({"error": "No query provided"}), 400
+    if not client:
+        return jsonify({"error": "LLM client not configured"}), 500
+
+    def generate():
+        timings = {}
+        t0 = time.time()
+
+        def stage(label):
+            yield_val = sse("stage", {"label": label})
+            return yield_val
+
+        try:
+            # -- Document ID shortcut --------------------------------------
+            doc_id_match = re.search(r'\b(\d{3}-\d{5}-\d{5})\b', query)
+            if doc_id_match:
+                yield sse("stage", {"label": "Fetching document..."})
+                doc_id = doc_id_match.group(1)
+                filename = f"{doc_id}.pdf"
+                with db_cursor() as cur:
+                    cur.execute(
+                        "SELECT content, filename, page_number FROM jfk_pages WHERE filename = %s ORDER BY page_number",
+                        (filename,),
+                    )
+                    doc_results = cur.fetchall()
+                if not doc_results:
+                    yield final_event(
+                        f"Document **{filename}** was not found in the archive. Please verify the document ID.",
+                        [], "document")
+                    return
+                yield sse("stage", {"label": "Generating..."})
+                parts = [f"[{i}] Source: {r[1]}, Page {r[2]}\n{r[0]}" for i, r in enumerate(doc_results, 1)]
+                ctx = "\n\n".join(parts)
+                instructions = load_prompt('document-agent.txt').replace('{filename}', filename)
+                full = ""
+                try:
+                    stream = client.chat.completions.create(
+                        model=MODEL,
+                        messages=[
+                            {"role": "system", "content": instructions},
+                            {"role": "user", "content": f"DOCUMENT PAGES:\n{ctx}\n\nUSER INQUIRY: {query}"},
+                        ],
+                        temperature=0.3,
+                        stream=True,
+                    )
+                    for chunk in stream:
+                        delta = chunk.choices[0].delta.content if chunk.choices else None
+                        if delta:
+                            full += delta
+                            yield sse("token", {"text": delta})
+                except Exception as e:
+                    print(f"Doc streaming failed, using non-stream: {e}")
+                    res = client.chat.completions.create(
+                        model=MODEL,
+                        messages=[
+                            {"role": "system", "content": instructions},
+                            {"role": "user", "content": f"DOCUMENT PAGES:\n{ctx}\n\nUSER INQUIRY: {query}"},
+                        ],
+                        temperature=0.3,
+                    )
+                    full = res.choices[0].message.content
+                    yield sse("token", {"text": full})
+                cleaned = strip_doc_echo(full)
+                # Replay cleaned answer so the frontend shows final cleaned text
+                # (only if cleaning stripped something visible — otherwise skip)
+                yield final_event(
+                    cleaned,
+                    [{"filename": r[1], "page": r[2]} for r in doc_results],
+                    "document",
+                    {"total_ms": int((time.time() - t0) * 1000)},
+                )
+                return
+
+            # -- Router -----------------------------------------------------
+            yield sse("stage", {"label": "Routing..."})
+            t_router = time.time()
+            routed = route_query(query, history)
+            timings["router_ms"] = int((time.time() - t_router) * 1000)
+            query_type = routed["query_type"]
+            rewritten_query = routed["rewritten_query"]
+            print(f"[route] type={query_type} rewritten={rewritten_query!r}")
+
+            # -- Metadata shortcut -----------------------------------------
+            if query_type == "metadata" and routed["metadata_filter"]:
+                yield sse("stage", {"label": "Running metadata query..."})
+                allowed_columns = {
+                    'has_redactions', 'includes_handwriting', 'has_stamps',
+                    'has_tables', 'has_forms', 'is_typewritten', 'document_type',
+                }
+                mf = routed["metadata_filter"]
+                col, val = mf.get('column', ''), mf.get('value', True)
+                if col in allowed_columns:
+                    with db_cursor() as cur:
+                        if isinstance(val, bool):
+                            cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} = %s", (val,))
+                            total_matching = cur.fetchone()[0]
+                            cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} = %s", (val,))
+                            docs_matching = cur.fetchone()[0]
+                            cur.execute(f"""
+                                SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
+                                FROM jfk_pages WHERE {col} = %s AND content IS NOT NULL
+                                ORDER BY file_id, page_number LIMIT 10
+                            """, (val,))
+                        else:
+                            cur.execute(f"SELECT COUNT(*) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
+                            total_matching = cur.fetchone()[0]
+                            cur.execute(f"SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE {col} ILIKE %s", (f"%{val}%",))
+                            docs_matching = cur.fetchone()[0]
+                            cur.execute(f"""
+                                SELECT DISTINCT ON (file_id) content, filename, page_number, file_id
+                                FROM jfk_pages WHERE {col} ILIKE %s AND content IS NOT NULL
+                                ORDER BY file_id, page_number LIMIT 10
+                            """, (f"%{val}%",))
+                        samples = cur.fetchall()
+
+                    ctx_parts = [
+                        f"METADATA QUERY RESULTS for {col} = {val}:",
+                        f"Total matching pages: {total_matching}",
+                        f"Total matching documents: {docs_matching}",
+                        "",
+                        "SAMPLE DOCUMENTS:",
+                    ]
+                    sources_list = []
+                    for idx, r in enumerate(samples, 1):
+                        snippet = r[0][:500] if r[0] else "(no content)"
+                        ctx_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{snippet}")
+                        sources_list.append({"filename": r[1], "page": r[2]})
+                    meta_prompt = (
+                        "You are a research historian answering questions about the JFK document archive.\n"
+                        "Below are metadata query results. Present statistics clearly then describe samples.\n"
+                        "Cite samples as [1], [2]. No reasoning steps, no LaTeX.\n\n"
+                        + "\n\n".join(ctx_parts)
+                        + f"\n\nUSER INQUIRY: {query}"
+                    )
+                    yield sse("stage", {"label": "Generating..."})
+                    full = ""
+                    try:
+                        stream = client.chat.completions.create(
+                            model=MODEL,
+                            messages=[{"role": "user", "content": meta_prompt}],
+                            temperature=0.3,
+                            stream=True,
+                        )
+                        for chunk in stream:
+                            delta = chunk.choices[0].delta.content if chunk.choices else None
+                            if delta:
+                                full += delta
+                                yield sse("token", {"text": delta})
+                    except Exception as e:
+                        print(f"Meta streaming failed: {e}")
+                        res = client.chat.completions.create(
+                            model=MODEL,
+                            messages=[{"role": "user", "content": meta_prompt}],
+                            temperature=0.3,
+                        )
+                        full = res.choices[0].message.content
+                        yield sse("token", {"text": full})
+                    yield final_event(strip_artifacts(full), sources_list, "metadata",
+                                      {"total_ms": int((time.time() - t0) * 1000), **timings})
+                    return
+                # Invalid column — fall through to search
+                query_type = "simple"
+
+            # -- Out-of-scope ---------------------------------------------
+            # Short-circuit: skip retrieval + generation entirely. Emit the
+            # exact refusal line the eval/citation-verification contract
+            # expects, streamed token-by-token so the frontend animates it
+            # the same way as a real answer.
+            if query_type == "out_of_scope":
+                refusal = "The retrieved documents do not contain sufficient information to answer this query."
+                yield sse("stage", {"label": "Out of scope"})
+                for tok in re.findall(r'\S+\s*', refusal):
+                    yield sse("token", {"text": tok})
+                    time.sleep(0.015)
+                timings["total_ms"] = int((time.time() - t0) * 1000)
+                yield final_event(refusal, [], "out_of_scope", timings)
+                return
+
+            # -- Conversational -------------------------------------------
+            if not routed["needs_retrieval"] or query_type == "conversational":
+                yield sse("stage", {"label": "Responding..."})
+                conv_messages = [{"role": "system", "content": load_prompt('conversational.txt')}]
+                for msg in history[-20:]:
+                    role = msg.get('role', 'user')
+                    if role in ('user', 'assistant'):
+                        conv_messages.append({"role": role, "content": msg['content']})
+                conv_messages.append({"role": "user", "content": query})
+                full = ""
+                try:
+                    stream = client.chat.completions.create(
+                        model=MODEL,
+                        messages=conv_messages,
+                        temperature=0.5,
+                        stream=True,
+                    )
+                    for chunk in stream:
+                        delta = chunk.choices[0].delta.content if chunk.choices else None
+                        if delta:
+                            full += delta
+                            yield sse("token", {"text": delta})
+                except Exception as e:
+                    print(f"Conversational streaming failed: {e}")
+                    res = client.chat.completions.create(
+                        model=MODEL, messages=conv_messages, temperature=0.5,
+                    )
+                    full = res.choices[0].message.content
+                    yield sse("token", {"text": full})
+                yield final_event(full, [], "conversational",
+                                  {"total_ms": int((time.time() - t0) * 1000), **timings})
+                return
+
+            # -- Search / RAG ---------------------------------------------
+            search_terms = [t for t in routed["search_terms"] if t and t.strip()]
+            if not search_terms:
+                search_terms = [query]
+            context_limit = 15 if query_type == "simple" else 20
+            print(f"[rag] type={query_type} terms={search_terms}")
+
+            stats = get_archive_stats()
+
+            yield sse("stage", {"label": "Retrieving documents..."})
+            t_retr = time.time()
+            # Use ONLY the router-extracted search terms for FTS. Feeding the full
+            # rewritten question pollutes ts_rank_cd with common words ("role",
+            # "played", "files") that match admin/policy docs and bury the
+            # actually-relevant pages. Fall back to tokenized rewritten_query only
+            # if the router returned no terms.
+            if search_terms:
+                ts_input = ' '.join(search_terms).strip()
+            else:
+                ts_input = rewritten_query
+            # Hybrid: FTS on keywords (proper-noun precision) ∪ vector on the
+            # rewritten question (semantic/summary recall). Rerank picks from
+            # the union.
+            unique_results = hybrid_search(ts_input, rewritten_query, _tokenize_terms(ts_input))
+            timings["retrieve_ms"] = int((time.time() - t_retr) * 1000)
+            print(f"[rag] retrieved={len(unique_results)} (hybrid)")
+
+            yield sse("stage", {"label": "Reranking..."})
+            t_rr = time.time()
+            final_results = rerank(unique_results, rewritten_query, context_limit)
+            timings["rerank_ms"] = int((time.time() - t_rr) * 1000)
+
+            system_prompt = build_rag_system_prompt(query_type, stats)
+            prior_summary = summarize_last_answer(history)
+
+            # First generation — collected silently (not streamed to client yet).
+            # We stream only the final verified answer after grounding + citation checks.
+            yield sse("stage", {"label": "Generating..."})
+            t_gen = time.time()
+            full_text = ""
+            for kind, payload in generate_answer_stream(query, final_results, system_prompt, prior_summary, query_type):
+                if kind == "token":
+                    full_text += payload
+                else:
+                    full_text = payload
+            timings["generate_ms"] = int((time.time() - t_gen) * 1000)
+            answer_text = strip_artifacts(full_text)
+
+            # Post-gen grounding check (sees sources)
+            yield sse("stage", {"label": "Checking answer..."})
+            t_g = time.time()
+            grounded, ground_reason = check_answer_grounded(answer_text, final_results, rewritten_query, query_type)
+            timings["ground_ms"] = int((time.time() - t_g) * 1000)
+            print(f"[rag] grounding {'PASSED' if grounded else 'FAILED'}: {ground_reason}")
+
+            retried = False
+            if not grounded:
+                retried = True
+                print(f"[rag] expanding after failed grounding.")
+                yield sse("stage", {"label": "Expanding search..."})
+                t_exp = time.time()
+                unique_results = expand_and_retrieve(rewritten_query, ground_reason, unique_results)
+                timings["expand_ms"] = int((time.time() - t_exp) * 1000)
+
+                yield sse("stage", {"label": "Reranking expanded results..."})
+                final_results = rerank(unique_results, rewritten_query, context_limit)
+
+                # Second generation — also silent; we still stream only the final answer.
+                # No second grounding check: we trust the expanded-regen output and let
+                # verify_citations strip bad [N] markers below instead of refusing outright.
+                yield sse("stage", {"label": "Regenerating with new sources..."})
+                answer_text = generate_answer_nonstream(query, final_results, system_prompt, prior_summary, query_type)
+
+            # Citation verification — strip bad citations (or regenerate if many bad)
+            yield sse("stage", {"label": "Verifying citations..."})
+            t_cv = time.time()
+            unsupported = verify_citations(answer_text, final_results)
+            timings["cite_verify_ms"] = int((time.time() - t_cv) * 1000)
+            if unsupported:
+                print(f"[rag] unsupported citations: {unsupported}")
+                # Strip unsupported [N] markers from the text
+                for n in sorted(set(unsupported), reverse=True):
+                    answer_text = re.sub(rf'\s*\[{n}\]', '', answer_text)
+
+            all_sources = [{"filename": r[1], "page": r[2]} for r in final_results]
+            answer_text, _ = remap_citations(answer_text, all_sources)
+            # Always surface every reranked source in the panel, even if the
+            # generator cited only a subset (or none survived verification).
             sources_out = all_sources
 
-        return jsonify({
-            "answer": answer_text,
-            "sources": sources_out,
-            "query_type": query_type
-        })
-    except Exception as e:
-        print(f"Error in /api/chat: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-    finally:
-        cur.close()
-        conn.close()
+            # Stream the final, verified answer to the frontend. Small delay per
+            # chunk so the UI animates in rather than arriving as one block.
+            yield sse("stage", {"label": "Streaming answer..."})
+            tokens_out = re.findall(r'\S+\s*', answer_text)
+            for tok in tokens_out:
+                yield sse("token", {"text": tok})
+                time.sleep(0.015)
+
+            timings["total_ms"] = int((time.time() - t0) * 1000)
+            print(f"[timing] {timings}")
+            yield final_event(answer_text, sources_out, query_type, timings)
+
+        except Exception as e:
+            print(f"Error in /api/chat stream: {e}")
+            yield sse("error", {"message": str(e)})
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
+# ---------------------------------------------------------------------------
+# Stats / analyze / pdf routes
+# ---------------------------------------------------------------------------
 @app.route('/api/stats', methods=['GET'])
-def stats():
-    conn = get_db_connection()
-    cur = conn.cursor()
+def stats_route():
     try:
-        cur.execute("SELECT COUNT(*) FROM jfk_pages")
-        total_pages = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages")
-        total_docs = cur.fetchone()[0]
-
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
-        pages_with_content = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
-        docs_with_content = cur.fetchone()[0]
-
+        with db_cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM jfk_pages")
+            total_pages = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages")
+            total_docs = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
+            pages_with_content = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
+            docs_with_content = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE includes_handwriting = true")
+            handwritten_pages = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_stamps = true")
+            stamped_pages = cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_redactions = true")
+            redacted_pages = cur.fetchone()[0]
+            cur.execute("SELECT document_type, COUNT(*) as count FROM jfk_pages GROUP BY document_type ORDER BY count DESC LIMIT 5")
+            doc_types = cur.fetchall()
         page_pct = (pages_with_content / total_pages * 100) if total_pages > 0 else 0
         doc_pct = (docs_with_content / total_docs * 100) if total_docs > 0 else 0
-
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE includes_handwriting = true")
-        handwritten_pages = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_stamps = true")
-        stamped_pages = cur.fetchone()[0]
-        cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_redactions = true")
-        redacted_pages = cur.fetchone()[0]
-
-        cur.execute("SELECT document_type, COUNT(*) as count FROM jfk_pages GROUP BY document_type ORDER BY count DESC LIMIT 5")
-        doc_types = cur.fetchall()
-
         return jsonify({
-            "total_pages": total_pages,
-            "total_docs": total_docs,
-            "pages_with_content": pages_with_content,
-            "docs_with_content": docs_with_content,
-            "page_content_pct": round(page_pct, 1),
-            "doc_content_pct": round(doc_pct, 1),
-            "handwritten_pages": handwritten_pages,
-            "stamped_pages": stamped_pages,
+            "total_pages": total_pages, "total_docs": total_docs,
+            "pages_with_content": pages_with_content, "docs_with_content": docs_with_content,
+            "page_content_pct": round(page_pct, 1), "doc_content_pct": round(doc_pct, 1),
+            "handwritten_pages": handwritten_pages, "stamped_pages": stamped_pages,
             "redacted_pages": redacted_pages,
-            "document_types": [{"type": r[0], "count": r[1]} for r in doc_types]
+            "document_types": [{"type": r[0], "count": r[1]} for r in doc_types],
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    finally:
-        cur.close()
-        conn.close()
 
 
 @app.route('/api/analyze', methods=['POST'])
@@ -567,20 +1107,16 @@ def analyze():
     data = request.json
     action = data.get('action')
     text = data.get('text')
-
     if not text:
         return jsonify({"error": "No text provided"}), 400
-
     if not client:
-        return jsonify({"error": "GROQ_API_KEY not configured"}), 500
-
+        return jsonify({"error": "LLM client not configured"}), 500
     if action == 'names':
         prompt = f"Extract all unique people's names from the following text. Return them as a comma-separated list. If none, say 'None'.\n\nText: {text}"
     elif action == 'summarize':
         prompt = f"Provide a concise summary of the following text, highlighting key information and events.\n\nText: {text}"
     else:
         return jsonify({"error": "Invalid action"}), 400
-
     try:
         completion = client.chat.completions.create(
             model=MODEL,
@@ -594,14 +1130,10 @@ def analyze():
 
 @app.route('/api/pdf/<filename>', methods=['GET'])
 def get_pdf(filename):
-    """Redirect to NARA archive URL for the PDF."""
-    # Strip .pdf extension to get the file_id, then build the NARA URL
     file_id = filename.replace('.pdf', '').replace('.PDF', '')
-    nara_url = f"{NARA_BASE_URL}/{file_id}.pdf"
-    return redirect(nara_url)
+    return redirect(f"{NARA_BASE_URL}/{file_id}.pdf")
 
 
-# SPA catch-all: serve frontend for non-API routes
 @app.route('/')
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')
@@ -609,7 +1141,6 @@ def serve_index():
 
 @app.errorhandler(404)
 def not_found(e):
-    # For SPA routing: serve index.html for any unmatched route
     if not request.path.startswith('/api'):
         return send_from_directory(app.static_folder, 'index.html')
     return jsonify({"error": "Not found"}), 404

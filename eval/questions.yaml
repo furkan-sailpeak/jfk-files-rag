@@ -1,0 +1,592 @@
+- id: factual_oswald_marine_clearance
+  category: factual
+  question: "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 180-10104-10354.pdf
+      page: 13
+    - filename: 180-10078-10492.pdf
+      page: 5
+  reference_answer: >
+    According to a 1978 fact sheet on Oswald's Marine Corps service, his level of security clearance
+    was "confidential." A Security Termination Statement (OPNAV FORM 5511-14) was executed by Oswald
+    on September 11, 1959. A fellow Marine, Richard Dennis Call, also recalled that Oswald held the
+    same security clearance as everyone else in his unit.
+  key_facts:
+    - "Oswald's Marine Corps security clearance was 'confidential'"
+    - "A Security Termination Statement was executed by Oswald on September 11, 1959"
+    - "This is documented in a 1978 fact sheet on Oswald's Marine Corps service"
+
+- id: factual_ruby_real_name
+  category: factual
+  question: "What was Jack Ruby's original family name before he changed it?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 135-10001-10288.pdf
+      page: 18
+  reference_answer: >
+    According to an interview transcript in which Frank Sturgis was questioned by Olsen, Jack Ruby's
+    real name was Rubenstein. The interviewer states, "Jack Ruby, I understand that his real name
+    was Rubenstein."
+  key_facts:
+    - "Jack Ruby's real name was Rubenstein"
+    - "This identification appears in an Olsen/Sturgis interview transcript"
+
+- id: factual_oswald_mexico_cuban_embassy
+  category: factual
+  question: "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 104-10413-10306.pdf
+      page: 35
+    - filename: 144-10001-10125.pdf
+      page: 18
+  reference_answer: >
+    Oswald went to the Cuban Embassy in Mexico City on September 27, 1963 and made an appointment
+    for a visa to Cuba on his way to the USSR. On the same day, he also visited the Soviet Embassy
+    to get a letter of recommendation, but was refused because they did not know who he was. Cuban
+    authorities (MINREX, Havana) later confirmed the request for a transit visa to the USSR made
+    through the Cuban Consulate.
+  key_facts:
+    - "Oswald visited the Cuban Embassy in Mexico City on 27 September 1963"
+    - "He requested a visa to Cuba on his way to the USSR"
+    - "He also visited the Soviet Embassy the same day"
+    - "The Soviet Embassy refused to issue a letter of recommendation because they did not know him"
+
+- id: factual_ruby_fbi_flynn_1959
+  category: factual
+  question: "Which FBI agent contacted Jack Ruby in 1959, and on what date?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 157-10014-10242.pdf
+      page: 441
+  reference_answer: >
+    According to a June 9, 1964 FBI letter from J. Edgar Hoover to J. Lee Rankin (General Counsel of
+    the President's Commission), Jack Ruby was contacted by Special Agent Charles W. Flynn of the
+    FBI's Dallas Office on March 11, 1959, in view of his position as a nightclub operator.
+  key_facts:
+    - "Special Agent Charles W. Flynn of the FBI Dallas Office contacted Jack Ruby"
+    - "The contact occurred on March 11, 1959"
+    - "Ruby was contacted in connection with his position as a nightclub operator"
+
+- id: factual_oswald_marine_discharge_1959
+  category: factual
+  question: "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 180-10072-10186.pdf
+      page: 46
+  reference_answer: >
+    According to the Fourth Endorsement on Pfc Oswald's letter of 17 August 1959, the 3d Marine
+    Aircraft Wing Hardship or Dependency Discharge Board met at 1530 on 27 August 1959 to consider
+    the case of Private First Class Lee H. Oswald (service number 1653230/6741).
+  key_facts:
+    - "The 3d Marine Aircraft Wing Hardship or Dependency Discharge Board met on 27 August 1959"
+    - "The board convened at 1530 hours"
+    - "Oswald held the rank of Private First Class"
+    - "Oswald's service number was 1653230"
+
+- id: factual_cia_mexico_city_cable_date
+  category: factual
+  question: "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 180-10110-10484.pdf
+      page: 92
+    - filename: 180-10110-10484.pdf
+      page: 172
+  reference_answer: >
+    On October 11, 1963 - three days after the Mexico City Station's initial report to Headquarters
+    of Oswald's contact with the Soviet Embassy - the Mexico City Station received a cable from CIA
+    Headquarters with information about Lee Oswald, suggesting he might be identical to "Lee Henry
+    (sic) Oswald." The documents note that Oswald's Mexico "P" file was opened on or about 15
+    October 1963 in response.
+  key_facts:
+    - "CIA Headquarters sent the cable on October 11, 1963"
+    - "This was three days after Mexico City's initial report on Oswald's Soviet Embassy contact"
+    - "Headquarters suggested Oswald might be 'Lee Henry (sic) Oswald'"
+    - "Oswald's Mexico 'P' file was opened on or about 15 October 1963"
+
+- id: biographical_jack_ruby
+  category: biographical
+  question: "Who was Jack Ruby?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 135-10001-10288.pdf
+      page: 18
+    - filename: 157-10014-10242.pdf
+      page: 441
+  reference_answer: >
+    Based on the retrieved documents, Jack Ruby (whose real name was Rubenstein) was a Dallas
+    nightclub operator. He was contacted by the FBI's Dallas Office (Special Agent Charles W. Flynn)
+    on March 11, 1959 in connection with his position as a night-club operator. The previews
+    available contain only limited biographical detail beyond his name, occupation, and FBI contact.
+  key_facts:
+    - "Jack Ruby's real name was Rubenstein"
+    - "Ruby was a nightclub operator in Dallas"
+    - "Ruby was contacted by FBI Special Agent Charles W. Flynn on March 11, 1959"
+
+- id: biographical_oswald
+  category: biographical
+  question: "Who was Lee Harvey Oswald?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 104-10332-10014.pdf
+      page: 56
+    - filename: 180-10104-10354.pdf
+      page: 13
+    - filename: 180-10072-10186.pdf
+      page: 46
+  reference_answer: >
+    Lee Harvey Oswald was identified by the Warren Commission as the assassin of President John F.
+    Kennedy. Before the assassination, CIA Headquarters information on Oswald consisted chiefly of
+    the facts that he had served in the Marine Corps and had defected to the Soviet Union and then
+    returned. He held a "confidential" Marine Corps security clearance and was discharged in 1959
+    following a hardship/dependency discharge board proceeding. In September 1963 he traveled to
+    Mexico City and contacted both the Cuban and Soviet Embassies.
+  key_facts:
+    - "Oswald was identified by the Warren Commission as Kennedy's assassin"
+    - "Oswald served in the U.S. Marine Corps"
+    - "Oswald defected to the Soviet Union and later returned"
+    - "In September 1963 he visited the Cuban and Soviet Embassies in Mexico City"
+
+- id: biographical_david_ferrie
+  category: biographical
+  question: "Who was David Ferrie?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 124-10273-10289_redacted.pdf
+      page: 640
+    - filename: 157-10014-10242.pdf
+      page: 385
+  reference_answer: >
+    According to the retrieved documents, David William Ferrie was a former airline pilot who figured
+    centrally in New Orleans District Attorney Jim Garrison's JFK assassination investigation.
+    Garrison attempted to develop evidence that Ferrie and Lee Harvey Oswald had conspired with
+    anti-Castro Cubans to assassinate President Kennedy. The previews available contain only limited
+    additional biographical detail about Ferrie beyond his occupation and his role in Garrison's
+    theory.
+  key_facts:
+    - "David William Ferrie was a former airline pilot"
+    - "Ferrie was a central figure in Jim Garrison's New Orleans investigation"
+    - "Garrison alleged Ferrie conspired with Oswald and anti-Castro Cubans to assassinate Kennedy"
+
+- id: biographical_silvia_duran
+  category: biographical
+  question: "Who was Silvia Duran?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 144-10001-10099.pdf
+      page: 2
+    - filename: 180-10110-10484.pdf
+      page: 247
+    - filename: 180-10110-10484.pdf
+      page: 306
+  reference_answer: >
+    Silvia Duran was an employee of the Cuban Consulate in Mexico City and the wife of Horatio
+    Duran. She handled Lee Harvey Oswald's request for a transit visa during his late September /
+    early October 1963 visit to Mexico City, and stated she was certain that Oswald signed the visa
+    application in her presence. A Cuban diplomatic note of protest to Mexico, dated 29 November 1963,
+    also addressed the "maltreatment" of Duran in the course of her arrest in connection with the
+    Oswald visa request.
+  key_facts:
+    - "Silvia Duran was an employee of the Cuban Consulate in Mexico City"
+    - "She was the wife of Horatio Duran"
+    - "She handled Oswald's visa application and stated he signed it in her presence"
+    - "Cuba issued a diplomatic note protesting her treatment after she was arrested"
+
+- id: biographical_clay_shaw
+  category: biographical
+  question: "Who was Clay Shaw?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 104-10337-10001.pdf
+      page: 195
+    - filename: 104-10330-10081.pdf
+      page: 15
+  reference_answer: >
+    Clay Shaw was a defendant in the JFK assassination investigation led by New Orleans District
+    Attorney Jim Garrison, who charged that Shaw, David Ferrie, and others had plotted to kill the
+    President. The retrieved documents also reference Shaw being linked in press reports to the
+    World Trade Center and to Permindex, a Swiss corporation. The previews provide limited further
+    personal biographical detail.
+  key_facts:
+    - "Clay Shaw was charged by Jim Garrison in connection with the JFK assassination"
+    - "Garrison alleged Shaw plotted with David Ferrie and others to kill the President"
+    - "Shaw was linked in press reports to the World Trade Center and Permindex"
+
+- id: biographical_jim_garrison
+  category: biographical
+  question: "Who was Jim Garrison?"
+  query_type_expected: simple
+  reference_evidence:
+    - filename: 124-10273-10289_redacted.pdf
+      page: 640
+    - filename: 104-10305-10000.pdf
+      page: 106
+    - filename: 104-10337-10001.pdf
+      page: 195
+  reference_answer: >
+    Jim Garrison was the New Orleans District Attorney who, beginning in December 1966, conducted
+    an investigation of the assassination of President Kennedy. He attempted to develop evidence
+    that David William Ferrie, Clay Shaw, Lee Harvey Oswald, and anti-Castro Cubans had conspired
+    to kill the President, and he prosecuted Clay Shaw in 1966-1969. Garrison's conspiracy theory
+    was later described by his own former chief investigator, William H. Gurvich, as a "baseless
+    fraud" and "a figment of the D.A.'s imagination."
+  key_facts:
+    - "Jim Garrison was the New Orleans District Attorney"
+    - "He began an investigation of the JFK assassination in December 1966"
+    - "He alleged a conspiracy involving Ferrie, Clay Shaw, Oswald, and anti-Castro Cubans"
+    - "He prosecuted Clay Shaw between 1966 and 1969"
+    - "His former chief investigator William H. Gurvich called the theory a 'baseless fraud'"
+
+- id: analytical_cia_surveillance_oswald
+  category: analytical
+  question: "What did the HSCA conclude about the CIA's photographic and electronic surveillance of Oswald in Mexico City, and how forthcoming was the CIA with materials?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 180-10110-10484.pdf
+      page: 119
+    - filename: 180-10110-10484.pdf
+      page: 19
+    - filename: 180-10110-10484.pdf
+      page: 35
+  reference_answer: >
+    The HSCA investigated both the CIA's general photographic surveillance operations in Mexico City
+    in 1963 and the specific question of whether Oswald had been photographed. The Committee
+    concluded that the CIA's photo-surveillance operations in Mexico City "probably obtained a
+    photograph of Lee Harvey Oswald" entering either or both of the Soviet and Cuban compounds.
+    However, the Committee also expressed "deep concern" that the Agency may have withheld
+    photographic materials highly relevant to the investigation, and found that outside of areas
+    involving sensitive sources and methods (such as electronic and photographic surveillance of the
+    Soviet and Cuban diplomatic compounds), information from Mexico was generally relayed accurately
+    and expeditiously to the Warren Commission.
+  key_facts:
+    - "HSCA investigated CIA photo-surveillance operations in Mexico City in 1963"
+    - "HSCA concluded CIA probably obtained a photograph of Oswald at the Soviet or Cuban compounds"
+    - "HSCA expressed concern about possible CIA withholding of photographic materials"
+    - "Information outside sensitive sources/methods was generally relayed accurately to the Warren Commission"
+
+- id: analytical_warren_ruby_hunts
+  category: analytical
+  question: "What links do the retrieved documents draw between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 157-10014-10242.pdf
+      page: 44
+    - filename: 157-10014-10242.pdf
+      page: 384
+  reference_answer: >
+    The retrieved documents, citing recollections from Paul Rothermel - a former FBI agent who was
+    Director of Security for the Hunt Oil Company in Dallas - note that Jim Braden (Brading) visited
+    the Hunt offices on November 21 in the company of three other men, including Roger Bauman,
+    described as "Brading's old Mafia friend," along with Morgan Brown and Duane Nowlin. Rothermel
+    was later fired by H.L. Hunt's sons after reports surfaced that he was "suspicious" of a possible
+    Hunt connection to the assassination. The previews primarily establish the Braden-Hunt office
+    visit and Rothermel's subsequent firing rather than a fully-developed conspiracy narrative.
+  key_facts:
+    - "Paul Rothermel was a former FBI agent and Director of Security for the Hunt Oil Company"
+    - "Rothermel recalled Braden visiting the Hunt offices on November 21"
+    - "Braden visited with Roger Bauman (described as Braden's old Mafia friend), Morgan Brown, and Duane Nowlin"
+    - "Rothermel was later fired by H.L. Hunt's sons over his suspicions of a possible Hunt connection"
+
+- id: analytical_kgb_oswald_conclusion
+  category: analytical
+  question: "What did U.S. investigators ultimately conclude about whether Lee Harvey Oswald was a Soviet (KGB) agent?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10332-10014.pdf
+      page: 56
+  reference_answer: >
+    The retrieved documents indicate that Soviet defector Yuri Nosenko told U.S. investigators that
+    Oswald was not a Soviet agent, as cited in coverage referencing the Warren Commission. However,
+    CIA officer John Scelso said he later heard that Nosenko "was discovered to have been dissembling,
+    not being on the level," a view imparted to him by CIA officers. The retrieved previews therefore
+    show a divided or unresolved U.S. intelligence assessment of Oswald's Soviet connections rather
+    than presenting a single definitive conclusion.
+  key_facts:
+    - "Yuri Nosenko, a Soviet defector, told investigators Oswald was not a Soviet agent"
+    - "CIA officer Scelso later heard Nosenko was 'dissembling' per other CIA officers"
+    - "The U.S. intelligence view of Nosenko's credibility was divided"
+
+- id: analytical_garrison_theory
+  category: analytical
+  question: "How is Jim Garrison's conspiracy theory characterized in the retrieved documents, both by himself and by his critics?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 124-10273-10289_redacted.pdf
+      page: 640
+    - filename: 104-10305-10000.pdf
+      page: 106
+    - filename: 104-10305-10000.pdf
+      page: 114
+    - filename: 104-10337-10001.pdf
+      page: 195
+  reference_answer: >
+    According to the retrieved documents, Garrison's theory was that David William Ferrie, Clay
+    Shaw, and Lee Harvey Oswald had conspired with anti-Castro Cubans to assassinate President
+    Kennedy; he later publicly framed the assassination as "an operation conducted by elements of
+    the CIA." His investigation, begun in December 1966, drew on information from sources such as
+    Jack S. Martin and David Lewis, and culminated in the prosecution of Clay Shaw (1966-1969).
+    Critics were sharply unfavorable: his own former chief investigator, William H. Gurvich, swore
+    under oath that Garrison's entire "plot" was "a figment of the D.A.'s imagination" and a
+    "baseless fraud," and New Orleans press figures including Gordon Novel publicly disputed his
+    claims.
+  key_facts:
+    - "Garrison theorized that Ferrie, Clay Shaw, Oswald, and anti-Castro Cubans conspired to kill Kennedy"
+    - "Garrison publicly claimed the assassination was a CIA operation"
+    - "His investigation relied on sources including Jack S. Martin and David Lewis"
+    - "William H. Gurvich, his former chief investigator, testified the theory was a 'baseless fraud'"
+    - "The investigation resulted in the prosecution of Clay Shaw"
+
+- id: analytical_oswald_cuba_connections
+  category: analytical
+  question: "What connections between Oswald and Cuban-related activities do the retrieved documents establish?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 157-10014-10242.pdf
+      page: 165
+    - filename: 180-10106-10008.pdf
+      page: 1
+    - filename: 104-10337-10001.pdf
+      page: 162
+    - filename: 104-10413-10306.pdf
+      page: 35
+  reference_answer: >
+    The retrieved documents show several distinct Cuba-related threads involving Oswald. First,
+    Oswald was associated with the Fair Play for Cuba Committee; Bureau documents indicate the CIA
+    had taken an interest in that Committee and was considering disinformation that might embarrass
+    it. Second, an HSCA record (04/14/1978, originator Phillip Geraci) concerns Oswald's post-Russian
+    political and subversive activities and names Carlos Bringuier and Vance Blalock. Third, on
+    27 September 1963 Oswald personally visited the Cuban Embassy in Mexico City to request a transit
+    visa to Cuba on his way to the USSR. Additional commentary frames Oswald as a "Soviet defector
+    and Fair Play for Cuba Committee activist" in discussions of the FBI's apparent lack of interest
+    in him.
+  key_facts:
+    - "Oswald was associated with the Fair Play for Cuba Committee"
+    - "The CIA considered disinformation against the Fair Play for Cuba Committee"
+    - "An HSCA record links Oswald to Carlos Bringuier and Vance Blalock"
+    - "Oswald visited the Cuban Embassy in Mexico City on 27 September 1963 seeking a transit visa"
+
+- id: analytical_hsca_ruby
+  category: analytical
+  question: "What investigative findings do the retrieved documents offer regarding the HSCA's examination of Jack Ruby?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 157-10014-10242.pdf
+      page: 441
+    - filename: 135-10001-10288.pdf
+      page: 18
+  reference_answer: >
+    The retrieved documents contain limited direct HSCA material specifically on Ruby. They show
+    that the FBI had contacted Jack Ruby via Special Agent Charles W. Flynn of the Dallas Office on
+    March 11, 1959 in view of his position as a nightclub operator, and that this FBI contact was
+    later provided to the President's Commission in June 1964. A separate interview transcript
+    (Olsen-Sturgis) probes possible pre-assassination contacts between Ruby (noted to have the real
+    name Rubenstein) and figures such as Frank Sturgis. Beyond these threads, the previews do not
+    present a consolidated HSCA analytic conclusion on Ruby.
+  key_facts:
+    - "FBI Special Agent Charles W. Flynn contacted Ruby on March 11, 1959"
+    - "The FBI's earlier contact with Ruby was reported to the President's Commission in June 1964"
+    - "An Olsen interview asked Frank Sturgis about possible contacts with Ruby (real name Rubenstein)"
+    - "The retrieved previews do not contain a full HSCA analytic conclusion on Ruby"
+
+- id: partial_evidence_oswald_motivations
+  category: partial_evidence
+  question: "What do the archival documents reveal about Lee Harvey Oswald's personal motivations for assassinating President Kennedy?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10332-10014.pdf
+      page: 56
+    - filename: 180-10104-10354.pdf
+      page: 13
+    - filename: 180-10078-10492.pdf
+      page: 5
+  reference_answer: >
+    The retrieved documents do not directly articulate Oswald's personal motivations for the
+    assassination. They do, however, provide contextual biographical material that investigators
+    have used when considering motive: Oswald served in the Marine Corps with a "confidential"
+    security clearance, was known to his fellow Marines to be studying Russian and interested in
+    "the Russian way of life," defected to the Soviet Union and later returned, and contacted the
+    Soviet and Cuban Embassies in Mexico City in September 1963. A CIA officer later described him
+    as appearing to be a "small-potatoes defector." The previews do not contain an explicit statement
+    of ideological or personal motive.
+  key_facts:
+    - "The previews do not contain an explicit statement of Oswald's motive"
+    - "Oswald was studying Russian and interested in the Russian way of life while in the Marines"
+    - "Oswald defected to the Soviet Union and later returned"
+    - "CIA described him as a 'small-potatoes defector'"
+
+- id: partial_evidence_oswald_acted_alone
+  category: partial_evidence
+  question: "Do the retrieved documents support the conclusion that Oswald acted alone in the assassination?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10332-10009.pdf
+      page: 68
+    - filename: 180-10110-10484.pdf
+      page: 313
+    - filename: 104-10433-10209.pdf
+      page: 255
+  reference_answer: >
+    The retrieved previews do not supply a direct, affirmative endorsement of the "lone gunman"
+    conclusion. They note that surveys show most Americans doubt Oswald acted alone and reference
+    Gerald Posner's position that the original Dictabelt acoustic evidence for a fourth shot was
+    flawed per the National Academy of Sciences review. Other previews raise unresolved questions -
+    for example, the possibility that "someone did impersonate Oswald in Mexico" which investigators
+    said "cannot be" ruled out, and Psychological Stress Evaluator results that did not substantiate
+    some Dallas police claims about evidence handling. The documents therefore present contested
+    material rather than a clean confirmation of the lone-gunman thesis.
+  key_facts:
+    - "Previews do not contain a direct affirmative endorsement of the lone-gunman conclusion"
+    - "Posner/NAS review rejected the Dictabelt fourth-shot evidence"
+    - "An HSCA-related document says the possibility someone impersonated Oswald in Mexico could not be ruled out"
+    - "Most Americans per surveys doubt Oswald acted alone"
+
+- id: partial_evidence_cuban_involvement
+  category: partial_evidence
+  question: "Was the Cuban government involved in the assassination of President Kennedy?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10333-10001.pdf
+      page: 114
+    - filename: 157-10014-10242.pdf
+      page: 463
+    - filename: 157-10014-10242.pdf
+      page: 462
+  reference_answer: >
+    The retrieved documents do not establish Cuban governmental involvement in the assassination.
+    They record that President Lyndon Johnson expressed his belief that Castro "could have planned"
+    the assassination in retaliation, citing a 1975 CBS Evening News interview, and they note that
+    U.S. efforts to assassinate Castro - including plots involving Mafia figures such as Santos
+    Trafficante of Tampa - had been closely held within the CIA and FBI before eventual disclosure
+    by the Senate intelligence committee. The previews thus document speculation and the retaliation
+    hypothesis rather than a confirmed Cuban state role.
+  key_facts:
+    - "LBJ believed Castro could have planned the assassination in retaliation"
+    - "LBJ's belief was cited from a 1975 CBS Evening News interview"
+    - "CIA-Mafia plots against Castro (involving Santos Trafficante) were secret until Senate disclosure"
+    - "The previews do not establish Cuban governmental involvement in the assassination"
+
+- id: partial_evidence_ruby_state_of_mind
+  category: partial_evidence
+  question: "What do the documents indicate about Jack Ruby's mental state or psychological condition at the time of the assassination?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 157-10014-10242.pdf
+      page: 441
+    - filename: 135-10001-10288.pdf
+      page: 18
+  reference_answer: >
+    The retrieved previews do not contain direct evidence or clinical findings about Jack Ruby's
+    mental state at the time of the assassination. They establish only contextual facts: that Ruby
+    (real name Rubenstein) was a Dallas nightclub operator and was contacted by FBI Special Agent
+    Charles W. Flynn on March 11, 1959, and that Frank Sturgis was asked in an Olsen interview about
+    possible contacts with Ruby. On the specific question of Ruby's psychological state, the
+    retrieved material is insufficient and any definitive assessment would require sources not
+    present in these previews.
+  key_facts:
+    - "Previews contain no direct evidence about Ruby's mental state at the time of the assassination"
+    - "Ruby (real name Rubenstein) was a Dallas nightclub operator"
+    - "FBI Special Agent Flynn contacted Ruby on March 11, 1959"
+
+- id: partial_evidence_cia_oswald_connection
+  category: partial_evidence
+  question: "Did Lee Harvey Oswald have a connection to the CIA?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10332-10016.pdf
+      page: 10
+    - filename: 104-10332-10014.pdf
+      page: 56
+  reference_answer: >
+    The retrieved documents do not establish an operational connection between Oswald and the CIA.
+    A September 25, 1998 internal memorandum titled "No Evidence of Contact Between Lee Harvey Oswald
+    and the CIA's Office of Operations" notes that whether the CIA's Office of Operations (later
+    the Domestic Contacts Division) interviewed or took note of Oswald is "one of the enigmas" of
+    his defection and re-defection, and states that the available evidence is "somewhat contradictory."
+    CIA officer John Scelso described Oswald as a "small-potatoes defector" whose record gave no
+    reason to pay special heed. The previews therefore support, at most, ambiguity rather than a
+    confirmed CIA connection.
+  key_facts:
+    - "A 1998 memo is titled 'No Evidence of Contact Between Lee Harvey Oswald and the CIA's Office of Operations'"
+    - "The memo calls the question of CIA Office of Operations contact with Oswald 'one of the enigmas' with 'somewhat contradictory' evidence"
+    - "CIA officer Scelso called Oswald a 'small-potatoes defector'"
+    - "The previews do not establish an operational CIA-Oswald connection"
+
+- id: partial_evidence_organized_crime_role
+  category: partial_evidence
+  question: "What role, if any, did organized crime play in the Kennedy assassination according to the retrieved documents?"
+  query_type_expected: research
+  reference_evidence:
+    - filename: 104-10333-10001.pdf
+      page: 107
+    - filename: 157-10014-10242.pdf
+      page: 462
+    - filename: 157-10014-10242.pdf
+      page: 44
+  reference_answer: >
+    The retrieved documents do not provide a definitive finding of organized-crime responsibility,
+    but they reflect that this theory was seriously discussed by investigators and authors. A law
+    review footnote cites G. Robert Blakey & Richard Billings, "The Plot to Kill the President"
+    (1981), as "explaining the conclusion of the Select Committee on Assassinations that organized
+    crime was behind the plot to kill JFK," and John Davis's "Mafia Kingfish" examining the theory
+    that the New Orleans Mafia, led by Carlos Marcello, was responsible. The previews also link
+    Mafia figure Santos Trafficante to CIA-backed plots against Castro and describe Jim Braden as
+    having an "old Mafia friend," Roger Bauman, among his associates around the Hunt offices on
+    November 21. The material thus supports a documented organized-crime hypothesis while not
+    conclusively proving it.
+  key_facts:
+    - "The HSCA reportedly concluded organized crime was behind the plot to kill JFK (per Blakey & Billings)"
+    - "John Davis's 'Mafia Kingfish' examined the Carlos Marcello / New Orleans Mafia theory"
+    - "Santos Trafficante was linked to CIA-Mafia plots against Castro"
+    - "Jim Braden's associate Roger Bauman is described as his 'old Mafia friend'"
+    - "The previews do not provide a definitive finding of organized-crime responsibility"
+
+- id: out_of_scope_world_series_1964
+  category: out_of_scope
+  question: "Who won the 1964 World Series?"
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []
+
+- id: out_of_scope_caffeine_formula
+  category: out_of_scope
+  question: "What is the chemical formula for caffeine?"
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []
+
+- id: out_of_scope_ocean_poem
+  category: out_of_scope
+  question: "Write me a poem about the ocean."
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []
+
+- id: out_of_scope_change_tire
+  category: out_of_scope
+  question: "How do I change a car tire?"
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []
+
+- id: out_of_scope_latvia_capital
+  category: out_of_scope
+  question: "What is the capital of Latvia?"
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []
+
+- id: out_of_scope_hamlet_plot
+  category: out_of_scope
+  question: "Summarize the plot of Hamlet."
+  query_type_expected: out_of_scope
+  reference_evidence: []
+  reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
+  key_facts: []

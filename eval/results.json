@@ -1,0 +1,2206 @@
+[
+  {
+    "id": "factual_oswald_marine_clearance",
+    "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Lee Harvey Oswald held a \"confidential\" level of security clearance during his Marine Corps service.**\n- Oswald's level of security clearance was specified as \"confidential\" in his fact sheet [1].\n- His unit had security clearance, described as \"confidential\" due to the nature of their work with radar equipment [2].\n- A Security Termination Statement was executed by Oswald on September 11, 1959, which may be related to his security clearance [1].\n- Oswald's security clearance was necessary for his duties, which involved tracking aircraft on a radar scope [2].\n- The level of security clearance is confirmed by another source, which mentions that Oswald's unit had security clearance [1]. \n*_The records do not provide further details on the scope or implications of Oswald's security clearance._*",
+    "sources": [
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 13
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 3
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 8
+      },
+      {
+        "filename": "180-10117-10032.pdf",
+        "page": 81
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 257
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 255
+      },
+      {
+        "filename": "180-10143-10227.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 40
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 182
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 15
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 44
+      },
+      {
+        "filename": "104-10301-10002.pdf",
+        "page": 5
+      },
+      {
+        "filename": "180-10078-10492.pdf",
+        "page": 3
+      }
+    ],
+    "timings": {
+      "router_ms": 662,
+      "retrieve_ms": 2863,
+      "rerank_ms": 625,
+      "generate_ms": 1709,
+      "ground_ms": 476,
+      "cite_verify_ms": 716,
+      "total_ms": 10681
+    },
+    "elapsed_s": 10.702375173568726
+  },
+  {
+    "id": "factual_ruby_real_name",
+    "question": "What was Jack Ruby's original family name before he changed it?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**The retrieved documents do not contain information about Jack Ruby's original family name before he changed it.**\n- The documents provide information about various individuals, including Lee Harvey Oswald [1], but do not mention Jack Ruby's original family name.\n- Some documents discuss people with different names, such as Leon Rothman and Lincoln Charles Powell, but none of them are related to Jack Ruby.\n- Other documents mention individuals like Amos Lee Euins and Juanita Brown, but again, there is no mention of Jack Ruby or his original family name.\n- The documents also include information about companies and organizations, such as the Hunt Oil Company, but do not provide any details about Jack Ruby.\n*_The records do not directly describe Jack Ruby's original family name; however, they mention various other individuals and topics in connection with the JFK assassination and related investigations._*",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 440
+      },
+      {
+        "filename": "180-10144-10288.pdf",
+        "page": 5
+      },
+      {
+        "filename": "124-10226-10305.pdf",
+        "page": 160
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 2334
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 2872
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 2350
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 2054
+      },
+      {
+        "filename": "180-10144-10288.pdf",
+        "page": 4
+      },
+      {
+        "filename": "180-10086-10257.pdf",
+        "page": 7
+      },
+      {
+        "filename": "180-10144-10288.pdf",
+        "page": 6
+      },
+      {
+        "filename": "124-10180-10324_multirif.pdf",
+        "page": 99
+      },
+      {
+        "filename": "180-10086-10257.pdf",
+        "page": 8
+      },
+      {
+        "filename": "124-10226-10305.pdf",
+        "page": 118
+      },
+      {
+        "filename": "104-10217-10223.pdf",
+        "page": 109
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 30
+      }
+    ],
+    "timings": {
+      "router_ms": 601,
+      "retrieve_ms": 52396,
+      "rerank_ms": 1267,
+      "generate_ms": 2167,
+      "ground_ms": 1084,
+      "cite_verify_ms": 1041,
+      "total_ms": 61189
+    },
+    "elapsed_s": 61.19913125038147
+  },
+  {
+    "id": "factual_oswald_mexico_cuban_embassy",
+    "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Oswald visited the Cuban Embassy in Mexico City on September 27, 1963, to request a transit visa.**\n- Oswald went to the Cuban Embassy to make an appointment for a visa to Cuba on his way to the USSR, and later that day, he also visited the Soviet Embassy to get a letter of recommendation [1].\n- On the same day, Valery Kostikov talked with Sylvia Duran, and it was noted that the Soviet Embassy had never heard of Oswald [1].\n- The Cuban government verified Oswald's request for a transit visa to go to the USSR, which was requested from the Cuban Consulate in Merida on September 27, 1963 [2].\n- The visa was never granted, as the Cuban Consulate stated it could not grant the visa without permission from the country of destination [2].\n*_The records do not provide detailed information about Oswald's activities immediately after the visa request, but they confirm his presence at the Cuban Embassy on September 27, 1963._*",
+    "sources": [
+      {
+        "filename": "180-10110-10100.pdf",
+        "page": 4
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 155
+      },
+      {
+        "filename": "104-10218-10007.pdf",
+        "page": 137
+      },
+      {
+        "filename": "104-10413-10306.pdf",
+        "page": 36
+      },
+      {
+        "filename": "104-10413-10306.pdf",
+        "page": 35
+      },
+      {
+        "filename": "144-10001-10168.pdf",
+        "page": 2
+      },
+      {
+        "filename": "104-10218-10032.pdf",
+        "page": 122
+      },
+      {
+        "filename": "104-10306-10018.pdf",
+        "page": 17
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 37
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 158
+      },
+      {
+        "filename": "104-10308-10163.pdf",
+        "page": 1
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 406
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 573
+      },
+      {
+        "filename": "104-10221-10002.pdf",
+        "page": 56
+      },
+      {
+        "filename": "180-10145-10239.pdf",
+        "page": 7
+      }
+    ],
+    "timings": {
+      "router_ms": 524,
+      "retrieve_ms": 1283,
+      "rerank_ms": 1069,
+      "generate_ms": 1700,
+      "ground_ms": 759,
+      "expand_ms": 4007,
+      "cite_verify_ms": 717,
+      "total_ms": 16565
+    },
+    "elapsed_s": 16.58233404159546
+  },
+  {
+    "id": "factual_ruby_fbi_flynn_1959",
+    "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**The retrieved documents do not contain sufficient information to answer this query.**\n- The documents mention various individuals, including Charles W. Kane, Jack Bauman, and Howard Hunt, but do not discuss an FBI agent contacting Jack Ruby in 1959 [1].\n- There is a mention of a meeting between Mr. Kane and Mr. Hunt in 1959, but it does not involve an FBI agent [2].\n- The documents primarily focus on the Watergate affair and its investigation, with no direct reference to Jack Ruby or an FBI agent contacting him in 1959 [3].\n- The sources provide information on the CIA's involvement with various individuals and events, but do not address the specific question about Jack Ruby [4].\n- The documents discuss the JFK assassination, but only in the context of a 1974 memorandum and do not mention Jack Ruby or an FBI agent contacting him in 1959 [5].\n\n*_The records do not directly describe an FBI agent contacting Jack Ruby in 1959, and the available information does not provide a clear answer to the question._*",
+    "sources": [
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 63
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 115
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 116
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 59
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 64
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 60
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 62
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 112
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 38
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 39
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 113
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 111
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 114
+      },
+      {
+        "filename": "124-10274-10044.pdf",
+        "page": 169
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 41
+      }
+    ],
+    "timings": {
+      "router_ms": 292,
+      "retrieve_ms": 1174,
+      "rerank_ms": 1227,
+      "generate_ms": 1492,
+      "ground_ms": 1031,
+      "cite_verify_ms": 543,
+      "total_ms": 9012
+    },
+    "elapsed_s": 9.022228002548218
+  },
+  {
+    "id": "factual_oswald_marine_discharge_1959",
+    "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**The Marine Corps hardship or dependency discharge board convened to consider Oswald's case on 27 August 1959.**\n- The board met at 1530 to consider the case of Private First Class Lee H. Oswald, as guided by the provisions of reference (a) and in compliance with the Third Endorsement [1].\n- The members present at the meeting included Lieutenant Colonel Bolish J. KOZAK, Major George E. MC CLANE, and Major Eugene T. CARD [1].\n- The board's recommendations were to be returned to the Headquarters by endorsement as expeditiously as possible, as stated in the Third Endorsement [2].\n- The board's decision was based on the evaluation of all facts available, including Oswald's dependency situation and his request for discharge [1].\n* *_The records do not provide further details on the board's deliberations or the exact timeline of Oswald's discharge process beyond the board's recommendation._*",
+    "sources": [
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 46
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 45
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 41
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 24
+      },
+      {
+        "filename": "104-10224-10008.pdf",
+        "page": 5
+      },
+      {
+        "filename": "104-10222-10040.pdf",
+        "page": 169
+      },
+      {
+        "filename": "104-10193-10069.pdf",
+        "page": 48
+      },
+      {
+        "filename": "104-10291-10004.pdf",
+        "page": 68
+      },
+      {
+        "filename": "104-10225-10003.pdf",
+        "page": 58
+      },
+      {
+        "filename": "104-10225-10003.pdf",
+        "page": 63
+      },
+      {
+        "filename": "104-10193-10079.pdf",
+        "page": 183
+      },
+      {
+        "filename": "104-10193-10079.pdf",
+        "page": 16
+      },
+      {
+        "filename": "104-10193-10079.pdf",
+        "page": 191
+      },
+      {
+        "filename": "104-10194-10019.pdf",
+        "page": 192
+      },
+      {
+        "filename": "104-10194-10012.pdf",
+        "page": 124
+      }
+    ],
+    "timings": {
+      "router_ms": 529,
+      "retrieve_ms": 1149,
+      "rerank_ms": 782,
+      "generate_ms": 1877,
+      "ground_ms": 1103,
+      "cite_verify_ms": 715,
+      "total_ms": 8858
+    },
+    "elapsed_s": 8.866668939590454
+  },
+  {
+    "id": "factual_cia_mexico_city_cable_date",
+    "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**CIA Headquarters sent the Mexico City Station information responding to Oswald's initial reported contact on October 11, 1963.**\n- The Mexico City Station received some information about Lee Oswald from CIA Headquarters on October 11, 1963, which described Oswald as born on October 18, 1939, in New Orleans, Louisiana [1].\n- This cable from CIA Headquarters to the Mexico City Station was in response to the Station's initial report of Oswald's contact with the Soviet Embassy [1].\n- The information provided by CIA Headquarters included details about Oswald's defection to the USSR in 1959, his employment in Minsk, and his marriage to a Russian citizen [1].\n- The CIA Headquarters' response was part of the agency's effort to gather more information about Oswald's activities in Mexico City [2].\n* _The records do not provide further details on the specific actions taken by the Mexico City Station after receiving this information from CIA Headquarters._",
+    "sources": [
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 300
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 120
+      },
+      {
+        "filename": "104-10306-10018.pdf",
+        "page": 17
+      },
+      {
+        "filename": "180-10143-10113.pdf",
+        "page": 4
+      },
+      {
+        "filename": "104-10331-10139.pdf",
+        "page": 2
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 9
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 178
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 134
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 144
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 258
+      },
+      {
+        "filename": "180-10113-10119.pdf",
+        "page": 6
+      },
+      {
+        "filename": "180-10113-10119.pdf",
+        "page": 2
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 192
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      }
+    ],
+    "timings": {
+      "router_ms": 371,
+      "retrieve_ms": 1259,
+      "rerank_ms": 788,
+      "generate_ms": 1416,
+      "ground_ms": 526,
+      "cite_verify_ms": 821,
+      "total_ms": 7994
+    },
+    "elapsed_s": 8.000425815582275
+  },
+  {
+    "id": "biographical_jack_ruby",
+    "question": "Who was Jack Ruby?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Jack Ruby was a man with connections to the Mafia and was involved in the assassination of Lee Harvey Oswald.**\n- Jack Ruby visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, just twenty-four hours before the President was murdered, alongside Jim Braden [1].\n- Ruby was known to have connections in the Havana underworld, and one CIA cable reported that \"an American gangster type named Ruby\" had visited Santos Trafficante in his Cuban prison.\n- Ruby's true identity and connections were not fully explored by the Warren Commission, and his involvement with the Mafia's highest echelon \"enforcers\" has been noted by federal authorities.\n- Ruby's actions and connections have been the subject of various investigations and theories, including those presented by authors and journalists such as Jack Anderson and Les Whitten.\n- The CIA withheld data related to the JFK probe, including information about Cuban Premier Fidel Castro's possible involvement, which may have been connected to Ruby's actions. \n*_The records do not directly describe the full extent of Ruby's connections to the CIA or the Mafia, but they do mention his involvement in various events and plots._*",
+    "sources": [
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 325
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 383
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 587
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 450
+      },
+      {
+        "filename": "157-10002-10165.pdf",
+        "page": 2
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 375
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 34
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 374
+      },
+      {
+        "filename": "180-10096-10399.pdf",
+        "page": 8
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 70
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 116
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 534
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 69
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 445
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 449
+      }
+    ],
+    "timings": {
+      "router_ms": 560,
+      "retrieve_ms": 1362,
+      "rerank_ms": 1504,
+      "generate_ms": 3102,
+      "ground_ms": 686,
+      "cite_verify_ms": 1510,
+      "total_ms": 12337
+    },
+    "elapsed_s": 12.344430208206177
+  },
+  {
+    "id": "biographical_oswald",
+    "question": "Who was Lee Harvey Oswald?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Lee Harvey Oswald was an American who visited the Soviet and Cuban Consulates or Embassies in Mexico City, and his activities while in Mexico City are a subject of investigation by the House Select Committee on Assassinations.**\n- Oswald's contact with the Soviet Embassy in Mexico City was reported to the CIA, and he was described as an American male who identified himself as Lee OSWALD [3].\n- The CIA Mexico City Station received information about Oswald from CIA Headquarters, including his birthdate, height, weight, and hair color, on October 11, 1963 [4].\n- Oswald's visa application and the Ministry of Foreign Affairs of the Republic of Cuba's letter denying the visa were published as exhibits by the Warren Commission [2].\n- The House Select Committee on Assassinations investigated Oswald's activities in Mexico City, including his possible attendance at a \"twist party\" at the home of Ruben Duran Navarro [1].\n* *_The records do not directly describe Oswald's complete biography or all his activities in Mexico City; however, they mention various details about his interactions with the Soviet and Cuban diplomatic missions._*",
+    "sources": [
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 11
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 1
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 298
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 4
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 40
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 408
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 257
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 191
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 128
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 182
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 268
+      },
+      {
+        "filename": "104-10177-10217.pdf",
+        "page": 11
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 30
+      }
+    ],
+    "timings": {
+      "router_ms": 1014,
+      "retrieve_ms": 1943,
+      "rerank_ms": 821,
+      "generate_ms": 1718,
+      "ground_ms": 634,
+      "expand_ms": 55712,
+      "cite_verify_ms": 1018,
+      "total_ms": 70388
+    },
+    "elapsed_s": 70.39894318580627
+  },
+  {
+    "id": "biographical_david_ferrie",
+    "question": "Who was David Ferrie?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**David Ferrie was a private investigator and a former airline pilot who was investigated for possible connections to the assassination of President Kennedy [1].**\n- He was employed by Carlos Marcello, a top Mafia kingpin, as a private investigator, and worked out of the offices of Marcello's criminal attorney, G. Wray Gill, in the Pere Marquette Building in New Orleans [1].\n- Ferrie was found dead in his apartment in New Orleans, six days after District Attorney Jim Garrison's charges against him were made public, and his death was ruled a suicide [2].\n- The FBI and Secret Service investigated a possible Ferrie role in the assassination immediately after the event, but the Warren Commission decided not to include their reports on Ferrie in the 26 Volumes of Hearings [1].\n- Ferrie's ties to Carlos Marcello and the Marcello Mafia empire were a focus of investigation by critics of the Warren Commission, and he was also linked to other figures, including Clay Shaw and Lee Harvey Oswald [3].\n* *_The records do not provide a comprehensive biography of David Ferrie, but they highlight his connections to key figures and events related to the Kennedy assassination._*",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 385
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 45
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 8
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 386
+      },
+      {
+        "filename": "180-10076-10105.pdf",
+        "page": 2
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 640
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 208
+      },
+      {
+        "filename": "180-10145-10285.pdf",
+        "page": 22
+      },
+      {
+        "filename": "180-10107-10006.pdf",
+        "page": 4
+      },
+      {
+        "filename": "104-10061-10115.pdf",
+        "page": 44
+      },
+      {
+        "filename": "104-10332-10022.pdf",
+        "page": 60
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 177
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 181
+      },
+      {
+        "filename": "178-10002-10279.pdf",
+        "page": 87
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 480
+      }
+    ],
+    "timings": {
+      "router_ms": 446,
+      "retrieve_ms": 1288,
+      "rerank_ms": 963,
+      "generate_ms": 2194,
+      "ground_ms": 466,
+      "cite_verify_ms": 1637,
+      "total_ms": 10584
+    },
+    "elapsed_s": 10.600474119186401
+  },
+  {
+    "id": "biographical_silvia_duran",
+    "question": "Who was Silvia Duran?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Silvia Duran was a Mexican national who worked at the Cuban Consulate in Mexico City and had interactions with Lee Harvey Oswald.**\n- She was rearrested by Mexican authorities on November 27, 1963, because she was attempting to leave Mexico for Cuba [1].\n- Silvia Duran confirmed that she met Lee Harvey Oswald at the Cuban Consulate when he applied for a visa and had given him her business phone number [3].\n- The CIA Mexico City Station reported that Silvia Duran had told one of their sources that she had met Oswald and had dated him on several occasions [4].\n- The House Select Committee on Assassinations found no evidence that Silvia Duran was an American or Mexican intelligence agent, but some CIA officers considered the possibility that she was a Cuban intelligence agent [2].\n*_The records do not directly describe Silvia Duran's full background or her life after the events related to the JFK assassination; however, they mention her interactions with Oswald and her work at the Cuban Consulate._*",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 424
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 260
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 248
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 264
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 247
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 396
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 307
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 317
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 250
+      },
+      {
+        "filename": "104-10306-10018.pdf",
+        "page": 17
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 258
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 321
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 395
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 419
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 330
+      }
+    ],
+    "timings": {
+      "router_ms": 404,
+      "retrieve_ms": 1317,
+      "rerank_ms": 1240,
+      "generate_ms": 1731,
+      "ground_ms": 869,
+      "cite_verify_ms": 760,
+      "total_ms": 9444
+    },
+    "elapsed_s": 9.454628944396973
+  },
+  {
+    "id": "biographical_clay_shaw",
+    "question": "Who was Clay Shaw?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Clay Shaw was a former Director of the International Trade Mart in New Orleans who was investigated by New Orleans District Attorney James C. Garrison in connection with the assassination of President John F. Kennedy.**\n- Clay Shaw's name did not come up during the FBI's investigation of the assassination, and the FBI never investigated him [1].\n- Shaw was arrested by Garrison, who claimed Shaw was identical with one Clay Bertrand, an alleged contact of New Orleans attorney Dean Andrews [1].\n- The FBI developed no information indicating that Lee Harvey Oswald knew Clay Shaw [1].\n- A Pravda article published on March 7, 1967, charged that the CIA made use of Shaw's services for its own interests in Italy [2].\n- *The records do not directly describe Shaw's personal life or background; however, they mention his connection to the CIA and his investigation by Garrison in connection with the Kennedy assassination.*",
+    "sources": [
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 208
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 548
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 640
+      },
+      {
+        "filename": "104-10330-10081.pdf",
+        "page": 14
+      },
+      {
+        "filename": "104-10333-10006.pdf",
+        "page": 9
+      },
+      {
+        "filename": "104-10333-10006.pdf",
+        "page": 10
+      },
+      {
+        "filename": "104-10333-10002.pdf",
+        "page": 25
+      },
+      {
+        "filename": "104-10079-10016.pdf",
+        "page": 67
+      },
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 18
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 106
+      },
+      {
+        "filename": "104-10079-10016.pdf",
+        "page": 66
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 212
+      },
+      {
+        "filename": "104-10332-10022.pdf",
+        "page": 60
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 480
+      },
+      {
+        "filename": "124-10274-10070.pdf",
+        "page": 20
+      }
+    ],
+    "timings": {
+      "router_ms": 239,
+      "retrieve_ms": 1269,
+      "rerank_ms": 929,
+      "generate_ms": 1380,
+      "ground_ms": 843,
+      "cite_verify_ms": 614,
+      "total_ms": 8105
+    },
+    "elapsed_s": 8.11763596534729
+  },
+  {
+    "id": "biographical_jim_garrison",
+    "question": "Who was Jim Garrison?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Jim Garrison was the District Attorney of New Orleans who conducted an investigation into the assassination of President John F. Kennedy.**\n- He was quoted as saying that the next U.S. President who tries to put the brakes on the war machine will also be slain [3].\n- Garrison's investigation was based on information furnished to him by Jack S. Martin and David Lewis, and he made one arrest in his case, Clay L. Shaw, a former Director of the International Trade Mart in New Orleans [1].\n- The FBI received allegations of a connection between David Ferrie and Lee Harvey Oswald, but thoroughly investigated and found no evidence to support this claim [1].\n- Garrison was described as an egomaniac and politically ambitious, and his mental stability was questioned due to his medical discharge from the U.S. Army in 1951 for an emotional problem [2].\n*_The records do not directly describe the full extent of Garrison's early life or career, but they provide details about his investigation and personality._*",
+    "sources": [
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 106
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 23
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 640
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 480
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 537
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 208
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 226
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 24
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 47
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 107
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 376
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 45
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 34
+      },
+      {
+        "filename": "104-10104-10262.pdf",
+        "page": 2
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 53
+      }
+    ],
+    "timings": {
+      "router_ms": 307,
+      "retrieve_ms": 1332,
+      "rerank_ms": 951,
+      "generate_ms": 2490,
+      "ground_ms": 580,
+      "cite_verify_ms": 657,
+      "total_ms": 9415
+    },
+    "elapsed_s": 9.425423860549927
+  },
+  {
+    "id": "analytical_cia_surveillance_oswald",
+    "question": "What did the HSCA conclude about the CIA's photographic and electronic surveillance of Oswald in Mexico City, and how forthcoming was the CIA with materials?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe HSCA concluded that the CIA's photographic surveillance operations in Mexico City probably obtained a photograph of Lee Harvey Oswald entering either or both the Soviet and Cuban Consulates, despite the CIA's denial of such a photograph's existence [4]. The CIA was not fully forthcoming with materials, withholding certain production materials from the photographic bases, which prevented the Committee from determining whether a photograph of Oswald was taken [1]. The Committee found that the CIA's handling of the Oswald case prior to the assassination was not professional [5].\n\n## Detailed Findings\n### CIA's Photographic Surveillance\nThe CIA had three photographic surveillance bases (four cameras) that may have photographed Lee Harvey Oswald in September and October 1963 [3]. The Committee was unable to review the production from LILYRIC, the second base that covered the Soviet Embassy entrance, and the pulse camera that covered the Cuban Consulate entrance [1]. The CIA's withholding of certain production materials from the photographic bases prevented the Committee from determining whether a photograph of Oswald was taken [1].\n\n### Electronic Surveillance\nThe Committee examined the production from the electronic surveillance of the Cuban diplomatic compound's telephones and found no telephone conversation that directly mentioned Oswald or information that clearly and directly referred to him [7]. The Committee also examined the production from the electronic surveillance of the Soviet Embassy and found that the Mexico City Station linked the intercepted conversations to Lee Harvey Oswald [2].\n\n### CIA's Forthcomingness\nThe CIA was not fully forthcoming with materials, and the Committee had to request the production of the photographic bases multiple times [1]. The CIA's initial response to the Committee's request was incomplete, and the Committee had to follow up to obtain more information [1]. The CIA's handling of the Oswald case prior to the assassination was not professional, and the Committee found that the CIA's actions were not adequate [5].\n\n### HSCA's Investigation\nThe HSCA conducted extensive interviews, depositions, and executive session hearings involving CIA personnel [6]. The Committee also reviewed the files of the CIA and the FBI that pertained to Oswald and Mexico City [6]. The Committee's investigation found that the CIA's photo-surveillance operations in Mexico City probably obtained a photograph of Lee Harvey Oswald [4].\n\n### Contradictions and Gaps\nThe Committee found contradictions between the CIA's statements and the evidence, including the CIA's denial of the existence of a photograph of Oswald [4]. The Committee also found gaps in the CIA's production, including the withholding of certain materials [1]. The Committee noted that the CIA's handling of the Oswald case prior to the assassination was not professional, and that the CIA's actions were not adequate [5].",
+    "sources": [
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 119
+      },
+      {
+        "filename": "104-10079-10016.pdf",
+        "page": 49
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 132
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 11
+      },
+      {
+        "filename": "104-10332-10014.pdf",
+        "page": 27
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 233
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 222
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 102
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 227
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 105
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 122
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 120
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 19
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 126
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 190
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      },
+      {
+        "filename": "135-10001-10283.pdf",
+        "page": 6
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 168
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 93
+      }
+    ],
+    "timings": {
+      "router_ms": 437,
+      "retrieve_ms": 1341,
+      "rerank_ms": 862,
+      "generate_ms": 3003,
+      "ground_ms": 727,
+      "cite_verify_ms": 716,
+      "total_ms": 15179
+    },
+    "elapsed_s": 15.19236707687378
+  },
+  {
+    "id": "analytical_warren_ruby_hunts",
+    "question": "What links do the retrieved documents draw between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents draw links between Jack Ruby's circle and the events surrounding the assassination, including a possible connection to Jim Braden, who was picked up by the police at the scene of the assassination [1]. The documents also mention the Hunt family in Dallas, specifically Lamar Hunt, who was visited by Jim Braden at the N.L. Hunt Oil Company offices on November 21, 1963 [1]. However, the records do not directly describe a link between the Hunt family and Jack Ruby's circle in relation to the assassination.\n\n## Detailed Findings\n### Jack Ruby's Circle and Jim Braden\nJim Braden, whose true identity is Eugene Hale Brading, has been linked to Jack Ruby through their possible meeting at the N.L. Hunt Oil Company offices on November 21, 1963 [1]. Braden was picked up by the police at the scene of the assassination and was released shortly thereafter [3]. The documents suggest that Braden may have been involved in organized crime and had ties to the Mafia [2].\n### The Hunt Family in Dallas\nThe documents mention Lamar Hunt, the son of H.L. Hunt, as someone who was visited by Jim Braden at the N.L. Hunt Oil Company offices on November 21, 1963 [1]. However, there is no direct link established between the Hunt family and Jack Ruby's circle in relation to the assassination. The documents do mention that H.L. Hunt was a right-wing oil billionaire [1].\n### Connections to the Assassination\nThe documents suggest that Jim Braden may have been involved in the assassination, given his presence at the scene and his possible ties to organized crime [2]. However, the records do not provide conclusive evidence of Braden's involvement or any direct link to Jack Ruby's circle. The documents also mention that the FBI withheld information from the Warren Commission, including details about the assassination investigation [4].",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 383
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 374
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 375
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 45
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 635
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 33
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 444
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 396
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 34
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 35
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 450
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 227
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 225
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 116
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 130
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 107
+      },
+      {
+        "filename": "135-10001-10243.pdf",
+        "page": 5
+      }
+    ],
+    "timings": {
+      "router_ms": 405,
+      "retrieve_ms": 2327,
+      "rerank_ms": 735,
+      "generate_ms": 2607,
+      "ground_ms": 384,
+      "cite_verify_ms": 1197,
+      "total_ms": 13141
+    },
+    "elapsed_s": 13.16800594329834
+  },
+  {
+    "id": "analytical_kgb_oswald_conclusion",
+    "question": "What did U.S. investigators ultimately conclude about whether Lee Harvey Oswald was a Soviet (KGB) agent?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents do not contain a definitive conclusion about whether Lee Harvey Oswald was a Soviet (KGB) agent [1]. However, they mention that the CIA investigated Oswald's activities and contacts with Soviet and Cuban diplomatic missions [2]. The documents also discuss the possibility of Oswald being an instrument of the military-industrial complex of the eastern United States, a theme pushed by the Soviets [6].\n\n## Detailed Findings\n### Oswald's Contacts with Soviet and Cuban Missions\nOswald met with Vice Counsel Kostikov at the Soviet Embassy in Mexico City, who was a member of the KGB [1]. The CIA investigated Oswald's activities and contacts with Soviet and Cuban diplomatic missions [2]. The documents also mention that Oswald had a visa application and a letter denying the visa from the Ministry of Foreign Affairs of the Republic of Cuba [8].\n### CIA Investigation and Findings\nThe CIA claimed that no investigation of Oswald was made in Mexico prior to the assassination of President Kennedy [7]. However, the documents reveal that the CIA did have some information about Oswald, including a \"201 file\" on him, which was restricted to a branch of the Agency known as \"CI/SIG\" [3]. The CIA also received copies of Oswald's manuscript from the FBI and the Warren Commission [5].\n### Soviet Involvement and Theories\nThe documents mention that the Soviets pushed the theme that Oswald was an instrument of the military-industrial complex of the eastern United States [6]. They also discuss the possibility of Oswald being a dispatch agent sent to mutilate the counter-intelligence leads [4]. However, there is no conclusive evidence to support these theories [6].",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 178
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 161
+      },
+      {
+        "filename": "180-10147-10176.pdf",
+        "page": 24
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 247
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 154
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 191
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 99
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 310
+      },
+      {
+        "filename": "157-10014-10005.pdf",
+        "page": 53
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 9
+      },
+      {
+        "filename": "178-10004-10115.pdf",
+        "page": 8
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 135
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 182
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 314
+      },
+      {
+        "filename": "135-10001-10297.pdf",
+        "page": 58
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 48
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 40
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 61
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 197
+      }
+    ],
+    "timings": {
+      "router_ms": 371,
+      "retrieve_ms": 1150,
+      "rerank_ms": 1063,
+      "generate_ms": 2557,
+      "ground_ms": 520,
+      "cite_verify_ms": 1123,
+      "total_ms": 11684
+    },
+    "elapsed_s": 11.697654008865356
+  },
+  {
+    "id": "analytical_garrison_theory",
+    "question": "How is Jim Garrison's conspiracy theory characterized in the retrieved documents, both by himself and by his critics?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nJim Garrison's conspiracy theory is characterized as a \"baseless fraud\" by his former chief investigator, William H. Gurvich [1]. Garrison's theory posits that Lee Harvey Oswald was part of a larger conspiracy involving anti-Castro Cubans, the CIA, and other individuals [4]. However, critics argue that Garrison's investigation was driven by a desire for publicity and that his theory is not supported by evidence [2].\n\n## Detailed Findings\n### Garrison's Investigation\nGarrison's investigation was sparked by his desire to develop evidence showing that David William Ferrie, a former airlines pilot, and Lee Harvey Oswald conspired with anti-Castro Cubans to assassinate President Kennedy [2]. He claimed that Oswald was schooled in covert operations by the CIA while in the marine corps [4]. However, the FBI found no evidence to support this claim, and Garrison's mental stability was questioned [2][3].\n\n### Criticisms of Garrison's Theory\nGarrison's theory was criticized by many, including the FBI, which found no evidence to support his claims [2]. The FBI also questioned the credibility of Garrison's witnesses, including Perry Russo, who admitted to receiving psychiatric treatment [2]. Additionally, Gurvich testified that Garrison once predicted the assassination probe would end with the suicide of his chief defendant, Clay Shaw [1].\n\n### Garrison's Methods\nGarrison's methods were also criticized, with some accusing him of being unstable and seeking headlines [4]. He was known to have ordered his investigators to arrest and assault individuals who expressed skepticism of his probe [1]. Novel, a key witness in Garrison's investigation, claimed that Garrison's whole case was a fraud and that he had been offered money and withdrawal of charges in exchange for his testimony [5].\n\n### Evaluation of Garrison's Theory\nThe Psychological Stress Evaluator (PSE) was used to analyze the testimony of Garrison, Shaw, and other witnesses [6]. The results showed that Garrison's statements indicated deception, while Shaw's statements showed stress, but not necessarily deception [6]. The PSE also analyzed the testimony of other witnesses, including Lee Odom, who showed hard stress during his statement [6]. However, the results were not conclusive, and the PSE's limitations were noted [6].",
+    "sources": [
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 106
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 640
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 208
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 537
+      },
+      {
+        "filename": "124-10273-10289_redacted.pdf",
+        "page": 197
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 65
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 107
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 373
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 45
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 385
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 252
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 226
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 141
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 111
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 128
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 155
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 171
+      },
+      {
+        "filename": "104-10324-10002.pdf",
+        "page": 31
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 366
+      }
+    ],
+    "timings": {
+      "router_ms": 290,
+      "retrieve_ms": 1625,
+      "rerank_ms": 945,
+      "generate_ms": 3334,
+      "ground_ms": 656,
+      "expand_ms": 30905,
+      "cite_verify_ms": 1832,
+      "total_ms": 50765
+    },
+    "elapsed_s": 50.79023504257202
+  },
+  {
+    "id": "analytical_oswald_cuba_connections",
+    "question": "What connections between Oswald and Cuban-related activities do the retrieved documents establish?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents establish connections between Lee Harvey Oswald and Cuban-related activities, including his visits to the Cuban Consulate in Mexico City and his attempts to obtain a visa to travel to Cuba. Oswald's interactions with Cuban officials and his interest in Cuba are documented in several sources. However, the documents also reveal inconsistencies and uncertainties surrounding Oswald's activities and intentions.\n\n## Detailed Findings\n### Oswald's Visits to the Cuban Consulate\nOswald visited the Cuban Consulate in Mexico City on September 27, 1963, where he met with Silvia Duran, an employee of the consulate [1]. He applied for an in-transit visa to Cuba, which was denied, and showed Duran his Russian labor card, marriage certificate, and American Communist Party membership card [1]. Oswald's signature on the visa application is confirmed by Duran, who stated that she was certain he signed it in her presence [3].\n\n### Oswald's Interactions with Cuban Officials\nOswald's interactions with Cuban officials, including Silvia Duran, are documented in several sources. Duran reported that Oswald was suspicious and showed her documents, including his Russian labor card and American Communist Party membership card [1]. The documents also mention that Oswald may have been in contact with a group of pro-Castro students from the University of Mexico, although this is not confirmed [2].\n\n### Cuban Government's Reaction to Oswald's Activities\nThe Cuban government's reaction to Oswald's activities is mentioned in several documents. A Cuban diplomatic message from November 1963 comments on Oswald's attempts to obtain a visa to travel to Cuba [4]. The message also mentions the assassination of President Kennedy and the Cuban government's response to it.\n\n### Connections to Other Cuban-Related Activities\nThe documents also mention connections between Oswald and other Cuban-related activities, including the Fair Play for Cuba Committee [1]. However, the nature and extent of these connections are not fully clarified in the retrieved documents. The documents do mention that the CIA had photographic surveillance operations covering the entrances to the Soviet Embassy and the Cuban Embassy and Consulate in Mexico City [2].",
+    "sources": [
+      {
+        "filename": "180-10143-10113.pdf",
+        "page": 4
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 255
+      },
+      {
+        "filename": "104-10332-10016.pdf",
+        "page": 11
+      },
+      {
+        "filename": "104-10332-10022.pdf",
+        "page": 23
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 321
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 305
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 72
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 40
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 17
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 17
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 306
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 116
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 133
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 117
+      },
+      {
+        "filename": "144-10001-10164.pdf",
+        "page": 8
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 255
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 172
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 157
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 161
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 268
+      }
+    ],
+    "timings": {
+      "router_ms": 720,
+      "retrieve_ms": 43476,
+      "rerank_ms": 1349,
+      "generate_ms": 3609,
+      "ground_ms": 560,
+      "cite_verify_ms": 968,
+      "total_ms": 61699
+    },
+    "elapsed_s": 61.71829319000244
+  },
+  {
+    "id": "analytical_hsca_ruby",
+    "question": "What investigative findings do the retrieved documents offer regarding the HSCA's examination of Jack Ruby?",
+    "category": "analytical",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents do not provide a comprehensive examination of the HSCA's investigation into Jack Ruby. However, they mention Jack Ruby in the context of the assassination and its aftermath [3]. The documents also discuss the HSCA's sequestered collection, which includes files on various individuals and topics related to the assassination [1].\n\n## Detailed Findings\n### HSCA Sequestered Collection\nThe HSCA sequestered collection contains 64 boxes of multimedia material, including documents, photographs, and microfilm [2]. The collection includes files on Lee Harvey Oswald, Jack Ruby, and other individuals related to the assassination [1]. The documents do not provide a detailed examination of the HSCA's investigation into Jack Ruby, but they mention his name in connection with the assassination [3].\n\n### Jack Ruby\nThe documents mention Jack Ruby as the individual who killed Lee Harvey Oswald [3]. They also discuss the HSCA's interest in Ruby's activities and connections [1]. However, the documents do not provide a comprehensive overview of the HSCA's investigation into Ruby.\n\n### Investigation Findings\nThe documents do not contain detailed findings from the HSCA's investigation into Jack Ruby. However, they mention the HSCA's efforts to gather information and interview witnesses [1]. The documents also discuss the challenges faced by the HSCA in investigating the assassination and the various individuals involved [2].",
+    "sources": [
+      {
+        "filename": "104-10337-10014.pdf",
+        "page": 13
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 12
+      },
+      {
+        "filename": "157-10004-10144.pdf",
+        "page": 2
+      },
+      {
+        "filename": "104-10333-10008.pdf",
+        "page": 35
+      },
+      {
+        "filename": "104-10337-10014.pdf",
+        "page": 12
+      },
+      {
+        "filename": "104-10194-10022.pdf",
+        "page": 123
+      },
+      {
+        "filename": "104-10305-10000.pdf",
+        "page": 110
+      },
+      {
+        "filename": "104-10226-10024.pdf",
+        "page": 27
+      },
+      {
+        "filename": "104-10176-10006.pdf",
+        "page": 71
+      },
+      {
+        "filename": "104-10170-10051.pdf",
+        "page": 43
+      },
+      {
+        "filename": "104-10176-10006.pdf",
+        "page": 73
+      },
+      {
+        "filename": "104-10176-10006.pdf",
+        "page": 77
+      },
+      {
+        "filename": "104-10176-10006.pdf",
+        "page": 74
+      },
+      {
+        "filename": "104-10177-10134.pdf",
+        "page": 118
+      },
+      {
+        "filename": "104-10164-10110.pdf",
+        "page": 66
+      },
+      {
+        "filename": "104-10176-10006.pdf",
+        "page": 69
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 99
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 20
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 98
+      },
+      {
+        "filename": "135-10001-10297.pdf",
+        "page": 58
+      }
+    ],
+    "timings": {
+      "router_ms": 728,
+      "retrieve_ms": 29676,
+      "rerank_ms": 922,
+      "generate_ms": 3337,
+      "ground_ms": 696,
+      "expand_ms": 77790,
+      "cite_verify_ms": 1278,
+      "total_ms": 123705
+    },
+    "elapsed_s": 123.71965408325195
+  },
+  {
+    "id": "partial_evidence_oswald_motivations",
+    "question": "What do the archival documents reveal about Lee Harvey Oswald's personal motivations for assassinating President Kennedy?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe archival documents do not directly describe Lee Harvey Oswald's personal motivations for assassinating President Kennedy [1]. However, they mention his defection to the USSR and his activities following his return to the United States [2]. The documents also reveal that Oswald was in contact with the American Embassy in Moscow, and the Department of State prepared reports on these contacts [4].\n\n## Detailed Findings\n### Oswald's Defection and Activities\nThe documents indicate that Oswald defected to the USSR in 1959 and was in contact with the American Embassy in Moscow [4]. The Department of State prepared reports on these contacts, which were likely due to counterintelligence concerns [4]. Oswald's defection and activities were also reported in press clippings, including The Washington Post and Evening Star [2][6].\n### CIA Files on Oswald\nThe CIA had two files on Oswald at the time of the assassination: the Defectors File (#0341008) and the Office of Security subject file on Lee Harvey Oswald (#30351164) [7][8]. The Defectors File was established circa 1950 to record information on US citizens defecting to other countries [9]. The Office of Security subject file on Oswald was established circa 1960 and contained press clippings and reports from other government agencies [2][6].\n### Destruction of HTLINGUAL Files\nThe HTLINGUAL files, which may have contained information on Oswald, were destroyed on 8 April 1994 [3][5]. The search of Oswald's name did not produce an index reference to any of these files [3]. The destruction of these files limits the availability of information on Oswald's personal motivations for assassinating President Kennedy.\n### Cuban Intelligence and the Assassination\nThe documents reveal that the NSA searched their files for information on the assassination of President Kennedy and found materials that may have some relevance to the assassination [10][11][12]. These materials include Cuban diplomatic messages and military reports, as well as information on Cuban intelligence agents [10][11][12]. However, these documents do not provide direct information on Oswald's personal motivations for the assassination.",
+    "sources": [
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 61
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 115
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 128
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 79
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 133
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 131
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 17
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 16
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 12
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 15
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 57
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 44
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 11
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 43
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 45
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 58
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 112
+      },
+      {
+        "filename": "144-10001-10164.pdf",
+        "page": 8
+      },
+      {
+        "filename": "144-10001-10138.pdf",
+        "page": 3
+      },
+      {
+        "filename": "144-10001-10264.pdf",
+        "page": 3
+      }
+    ],
+    "timings": {
+      "router_ms": 292,
+      "retrieve_ms": 1201,
+      "rerank_ms": 775,
+      "generate_ms": 2621,
+      "ground_ms": 314,
+      "cite_verify_ms": 1158,
+      "total_ms": 12385
+    },
+    "elapsed_s": 12.399956941604614
+  },
+  {
+    "id": "partial_evidence_oswald_acted_alone",
+    "question": "Do the retrieved documents support the conclusion that Oswald acted alone in the assassination?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents do not contain sufficient information to conclusively determine whether Oswald acted alone in the assassination [1]. However, they do provide some insights into Oswald's activities and connections, such as his contact with the Cuban and Soviet Embassies in Mexico prior to the assassination [3]. The documents also mention various investigations and reports related to the assassination, but they do not provide a clear answer to the question of whether Oswald acted alone [4].\n\n## Detailed Findings\n### Oswald's Connections and Activities\n* Oswald had contact with the Cuban and Soviet Embassies in Mexico prior to the assassination [3].\n* There were rumors in Cuba that Lee Oswald, the assassin of Kennedy, was photographed in Varadero and Pinar del Rio [2].\n* The CIA had a small file on Oswald before the assassination, which consisted of 34 documents [5].\n* The CIA accumulated more information on Oswald after the assassination, totaling around 33,000 pages [5].\n\n### Investigations and Reports\n* The Warren Commission reviewed and received a copy of the CIA's file on Oswald [7].\n* The CIA prepared a comprehensive SR/CI/Research paper on the Oswald case, which included a detailed chronology of Oswald's sojourn in the USSR [8].\n* The House Select Committee on Assassinations (HSCA) requested all materials related to the assassination, including files on Oswald [6].\n* The CIA reviewed and released documents related to the assassination, including Oswald's file, to the National Archives [6].\n\n### Contradictions and Gaps\n* The documents do not provide a clear answer to the question of whether Oswald acted alone in the assassination.\n* There are some contradictions and gaps in the information provided, such as the fact that the CIA had a small file on Oswald before the assassination, but accumulated much more information after the event [5].\n* The documents mention various investigations and reports, but they do not provide a comprehensive overview of the events surrounding the assassination [4].",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 159
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 28
+      },
+      {
+        "filename": "180-10143-10113.pdf",
+        "page": 4
+      },
+      {
+        "filename": "104-10150-10004.pdf",
+        "page": 113
+      },
+      {
+        "filename": "104-10210-10009.pdf",
+        "page": 105
+      },
+      {
+        "filename": "104-10337-10001.pdf",
+        "page": 51
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 64
+      },
+      {
+        "filename": "104-10337-10014.pdf",
+        "page": 12
+      },
+      {
+        "filename": "104-10333-10008.pdf",
+        "page": 41
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 20
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 116
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 49
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 62
+      },
+      {
+        "filename": "104-10301-10002.pdf",
+        "page": 5
+      },
+      {
+        "filename": "104-10227-10000.pdf",
+        "page": 123
+      },
+      {
+        "filename": "104-10332-10000.pdf",
+        "page": 13
+      },
+      {
+        "filename": "104-10337-10001.pdf",
+        "page": 80
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 133
+      },
+      {
+        "filename": "144-10001-10164.pdf",
+        "page": 8
+      },
+      {
+        "filename": "104-10332-10014.pdf",
+        "page": 34
+      }
+    ],
+    "timings": {
+      "router_ms": 717,
+      "retrieve_ms": 2281,
+      "rerank_ms": 881,
+      "generate_ms": 2385,
+      "ground_ms": 594,
+      "cite_verify_ms": 712,
+      "total_ms": 13450
+    },
+    "elapsed_s": 13.48329496383667
+  },
+  {
+    "id": "partial_evidence_cuban_involvement",
+    "question": "Was the Cuban government involved in the assassination of President Kennedy?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe Cuban government's involvement in the assassination of President Kennedy is not directly confirmed in the retrieved documents [1][2]. However, the documents suggest that the Cuban government was concerned about the potential consequences of the assassination and had received warnings about possible hostile activity against them [3]. The documents also reveal that the CIA had planned several assassination attempts against Fidel Castro, which could have potentially led to retaliation against the United States [4].\n\n## Detailed Findings\n### Cuban Reaction to the Assassination\nThe Cuban government's reaction to the assassination of President Kennedy was calm but cautious, with only isolated Communist groups showing any rejoicing [3]. The Cuban government issued a statement expressing deep sorrow and regret over the assassination, and Fidel Castro himself accused the news agencies of trying to connect the Soviet Union and Cuba to the crime [7]. The Cuban government was also concerned about the potential consequences of the assassination, with some officials believing that any other President would be \"even worse\" [7].\n\n### CIA Plots Against Castro\nThe CIA had planned several assassination attempts against Fidel Castro, including the use of poison pills, poison pens, and high-powered rifles [4]. One plot involved the use of a poison pen, which was offered to a Cuban agent on the same day that President Kennedy was shot in Dallas [4]. Another plot involved the use of a double-barreled shotgun, explosives, and demolition timing devices [9]. The CIA also worked with underworld figures, including Johnny Roselli, to plan and execute the assassination attempts [5].\n\n### Potential Retaliation\nThe documents suggest that the Cuban government may have had reason to retaliate against the United States for the CIA's assassination attempts against Castro [6]. However, there is no direct evidence in the retrieved documents to suggest that the Cuban government was involved in the assassination of President Kennedy [1][2]. The Warren Commission found no evidence to suggest that Lee Harvey Oswald was in the hire of the Cuban government [6].\n\n### Cuban Agent Activity\nThe Cuban government used agents for intelligence and subversion in North, Central, and South America, as well as Africa and Asia [8]. These agents were tasked with recruiting, gathering information, and reporting on counter-revolutionary activities [8]. The Cuban government also maintained contact with its agents through secure mail drop addresses and clandestine communication channels [8]. However, there is no direct evidence to suggest that these agents were involved in the assassination of President Kennedy [1][2].",
+    "sources": [
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 114
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 351
+      },
+      {
+        "filename": "144-10001-10070.pdf",
+        "page": 2
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 13
+      },
+      {
+        "filename": "144-10001-10364.pdf",
+        "page": 3
+      },
+      {
+        "filename": "104-10302-10021.pdf",
+        "page": 7
+      },
+      {
+        "filename": "144-10001-10072.pdf",
+        "page": 2
+      },
+      {
+        "filename": "144-10001-10059.pdf",
+        "page": 2
+      },
+      {
+        "filename": "157-10014-10151.pdf",
+        "page": 26
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 115
+      },
+      {
+        "filename": "124-10218-10058.pdf",
+        "page": 3
+      },
+      {
+        "filename": "157-10014-10178.pdf",
+        "page": 163
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 68
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 96
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 91
+      },
+      {
+        "filename": "144-10001-10202.pdf",
+        "page": 3
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 456
+      },
+      {
+        "filename": "144-10001-10364.pdf",
+        "page": 2
+      },
+      {
+        "filename": "144-10001-10136.pdf",
+        "page": 3
+      },
+      {
+        "filename": "157-10014-10178.pdf",
+        "page": 136
+      }
+    ],
+    "timings": {
+      "router_ms": 371,
+      "retrieve_ms": 1426,
+      "rerank_ms": 737,
+      "generate_ms": 2776,
+      "ground_ms": 449,
+      "cite_verify_ms": 778,
+      "total_ms": 14059
+    },
+    "elapsed_s": 14.087108135223389
+  },
+  {
+    "id": "partial_evidence_ruby_state_of_mind",
+    "question": "What do the documents indicate about Jack Ruby's mental state or psychological condition at the time of the assassination?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents do not provide a comprehensive overview of Jack Ruby's mental state or psychological condition at the time of the assassination. However, they mention his actions and statements, which may offer some insight into his mindset. The documents also discuss the possibility of a conspiracy and Ruby's potential involvement in it.\n\n## Detailed Findings\n### Jack Ruby's Actions and Statements\nJack Ruby's actions and statements are mentioned in several documents, including [2] and [3]. According to [2], Ruby acted alone when he killed Lee Harvey Oswald, motivated by a desire to be a hero in Dallas. The document also mentions that Ruby had no prior connection to Oswald and that their paths crossed by chance on the day of the shooting.\n\n### Possible Conspiracy Involvement\nThe documents also discuss the possibility of a conspiracy involving Ruby, as mentioned in [1] and [3]. However, [2] suggests that Ruby was not acting on behalf of organized crime, but rather on his own motivation. The document also mentions that Ruby's connection to organized crime was not fully explored by the Warren Commission.\n\n### Psychological Evaluation\nThere is no direct psychological evaluation of Jack Ruby in the retrieved documents. However, [4] mentions the use of a Psychological Stress Evaluator (PSE) to analyze the testimony of various individuals involved in the assassination, including Earl Warren and other members of the Warren Commission. The document does not apply the PSE to Ruby's testimony, but it does discuss the potential for deception and stress in the testimony of other individuals.\n\n### Gaps in Information\nThe records do not directly describe Jack Ruby's mental state or psychological condition at the time of the assassination. However, they mention his actions and statements, as well as the possibility of a conspiracy involving him. The documents also discuss the use of a PSE to evaluate the testimony of other individuals, but they do not apply this evaluation to Ruby's testimony.",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 43
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 444
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 135
+      },
+      {
+        "filename": "104-10173-10135.pdf",
+        "page": 21
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 44
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 100
+      },
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 17
+      },
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 21
+      },
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 16
+      },
+      {
+        "filename": "104-10173-10135.pdf",
+        "page": 24
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 172
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 68
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 255
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 162
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 256
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 173
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 116
+      },
+      {
+        "filename": "178-10004-10420.pdf",
+        "page": 171
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 174
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 114
+      }
+    ],
+    "timings": {
+      "router_ms": 334,
+      "retrieve_ms": 42731,
+      "rerank_ms": 1145,
+      "generate_ms": 3067,
+      "ground_ms": 315,
+      "expand_ms": 92595,
+      "cite_verify_ms": 911,
+      "total_ms": 153463
+    },
+    "elapsed_s": 153.4845712184906
+  },
+  {
+    "id": "partial_evidence_cia_oswald_connection",
+    "question": "Did Lee Harvey Oswald have a connection to the CIA?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nLee Harvey Oswald was never associated or connected with the CIA, directly or indirectly, in any way whatsoever [1]. The CIA had no operational interest in Oswald upon his return from the Soviet Union, and there is no evidence of contact between Oswald and the CIA's Office of Operations [9]. However, the CIA did open a 201 file on Oswald in December 1960, which served as a repository for records gathered during the investigation of the assassination [2].\n\n## Detailed Findings\n### CIA Connection\nThe CIA had no connection with Lee Harvey Oswald, and he was not a source, asset, or employee of the CIA [1]. The CIA's Office of Operations had no specific policy covering contacts with returning defectors, and there is no evidence of contact between Oswald and the CIA's Office of Operations [7]. The CIA did, however, receive copies of Oswald's manuscript from the FBI and the Warren Commission [1].\n\n### CIA Investigation\nThe CIA conducted an investigation into Oswald's activities, including his trip to Mexico City [3]. The CIA's Mexico City Station had surveillance operations in place, which may have obtained a photograph of Oswald entering the Soviet or Cuban Consulates [4]. However, the CIA denies that such a photograph exists [4].\n\n### Oswald's Activities\nOswald did visit the Soviet and Cuban Consulates in Mexico City, and there are records of his interactions with these entities [5]. The CIA has records of intercepted conversations between Oswald and Soviet Embassy officials, which were obtained through liaison wiretaps [8]. However, the CIA's investigation into Oswald's activities was limited, and there is no evidence of any direct involvement with Oswald [9].\n\n### CIA Records\nThe CIA has a significant number of records related to Oswald, including a 201 file that was opened in December 1960 [2]. The CIA's records on Oswald include information from various sources, including the FBI and the Warren Commission [1]. However, the CIA's records on Oswald are not comprehensive, and there are gaps in the information available [6].\n\n### Conclusion\nIn conclusion, while there is no evidence of a direct connection between Lee Harvey Oswald and the CIA, the CIA did have an interest in Oswald's activities and conducted an investigation into his trip to Mexico City [3]. The CIA's records on Oswald are significant, but there are gaps in the information available, and further research is needed to fully understand the CIA's involvement in the investigation of the assassination [6].",
+    "sources": [
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 9
+      },
+      {
+        "filename": "104-10337-10014.pdf",
+        "page": 36
+      },
+      {
+        "filename": "180-10147-10176.pdf",
+        "page": 24
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 1
+      },
+      {
+        "filename": "180-10113-10119.pdf",
+        "page": 2
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 19
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 20
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 13
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 29
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 15
+      },
+      {
+        "filename": "104-10332-10016.pdf",
+        "page": 11
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 102
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 132
+      },
+      {
+        "filename": "104-10332-10016.pdf",
+        "page": 10
+      },
+      {
+        "filename": "104-10211-10001.pdf",
+        "page": 37
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 35
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 40
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 197
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 178
+      }
+    ],
+    "timings": {
+      "router_ms": 505,
+      "retrieve_ms": 1819,
+      "rerank_ms": 871,
+      "generate_ms": 3038,
+      "ground_ms": 561,
+      "cite_verify_ms": 999,
+      "total_ms": 16474
+    },
+    "elapsed_s": 16.49296998977661
+  },
+  {
+    "id": "partial_evidence_organized_crime_role",
+    "question": "What role, if any, did organized crime play in the Kennedy assassination according to the retrieved documents?",
+    "category": "partial_evidence",
+    "query_type_seen": "research",
+    "answer": "## Executive Summary\nThe retrieved documents suggest that organized crime may have played a role in the Kennedy assassination, with some sources indicating that the CIA had enlisted the help of mobsters in attempts to kill Fidel Castro, which could have potentially led to a counterplot against President Kennedy [3][4]. However, the documents also note that there is no conclusive evidence to prove this theory, and the Warren Commission found no evidence of organized crime involvement [1]. The documents highlight the complexity and potential connections between the CIA, organized crime, and the Kennedy assassination.\n\n## Detailed Findings\n### CIA and Organized Crime Connection\nThe documents reveal that the CIA had connections with organized crime figures, including Sam Giancana and John Rosselli, who were involved in plots to assassinate Fidel Castro [2][3]. Rosselli, in particular, was a key figure in these plots and had ties to the CIA [3][4]. The documents also mention that the CIA's involvement with organized crime was not fully disclosed to the Warren Commission [4].\n\n### Potential Motive for Organized Crime Involvement\nThe documents suggest that organized crime figures may have had a motive to kill President Kennedy, particularly if they felt that he was a threat to their interests or if they were seeking revenge for the CIA's attempts to kill Castro [3][4]. However, the documents do not provide conclusive evidence to support this theory.\n\n### Investigation and Cover-Up\nThe documents imply that there may have been a cover-up or inadequate investigation into the potential involvement of organized crime in the Kennedy assassination [5][7]. The FBI's investigation into Rosselli's allegations was reportedly \"slipshod and incomplete\" [7], and the CIA's involvement with organized crime was not fully disclosed to the Warren Commission [4].\n\n### Key Figures and Testimony\nThe documents mention several key figures, including John Rosselli, Sam Giancana, and Edward P. Morgan, who provided testimony or information related to the potential involvement of organized crime in the Kennedy assassination [3][4][7]. However, the documents also note that some of these figures, including Rosselli, later recanted or denied their earlier statements [6].",
+    "sources": [
+      {
+        "filename": "178-10004-10420.pdf",
+        "page": 5
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 69
+      },
+      {
+        "filename": "157-10014-10137.pdf",
+        "page": 160
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 386
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 320
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 407
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 602
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 526
+      },
+      {
+        "filename": "104-10177-10217.pdf",
+        "page": 17
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 635
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 396
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 449
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 463
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 397
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 636
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 637
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 677
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 374
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 402
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 398
+      }
+    ],
+    "timings": {
+      "router_ms": 512,
+      "retrieve_ms": 1346,
+      "rerank_ms": 904,
+      "generate_ms": 2625,
+      "ground_ms": 896,
+      "expand_ms": 99518,
+      "cite_verify_ms": 1313,
+      "total_ms": 119289
+    },
+    "elapsed_s": 119.30028915405273
+  },
+  {
+    "id": "out_of_scope_world_series_1964",
+    "question": "Who won the 1964 World Series?",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "The St. Louis Cardinals won the 1964 World Series, defeating the New York Yankees in 7 games. By the way, if you're looking for information related to the JFK assassination, I can help you with that. You can ask about people, events, organizations, or specific document IDs from the JFK files.",
+    "sources": [],
+    "timings": {
+      "total_ms": 909,
+      "router_ms": 404
+    },
+    "elapsed_s": 0.9227631092071533
+  },
+  {
+    "id": "out_of_scope_caffeine_formula",
+    "question": "What is the chemical formula for caffeine?",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "The chemical formula for caffeine is C8H10N4O2. However, I'm a research system for the JFK files, so if you're looking for information related to the JFK assassination, feel free to ask about people, events, organizations, or specific document IDs.",
+    "sources": [],
+    "timings": {
+      "total_ms": 1139,
+      "router_ms": 301
+    },
+    "elapsed_s": 1.1454992294311523
+  },
+  {
+    "id": "out_of_scope_ocean_poem",
+    "question": "Write me a poem about the ocean.",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "The ocean's waves crash on the shore,\nA soothing sound that I adore.\nThe salty scent and seaweed's sway,\nInvite me to come out and play.\n\nThe tide rises, the tide falls,\nA constant motion that enthralls.\nThe ocean's depths are dark and wide,\nA mystery that I'd love to abide.\n\nBut I'm a research system, I must say,\nMy focus is on the JFK files each day.\nIf you'd like to know more about a topic or name,\nFeel free to ask, and I'll do my best to explain.\n\nYou can ask about people, events, or organizations too,\nOr even specific document IDs, like 104-10433-10209, if you knew.\nJust let me know how I can help, and I'll be happy to share,\nInformation from the JFK files, and show you I care.",
+    "sources": [],
+    "timings": {
+      "total_ms": 1477,
+      "router_ms": 432
+    },
+    "elapsed_s": 1.4836139678955078
+  },
+  {
+    "id": "out_of_scope_change_tire",
+    "question": "How do I change a car tire?",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "Changing a car tire can be a bit of a challenge, but don't worry, I can give you a quick rundown. First, find a safe location to change the tire, away from traffic. Then, turn off the engine and engage the parking brake. Next, gather your tools: a lug wrench, a spare tire, and a car jack. Loosen the lug nuts with the lug wrench, then raise the car with the jack. Remove the lug nuts and take off the flat tire, replacing it with the spare. Hand tighten the lug nuts, then lower the car and tighten them as much as possible. \n\nHowever, I'm a research system for the JFK files, so I can provide more detailed information on topics related to the JFK assassination if you're interested. You can ask me about people, events, organizations, or specific document IDs from the JFK files.",
+    "sources": [],
+    "timings": {
+      "total_ms": 1479,
+      "router_ms": 608
+    },
+    "elapsed_s": 1.491225004196167
+  },
+  {
+    "id": "out_of_scope_latvia_capital",
+    "question": "What is the capital of Latvia?",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "The capital of Latvia is Riga. By the way, if you're looking for information related to the JFK assassination, I can help with that too. You can ask me about people, events, organizations, or specific document IDs from the JFK files.",
+    "sources": [],
+    "timings": {
+      "total_ms": 1253,
+      "router_ms": 714
+    },
+    "elapsed_s": 1.258315086364746
+  },
+  {
+    "id": "out_of_scope_hamlet_plot",
+    "question": "Summarize the plot of Hamlet.",
+    "category": "out_of_scope",
+    "query_type_seen": "conversational",
+    "answer": "Not JFK-related, but I'd be happy to give you a quick summary. Hamlet is a tragedy about Prince Hamlet, who seeks to avenge his father's murder. His father's ghost reveals that he was killed by his brother, Claudius, who took the throne and married Hamlet's mother. Hamlet's quest for justice leads to chaos, madness, and ultimately, tragic consequences. Now, if you're interested in the JFK files, feel free to ask about people, events, organizations, or specific document IDs.",
+    "sources": [],
+    "timings": {
+      "total_ms": 1455,
+      "router_ms": 696
+    },
+    "elapsed_s": 1.4604761600494385
+  }
+]

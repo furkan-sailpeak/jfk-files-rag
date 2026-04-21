@@ -1,72 +1,150 @@
 # JFK Files Research System
 
-A Retrieval-Augmented Generation (RAG) system for querying declassified JFK assassination documents. Built as part of a Master of Statistics & Data Science thesis at KU Leuven.
+A Retrieval-Augmented Generation (RAG) system for querying the 2025 declassified JFK assassination record release, built for the Master of Statistics & Data Science thesis at KU Leuven.
 
 > *"Topic Modeling and Thematic Analysis of JFK Assassination Files Using NLP"*
 
-https://github.com/furkan-sailpeak/jfk-thesis
+Thesis repo: https://github.com/furkan-sailpeak/jfk-thesis
 
-## Features
+## What it does
 
-- **Document Q&A** — Ask questions about the JFK files and get structured research reports with in-text citations linked directly to source PDFs
-- **Conversation Memory** — Follow-up questions maintain context from previous exchanges
-- **Source Verification** — Every claim is cited with clickable references that open the original document at the exact page on the National Archives
-- **Archive Statistics** — Real-time overview of the document collection (pages, redactions, handwriting, stamps)
-- **Entity Extraction & Summarization** — Extract names or summarize content from retrieved documents
+- **Grounded Q&A** over ~70,000 OCR-processed pages — every factual claim carries a `[N]` citation linked to the exact page on the National Archives PDF viewer.
+- **Two answer modes** selected automatically by a router: *simple* (bold lead + bulleted facts) for single-fact queries, *research* (Executive Summary + Detailed Findings with `###` subsections) for analytical queries.
+- **Conversational follow-ups** — pronouns and references ("what about his wife?", "tell me more") resolve against the last few turns before retrieval runs.
+- **Archive-level queries** — ask about metadata properties (pages with redactions, handwriting, stamps, etc.) and get counts + sampled examples instead of a single-page answer.
+- **Honest refusals** — questions unrelated to the archive short-circuit to a fixed refusal line; the system does not confabulate.
 
 ## Architecture
 
-- **Backend**: Python, Flask, PostgreSQL (Supabase), Groq (LLaMA 3.3 70B)
-- **Frontend**: React, Vite, Framer Motion, Lucide Icons
-- **Database**: ~70,000+ OCR-processed pages from the 2025 JFK document release
-- **Deployment**: Docker / Railway
+**Backend:** Python 3.11 · Flask · PostgreSQL 15 + pgvector 0.8 (Supabase) · Groq (LLaMA 3.3 70B) · OpenAI (`text-embedding-3-small`, judge `gpt-5.4-mini`).
+**Frontend:** React + Vite · Framer Motion · Lucide Icons · Server-Sent Events for token streaming.
+**Deployment:** Docker / Railway.
 
-The system searches a PostgreSQL database of OCR-processed JFK document pages, retrieves relevant context, and generates structured research reports using an LLM. Source documents link directly to the National Archives via Google Cloud Storage.
+### Retrieval pipeline
 
-### Backend Flow (`app.py`)
+The request flow is a multi-stage agent pipeline with validation gates at each step:
 
 ```
-User Query
-    │
-    ▼
-┌─────────────────────────┐
-│  Document ID Detection   │──── regex match (e.g., 104-10433-10209)
-│  (e.g., 104-XXXXX-XXXXX)│     │
-└─────────┬───────────────┘     ▼
-          │ no match       ┌──────────────────┐
-          ▼                │ Retrieve all     │
-┌─────────────────────┐    │ pages of that    │
-│  Query Analysis     │    │ specific document│
-│  (LLM: keyword      │    └────────┬─────────┘
-│   extraction + type) │             │
-└─────────┬───────────┘             │
-          ▼                         │
-┌─────────────────────┐             │
-│  PostgreSQL Search   │             │
-│  (ILIKE + ranking)   │             │
-│  Supabase / jfk_pages│             │
-└─────────┬───────────┘             │
-          ▼                         ▼
-┌─────────────────────────────────────┐
-│  Build Numbered Context             │
-│  [1] Source: file.pdf, Page N       │
-│  [2] Source: file.pdf, Page M       │
-└─────────────────┬───────────────────┘
-                  ▼
-┌─────────────────────────────────────┐
-│  LLM Generation (Groq/LLaMA 3.3)   │
-│  System prompt + conversation       │
-│  history + retrieved documents      │
-│  → Structured report with [N] cites │
-└─────────────────┬───────────────────┘
-                  ▼
-┌─────────────────────────────────────┐
-│  Response to Frontend               │
-│  { answer, sources[], query_type }  │
-│                                     │
-│  Frontend: [N] → clickable links    │
-│  to NARA PDFs (GCS) at exact page   │
-└─────────────────────────────────────┘
+User query
+   │
+   ▼
+┌──────────────────────────────┐
+│ Document-ID shortcut         │ regex: 104-10433-10209 style
+│ (bypasses retrieval)         │──► fetch all pages, generate
+└──────────────┬───────────────┘
+               │ no ID match
+               ▼
+┌──────────────────────────────┐
+│ Router agent (JSON-mode)     │ type ∈ {simple, research, metadata,
+│ - classify query type        │        conversational, out_of_scope}
+│ - rewrite pronouns           │ extracts 1–3 high-signal keywords,
+│ - extract keywords           │ drops stopwords / generic verbs
+└──────┬─────────────┬─────────┘
+       │             │
+       │             ├── out_of_scope ──► fixed refusal, stream, return
+       │             └── conversational ─► free-chat branch, return
+       ▼
+┌──────────────────────────────┐
+│ Hybrid retrieval             │  FTS leg: tsvector + ts_rank_cd on
+│   FTS  ∪  vector             │           proper-noun keywords
+│                              │  Vector leg: OpenAI embeddings (512-dim
+│                              │           Matryoshka, stored as
+│                              │           halfvec(512)) · cosine
+│                              │           distance · ivfflat index
+│                              │  Union deduped on (filename, page) and
+│                              │  content prefix.
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐
+│ Rerank (LLM judge)           │ drops admin/index/cover chunks that
+│ top-K → 15–20 keep           │ share keywords but don't discuss
+│                              │ the subject; prefers substantive text.
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐
+│ Streamed generation          │ simple vs. research system prompt
+│ (Groq / LLaMA 3.3 70B)       │ + tail-of-prompt FORMAT REMINDER
+│                              │ (small models weight the tail)
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐
+│ Grounding check              │ second LLM pass: is the answer
+│ (subject + support)          │ on-topic and not fabricating?
+│                              │ if FAIL → expand query → regenerate
+└──────────────┬───────────────┘
+               ▼
+┌──────────────────────────────┐
+│ Citation verifier            │ per-[N] check: does source N actually
+│                              │ support the sentence citing it?
+│                              │ unsupported [N] stripped in place,
+│                              │ surviving citations renumbered 1..M.
+└──────────────┬───────────────┘
+               ▼
+          SSE stream
+      { token, stage, done }
+```
+
+### Why hybrid retrieval?
+
+Early versions used FTS only. Semantic questions ("who killed Oswald?") kept missing the obvious answer because the Ruby-shoots-Oswald pages don't contain the literal word "killed" — they say *"fired … fatal shot"*. Adding a pgvector leg (via `halfvec(512)` — Matryoshka-truncated embeddings that fit the Supabase free-tier disk budget at ~6× lower storage than `vector(1536)`) recovers those pages. FTS still carries proper-noun precision; vector carries semantic/paraphrase recall.
+
+### Prompt engineering notes
+
+- **FORMAT REMINDER at the tail.** LLaMA-3.3 forgets long system-prompt formatting rules by the time it generates. Hoisting a minimal "your output must look exactly like this" block to the very end of the user prompt raised structure-compliance from ~60% to 100% on the eval set.
+- **Router "PREFER / SKIP" rules.** Telling the router to prefer proper nouns and skip generic relational verbs ("role", "played", "involved") prevents FTS rankings from being dominated by administrative policy documents.
+- **Lenient citation verifier.** Claim-matching is paraphrase-tolerant. False-unsupported flags are more harmful than false-supported ones — a real source stripped from a valid citation looks worse to a researcher than a slightly imprecise link.
+
+## Evaluation
+
+The system is evaluated against a **30-question, corpus-grounded ground-truth set** authored directly from the archive (`eval/questions.yaml`). Each reference answer traces back to specific (filename, page) tuples. The judge is `gpt-5.4-mini` — a different model family from the one under test, so there is no self-judging bias.
+
+**Categories (6 questions each):** `factual`, `biographical`, `analytical`, `partial_evidence`, `out_of_scope`.
+
+**Metrics:**
+
+| Type | Metric |
+|---|---|
+| Deterministic | `evidence_recall@20`, `evidence_precision`, `structure_ok`, `has_citations`, `no_bulk_cite`, `correct_refusal` |
+| LLM judge | `faithfulness`, `completeness`, `hallucination`, `over_commits`, `clarity` |
+
+See `eval/README.md` for run instructions.
+
+### Head-to-head: RAG vs. plain GPT-5.4
+
+The system was benchmarked against OpenAI's **GPT-5.4 with no retrieval** — the model answers each question from training knowledge alone. Out-of-scope is excluded from the head-to-head (RAG refuses by design; plain GPT is expected to answer — not comparable).
+
+![RAG vs GPT-5.4 comparison](eval/comparison_chart.png)
+
+*Interactive version with hover tooltips: open `eval/comparison_chart.html` in a browser.*
+
+**Headline composite score** (equal-weight mean of completeness, 1 − hallucination rate, faithfulness/correctness, clarity ÷ 5):
+
+| System | Completeness | Non-hallucination | Faithfulness / Correctness | Clarity (÷5) | **Overall** |
+|---|---|---|---|---|---|
+| **JFK-RAG** | 0.56 | 0.92 | 0.74 | 0.87 | **0.77** |
+| GPT-5.4 (no retrieval) | 0.48 | 0.38 | 0.70 | 0.93 | 0.62 |
+
+**Per-category hallucination rate** (share of answers with fabricated claims):
+
+| Category | JFK-RAG | GPT-5.4 |
+|---|---|---|
+| factual | 0% | 50% |
+| biographical | 0% | 50% |
+| analytical | 17% | 83% |
+| partial_evidence | 17% | 67% |
+
+The qualitative story the numbers tell:
+
+- **RAG rarely invents.** When the retriever finds a page, the answer sticks to it. When retrieval fails, the system says so rather than fabricating — the faithfulness scores on partial-evidence questions stay high *because* the answer admits the gap.
+- **Plain GPT is fluent but confabulates on specifics.** It produces prettier prose (clarity edge: 4.63 vs 4.33 on 1–5) and wins *biographical* completeness on the strength of training-data familiarity with famous figures — but invents dates, document IDs, and specific archival details on half of all questions, and over 80% of analytical ones.
+- **The gap that matters for a criminologist** is the 0.92-vs-0.38 gap on non-hallucination. A researcher can use a partial, hedged RAG answer — they cannot use a confident GPT paragraph that contains an invented date.
+
+### Regenerating the chart
+
+```bash
+cd eval
+python make_chart.py          # writes comparison_chart.html
+open comparison_chart.html
 ```
 
 ## Setup
@@ -75,37 +153,46 @@ User Query
 
 - Python 3.11+
 - Node.js 20+
-- A Supabase PostgreSQL database with the `jfk_pages` table
-- A [Groq](https://console.groq.com/) API key
+- PostgreSQL 15+ with `pgvector ≥ 0.8` extension (Supabase Pro or self-hosted)
+- API keys: [Groq](https://console.groq.com/) (primary LLM) and [OpenAI](https://platform.openai.com/) (embeddings + judge)
 
-### Environment Variables
-
-Copy the example and fill in your credentials:
+### Environment variables
 
 ```bash
 cp .env.example .env
 ```
 
-| Variable | Description |
+| Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | PostgreSQL connection string (Supabase) |
-| `GROQ_API_KEY` | API key for Groq LLM |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `GROQ_API_KEY` | Groq key (router, rerank, generation, grounding, citation verify) |
+| `OPENAI_API_KEY` | OpenAI key (query embeddings; eval judge) |
+| `JUDGE_MODEL` | *optional* — override Groq judge model (default `llama-3.3-70b-versatile`) |
+| `JUDGE_MODEL_EVAL` | *optional* — override eval judge (default `gpt-5.4-mini`) |
+| `BASELINE_MODEL` | *optional* — override baseline model (default `gpt-5.4`) |
 
-### Local Development
+### Local development
 
 ```bash
 # Backend
 cd rag
 pip install -r requirements.txt
-python app.py
+python app.py                 # serves on :5001
 
 # Frontend (separate terminal)
 cd rag/frontend
 npm install
-npm run dev
+npm run dev                   # Vite proxies /api → :5001
 ```
 
-The Vite dev server proxies `/api` requests to Flask on port 5001.
+### Embedding backfill (one-time)
+
+After populating `jfk_pages` from OCR, embed every page so the vector leg has data to search:
+
+```bash
+cd rag
+python backfill_embeddings.py  # idempotent; resumable
+```
 
 ### Docker
 
@@ -113,44 +200,46 @@ The Vite dev server proxies `/api` requests to Flask on port 5001.
 cd rag
 docker build -t jfk-rag .
 docker run -p 5001:5001 \
-  -e DATABASE_URL="your_connection_string" \
-  -e GROQ_API_KEY="your_api_key" \
+  -e DATABASE_URL="..." \
+  -e GROQ_API_KEY="..." \
+  -e OPENAI_API_KEY="..." \
   jfk-rag
 ```
 
-### Railway Deployment
-
-1. Set the root directory to `rag/`
-2. Add `DATABASE_URL` and `GROQ_API_KEY` as environment variables
-3. Railway auto-detects the Dockerfile
-
-## API Endpoints
+## API endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
+| `/api/chat` | POST | Streamed RAG query (SSE); accepts `{query, history}` |
 | `/api/stats` | GET | Archive statistics |
-| `/api/chat` | POST | Query documents with RAG (supports conversation history) |
 | `/api/analyze` | POST | Extract names or summarize text |
 | `/api/pdf/<filename>` | GET | Redirect to NARA archive PDF |
 
-## Project Structure
+## Project layout
 
 ```
-rag/
-├── app.py                  # Flask backend (RAG logic, PostgreSQL, API routes)
-├── requirements.txt        # Python dependencies
-├── Dockerfile              # Multi-stage build for Railway
-├── .dockerignore
-└── frontend/
-    ├── src/
-    │   ├── App.jsx         # React app with citation linking
-    │   ├── index.css       # Archival/classified document theme
-    │   └── main.jsx
-    ├── index.html
-    ├── vite.config.js      # Dev proxy + build config
-    └── package.json
+.
+├── rag/                       # Flask backend + React frontend
+│   ├── app.py                 # Pipeline orchestration (router → retrieve → rerank → generate → verify)
+│   ├── backfill_embeddings.py # One-shot OpenAI embedding backfill into pgvector
+│   ├── frontend/              # React UI (SSE streaming, citation linking)
+│   └── Dockerfile
+├── prompts/                   # All system prompts in one place (router, rag-simple, rag-research, reranker, ...)
+├── eval/                      # Evaluation framework
+│   ├── questions.yaml         # 30 corpus-grounded questions
+│   ├── run.py                 # Drive the RAG server over every question
+│   ├── score.py               # Deterministic + LLM-judge metrics → scores.json + report.md
+│   ├── baseline.py            # Plain GPT-5.4 baseline (no retrieval)
+│   ├── baseline_score.py      # Same rubric, corpus-correctness added
+│   ├── compare.py             # Merges both score files → comparison.md
+│   ├── make_chart.py          # Plotly visual (comparison_chart.html)
+│   └── README.md              # Framework docs
+├── database/                  # SQL schema + pgvector migration scripts
+├── scripts/                   # OCR ingestion, misc utilities
+├── ocr_output/                # Raw OCR JSON (not committed)
+└── rag-architecture-diagram.html
 ```
 
 ## License
 
-This project is part of academic research at KU Leuven. The JFK documents are public domain, released by the National Archives and Records Administration (NARA).
+Academic project, KU Leuven. The JFK records are public domain (NARA, 2025 release).

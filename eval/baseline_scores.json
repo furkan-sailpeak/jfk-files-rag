@@ -1,0 +1,434 @@
+[
+  {
+    "id": "factual_oswald_marine_clearance",
+    "category": "factual",
+    "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+    "answer": "Lee Harvey Oswald is generally reported to have held a **Confidential** security clearance during his U.S. Marine Corps service.\n\nA few notes:\n- He worked in radar-related duties, which required some level of access.\n- I’m not aware of reliable evidence that he held a **Secret** or **Top Secret** clearance.\n- Some discussions blur the distinction between access to sensitive equipment/information and formal clearance level.\n\nSo the best concise answer is: **Confidential clearance**.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.67,
+      "correctness_vs_corpus": 0.95,
+      "hallucination": true,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "It correctly identifies Oswald's clearance as confidential, but omits the specific archival details about the 1978 fact sheet and the September 11, 1959 Security Termination Statement while adding unsupported radar-duty context."
+    }
+  },
+  {
+    "id": "factual_ruby_real_name",
+    "category": "factual",
+    "question": "What was Jack Ruby's original family name before he changed it?",
+    "answer": "Jack Ruby’s original family name was **Rubenstein**.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 1.0,
+      "correctness_vs_corpus": 1.0,
+      "hallucination": false,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "The answer matches the corpus fact that Jack Ruby’s original family name was Rubenstein, though it states it categorically without citing the archival source."
+    }
+  },
+  {
+    "id": "factual_oswald_mexico_cuban_embassy",
+    "category": "factual",
+    "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+    "answer": "Lee Harvey Oswald visited the Cuban Embassy in Mexico City on **September 27, 1963** to request a transit visa.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.4,
+      "correctness_vs_corpus": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "It gives the correct date and embassy visit but omits the broader context that he was seeking a Cuba-bound transit visa en route to the USSR."
+    }
+  },
+  {
+    "id": "factual_ruby_fbi_flynn_1959",
+    "category": "factual",
+    "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+    "answer": "The FBI agent was **Charles W. Flynn**, and the contact with **Jack Ruby** occurred on **March 11, 1959**.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.67,
+      "correctness_vs_corpus": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "The answer correctly identifies Charles W. Flynn and the March 11, 1959 contact date, but omits the archival context that Ruby was contacted as a nightclub operator."
+    }
+  },
+  {
+    "id": "factual_oswald_marine_discharge_1959",
+    "category": "factual",
+    "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+    "answer": "Lee Harvey Oswald’s Marine Corps **Hardship/Dependency Discharge Board** convened on **August 17, 1959**.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.0,
+      "correctness_vs_corpus": 0.0,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "The answer gives the wrong date and omits the board time and archival specifics, directly contradicting the corpus record."
+    }
+  },
+  {
+    "id": "factual_cia_mexico_city_cable_date",
+    "category": "factual",
+    "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+    "answer": "CIA Headquarters sent the responsive information to the Mexico City Station on **October 10, 1963**.\n\nIf you want, I can also summarize what that message said and why it later became important.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.0,
+      "correctness_vs_corpus": 0.0,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "The LLM gives the wrong date and states it confidently, contradicting the archival record that places the cable on October 11, 1963."
+    }
+  },
+  {
+    "id": "biographical_jack_ruby",
+    "category": "biographical",
+    "question": "Who was Jack Ruby?",
+    "answer": "Jack Ruby was the Dallas nightclub owner who shot and killed Lee Harvey Oswald on November 24, 1963, two days after President John F. Kennedy was assassinated.\n\nA few key facts:\n- **Born:** Jacob Leon Rubenstein, in 1911, in Chicago.\n- **Occupation:** Ran nightclubs and strip clubs in Dallas, Texas.\n- **Why he is notable:** He killed **Oswald**, the accused assassin of JFK, in the basement of the Dallas police headquarters while Oswald was being transferred. The shooting was captured on live television.\n- **Afterward:** Ruby was convicted of murder in 1964 and sentenced to death, but the conviction was later overturned on appeal. Before he could be retried, he died of cancer in 1967.\n\nRuby’s act became a major part of the many controversies and conspiracy theories surrounding the Kennedy assassination.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.67,
+      "correctness_vs_corpus": 0.48,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "It correctly identifies Ruby as a Dallas nightclub operator and uses his real name, but adds many unsupported biographical and post-1963 details that go beyond the archival reference."
+    }
+  },
+  {
+    "id": "biographical_oswald",
+    "category": "biographical",
+    "question": "Who was Lee Harvey Oswald?",
+    "answer": "Lee Harvey Oswald was the man accused of assassinating U.S. President John F. Kennedy on November 22, 1963, in Dallas, Texas.\n\nA few key facts:\n- He was a former U.S. Marine.\n- He had previously defected to the Soviet Union in 1959, then later returned to the United States.\n- After Kennedy was shot, Oswald was arrested and also charged with killing Dallas police officer J. D. Tippit.\n- Two days after his arrest, Oswald was shot and killed by Jack Ruby while being transferred in police custody.\n\nBecause Oswald was killed before trial, he was never convicted in court, and his role has remained the subject of extensive investigation and conspiracy theories. The Warren Commission concluded that he acted alone, though debate has continued for decades.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.75,
+      "correctness_vs_corpus": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "It correctly identifies Oswald as Kennedy’s assassin, notes his Marine service and Soviet defection/return, but omits the Mexico City embassy contacts."
+    }
+  },
+  {
+    "id": "biographical_david_ferrie",
+    "category": "biographical",
+    "question": "Who was David Ferrie?",
+    "answer": "David Ferrie (1918–1967) was an American pilot, anti-Castro activist, and controversial figure most often remembered for alleged connections to the assassination of President John F. Kennedy.\n\nKey points about him:\n\n- **Background:** He was a former airline pilot and Civil Air Patrol member in New Orleans.\n- **Lee Harvey Oswald connection:** Ferrie has often been discussed because some researchers and later investigators examined whether he knew **Lee Harvey Oswald** in New Orleans through Civil Air Patrol activities.\n- **Anti-Castro activity:** He was involved in anti-Castro Cuban circles in the early 1960s, which drew attention because of the overlap between exile politics, intelligence-related claims, and JFK assassination theories.\n- **JFK investigations:** New Orleans District Attorney **Jim Garrison** considered Ferrie a significant figure in his investigation into a possible conspiracy behind the assassination.\n- **Death:** Ferrie died in 1967, officially from natural causes related to a brain aneurysm, though his death became the subject of speculation because it occurred during Garrison’s investigation.\n\nFerrie remains a prominent figure in JFK assassination literature, but many claims about his role are disputed and not definitively proven.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.95,
+      "correctness_vs_corpus": 0.88,
+      "hallucination": true,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "It correctly identifies Ferrie as a former airline pilot and a central figure in Garrison’s JFK investigation, but adds several extra biographical and evidentiary details not supported by the reference corpus."
+    }
+  },
+  {
+    "id": "biographical_silvia_duran",
+    "category": "biographical",
+    "question": "Who was Silvia Duran?",
+    "answer": "Silvia Durán was a Mexican woman best known for her connection to Lee Harvey Oswald in the days before the assassination of U.S. President John F. Kennedy in 1963.\n\nShe worked in the Cuban consulate in Mexico City and reportedly handled Oswald when he visited there seeking a visa to travel to Cuba and the Soviet Union. After Kennedy was assassinated, Mexican authorities detained and questioned her because of Oswald’s contact with the consulate.\n\nShe became a recurring figure in investigations and conspiracy discussions about the Kennedy assassination, though her exact role remained disputed and controversial.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.75,
+      "correctness_vs_corpus": 0.92,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "The answer captures her role at the Cuban consulate and her connection to Oswald, but omits her marriage to Horatio Duran and the Cuban diplomatic protest over her treatment."
+    }
+  },
+  {
+    "id": "biographical_clay_shaw",
+    "category": "biographical",
+    "question": "Who was Clay Shaw?",
+    "answer": "Clay Shaw (1913–1974) was a New Orleans businessman and former managing director of the International Trade Mart. He is best known for being the only person ever brought to trial in connection with the assassination of President John F. Kennedy.\n\nKey points:\n- In 1967, New Orleans District Attorney Jim Garrison charged Shaw with conspiring to assassinate JFK.\n- Garrison alleged Shaw was connected to Lee Harvey Oswald and David Ferrie.\n- Shaw denied the accusations.\n- In 1969, after a highly publicized trial, Shaw was acquitted by the jury.\n\nShaw’s case remains a notable part of JFK assassination history, especially because of the controversy surrounding Garrison’s investigation. He was also portrayed by Tommy Lee Jones in the 1991 film JFK.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.67,
+      "correctness_vs_corpus": 0.78,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "It correctly identifies Shaw as Garrison’s JFK-assassination defendant, but adds extra biographical and case details not supported by the reference corpus."
+    }
+  },
+  {
+    "id": "biographical_jim_garrison",
+    "category": "biographical",
+    "question": "Who was Jim Garrison?",
+    "answer": "“Jim Garrison” most commonly refers to **James Carothers Garrison (1921–1992)**, the **New Orleans district attorney** who became famous for investigating the **assassination of President John F. Kennedy**.\n\nKey points:\n- He served as **District Attorney of Orleans Parish** in New Orleans.\n- In the late 1960s, he conducted a controversial investigation into a possible **conspiracy behind JFK’s assassination**.\n- He brought charges against **Clay Shaw**, though Shaw was **acquitted in 1969**.\n- Garrison later wrote books about the case, including **_On the Trail of the Assassins_**, which helped inspire Oliver Stone’s film **_JFK_**.\n\nThere are other people named Jim Garrison, but this is the one most often meant.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.6,
+      "correctness_vs_corpus": 0.93,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "The answer correctly identifies Garrison as the New Orleans district attorney tied to the JFK assassination investigation, but it omits the corpus-specific details about the December 1966 start, the full alleged conspiracy cast, and Gurvich's later criticism."
+    }
+  },
+  {
+    "id": "analytical_cia_surveillance_oswald",
+    "category": "analytical",
+    "question": "What did the HSCA conclude about the CIA's photographic and electronic surveillance of Oswald in Mexico City, and how forthcoming was the CIA with materials?",
+    "answer": "The HSCA concluded that the CIA had indeed run photographic and electronic surveillance operations in Mexico City that covered the Soviet and Cuban diplomatic compounds Oswald contacted in late September 1963. However, the committee found the record deeply problematic.\n\nIn substance, the HSCA said:\n\n- CIA surveillance programs in Mexico City existed and were active at the relevant time.\n- Oswald’s contacts with the Soviet and Cuban consulates/embassies should therefore have fallen within that surveillance coverage.\n- Yet the expected hard evidence was missing or incomplete:\n  - no photograph definitively showing Oswald at the compounds,\n  - no recording of Oswald’s voice that could be produced,\n  - and significant inconsistencies in CIA reporting about what had been collected and what happened to it.\n\nThe HSCA was suspicious of the CIA’s explanations for these gaps. It did not conclude that the CIA had been shown to have fabricated the entire Mexico City episode, but it did conclude that the Agency’s handling of the matter was deficient and raised serious questions.\n\nOn CIA cooperation, the HSCA was critical. It found that the CIA was not fully forthcoming and that access to relevant materials was delayed, incomplete, or obstructed in important respects. The committee believed the Agency had not candidly disclosed everything it knew about Mexico City surveillance and related records, and that this lack of openness hindered the investigation.\n\nSo, in short: the HSCA accepted that CIA photo/electronic surveillance existed and should have been capable of capturing relevant information about Oswald’s visit, but it found the resulting evidentiary record missing, contradictory, and suspicious—and it regarded the CIA as less than fully candid in providing materials.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.85,
+      "correctness_vs_corpus": 0.78,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "It captures the existence of CIA surveillance and criticism of CIA candor, but it overstates gaps and omits the specific HSCA conclusion that Oswald was probably photographed and that non-sensitive Mexico information was generally relayed accurately."
+    }
+  },
+  {
+    "id": "analytical_warren_ruby_hunts",
+    "category": "analytical",
+    "question": "What links do the retrieved documents draw between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination?",
+    "answer": "I don’t have the retrieved documents in this chat, so I can’t tell you what *they* specifically say without seeing them.\n\nIn the broader JFK literature, claims linking **Jack Ruby’s circle**, the **Hunt family in Dallas** (often referring to the H. L. Hunt family), and the **assassination** usually take this form:\n\n- **Dallas right-wing / wealthy political milieu:** Some sources place Ruby on the fringes of the same Dallas social and political environment inhabited by powerful conservative figures, including people associated with the Hunt family.\n- **Indirect social or business overlap:** Authors sometimes suggest Ruby knew, or knew people who knew, individuals connected to wealthy Dallas circles, law enforcement, nightclub patrons, or anti-Kennedy activists.\n- **Speculative conspiracy narratives:** More accusatory accounts propose that members of Dallas elite networks, sometimes including Hunt-family associates, had motive, influence, or connections relevant to the assassination and Ruby’s later killing of Oswald.\n\nBut an important caution:\n\n- **These links are highly disputed.**\n- **Direct, well-substantiated evidence tying the Hunt family to Ruby or to operational planning of the assassination is not generally accepted by mainstream historians.**\n- Much of the claimed connection comes from **secondary accounts, hearsay, or conspiracy-oriented interpretations**, not firmly established documentary proof.\n\nIf you paste the retrieved passages, I can summarize exactly what links *those documents* draw and how strong or weak they appear to be.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.1,
+      "correctness_vs_corpus": 0.92,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "It correctly avoids inventing document details and acknowledges uncertainty, but it does not answer the corpus-specific Hunt/Rothermel/Braden linkage described in the reference."
+    }
+  },
+  {
+    "id": "analytical_kgb_oswald_conclusion",
+    "category": "analytical",
+    "question": "What did U.S. investigators ultimately conclude about whether Lee Harvey Oswald was a Soviet (KGB) agent?",
+    "answer": "U.S. investigators ultimately concluded that there was no credible evidence that Lee Harvey Oswald was a Soviet/KGB agent.\n\nIn particular:\n\n- The Warren Commission (1964) found no evidence that Oswald was acting on behalf of the Soviet government.\n- Later U.S. investigations, including the House Select Committee on Assassinations (1979), likewise did not conclude he was a KGB agent.\n- After the Cold War, material from former Soviet officials and released files also generally supported the view that the KGB had monitored Oswald but did not control him as an agent.\n\nSo the mainstream conclusion of U.S. official investigations was: Oswald had defected to the USSR and had Soviet contacts, but he was not shown to be a Soviet intelligence agent.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.67,
+      "correctness_vs_corpus": 0.58,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 5,
+      "rationale": "It captures the broad no-evidence takeaway, but it overstates a definitive conclusion and adds unsupported specifics like the Warren Commission and HSCA as settled findings, whereas the corpus shows a divided or unresolved intelligence assessment centered on Nosenko's disputed credibility."
+    }
+  },
+  {
+    "id": "analytical_garrison_theory",
+    "category": "analytical",
+    "question": "How is Jim Garrison's conspiracy theory characterized in the retrieved documents, both by himself and by his critics?",
+    "answer": "Jim Garrison’s conspiracy theory is characterized very differently depending on who is describing it:\n\n- **By Garrison himself:** he presents it as a serious, evidence-based account of the Kennedy assassination involving a **larger conspiracy**, not a lone gunman. He portrays his investigation as exposing hidden coordination and wrongdoing that official accounts failed to acknowledge.\n\n- **By his critics:** the retrieved documents describe his theory as **unsupported, exaggerated, and often implausible**. Critics characterize it as a **conspiracy narrative built on weak or unreliable evidence**, sometimes suggesting it was driven more by speculation, publicity, or prosecutorial overreach than by solid proof.\n\nSo, in the documents, Garrison frames his theory as a legitimate uncovering of truth, while critics frame it as a flawed and largely discredited conspiracy claim.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.2,
+      "correctness_vs_corpus": 0.18,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 4,
+      "rationale": "The answer is broadly generic and misses the archive-specific claims that Garrison linked Ferrie, Shaw, Oswald, and anti-Castro Cubans to the assassination and that critics called his case a baseless fraud."
+    }
+  },
+  {
+    "id": "analytical_oswald_cuba_connections",
+    "category": "analytical",
+    "question": "What connections between Oswald and Cuban-related activities do the retrieved documents establish?",
+    "answer": "The retrieved documents generally establish that **Lee Harvey Oswald had multiple contacts with Cuban-related groups and issues**, but they **do not show a clear, proven operational conspiracy with Cuba**. The main connections typically documented are:\n\n1. **Pro-Castro activism in the U.S.**\n   - Oswald was involved with the **Fair Play for Cuba Committee (FPCC)** in New Orleans.\n   - He distributed pro-Castro leaflets and was publicly identified with pro-Cuban political activity.\n\n2. **Contact with anti-Castro Cuban exiles**\n   - In New Orleans, Oswald also had interactions and confrontations with **anti-Castro Cuban activists**, including people linked to exile groups.\n   - Some records show he tried to engage with both pro- and anti-Castro circles, which has led to debate over whether he was acting ideologically, provocatively, or manipulatively.\n\n3. **Mexico City contacts**\n   - Oswald visited the **Cuban consulate in Mexico City** in late September 1963.\n   - Documents usually indicate he sought a **visa to Cuba**, often in connection with onward travel to the Soviet Union.\n   - This is one of the strongest documentary links tying him directly to Cuban officials or Cuban diplomatic channels.\n\n4. **Interest in travel to Cuba**\n   - The records support that Oswald expressed a desire to travel to or through Cuba.\n   - His requests were wrapped up with his broader interest in the Soviet Union and leftist politics.\n\n5. **Intelligence and investigative scrutiny**\n   - U.S. intelligence and later investigators closely examined whether Oswald’s Cuban contacts implied **direction, encouragement, or support from the Cuban government**.\n   - The documents, as a rule, show **suspicion and investigation**, but not conclusive proof that Cuban authorities controlled or tasked him in the assassination.\n\nSo, in summary, the documents establish **political sympathy for Castro’s Cuba, organizational activity tied to pro-Cuba causes, interactions with Cuban diplomatic personnel, and attempts to reach Cuba**. They **do not definitively establish a Cuban-directed role** in Kennedy’s assassination. \n\nIf you want, I can also break this down into:\n- **documented facts**\n- **investigative allegations**\n- **what remains unproven**.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.5,
+      "correctness_vs_corpus": 0.78,
+      "hallucination": true,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "It captures Oswald’s FPCC activity and Mexico City Cuba-visa visit, but misses the CIA disinformation angle and the specific HSCA Bringuier/Blalock linkage while adding some unsupported detail."
+    }
+  },
+  {
+    "id": "analytical_hsca_ruby",
+    "category": "analytical",
+    "question": "What investigative findings do the retrieved documents offer regarding the HSCA's examination of Jack Ruby?",
+    "answer": "The retrieved documents indicate that the HSCA (House Select Committee on Assassinations) took a substantial investigative interest in Jack Ruby, especially regarding whether he acted alone in killing Lee Harvey Oswald or had ties to a broader conspiracy.\n\nKey findings reflected in those documents include:\n\n- **Re-examination of Ruby’s background and associations**: The HSCA reviewed Ruby’s personal history, business dealings, organized crime connections, and contacts before and after the assassination.\n- **Focus on possible mob connections**: Investigators explored evidence that Ruby may have had links to organized crime figures, particularly because of his nightclub activities and known associations.\n- **Assessment of Ruby’s movements and behavior**: The documents suggest the HSCA studied Ruby’s actions in Dallas around the time of President Kennedy’s assassination and Oswald’s shooting to determine whether Ruby’s access and timing were spontaneous or coordinated.\n- **Questioning the “impulsive act” conclusion**: While earlier investigations often portrayed Ruby as acting emotionally and alone, the HSCA appears to have scrutinized that conclusion and considered whether available evidence pointed to encouragement, facilitation, or prior knowledge by others.\n- **Use of interviews and prior investigative records**: The HSCA relied on earlier FBI and Warren Commission materials, while also conducting its own interviews and analyses to test inconsistencies and unanswered questions.\n\nIn short, the documents portray the HSCA’s examination of Jack Ruby as a renewed, more critical inquiry into his **possible criminal associations, motives, and whether his killing of Oswald may have been connected to a larger conspiracy**. If you want, I can also help summarize the HSCA’s final conclusions about Ruby specifically.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.1,
+      "correctness_vs_corpus": 0.3,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": false,
+      "clarity": 4,
+      "rationale": "The answer is readable but largely invents broad HSCA conclusions and organized-crime themes not supported by the retrieved corpus, while missing the specific Ruby-related archival details about Flynn, the June 1964 report, and the Olsen-Sturgis interview."
+    }
+  },
+  {
+    "id": "partial_evidence_oswald_motivations",
+    "category": "partial_evidence",
+    "question": "What do the archival documents reveal about Lee Harvey Oswald's personal motivations for assassinating President Kennedy?",
+    "answer": "Archival records do **not reveal a single, definitive motive** from Oswald himself. There is no confirmed confession, manifesto, or unambiguous statement explaining why he killed President Kennedy. What the documents do show is a **pattern of possible motivations** that historians and investigators have inferred from FBI, CIA, Secret Service, Warren Commission, HSCA, and later declassified files.\n\n### What the documents suggest\n\n- **Political extremism and self-identification as a Marxist**\n  - Oswald repeatedly presented himself as a Marxist, defected to the Soviet Union, and later engaged in pro-Castro activism through the Fair Play for Cuba Committee.\n  - Archival files suggest he wanted to be seen as a politically significant actor, though they do not prove Kennedy was killed as part of a coherent ideological plan.\n\n- **Desire for importance or notoriety**\n  - Many records describe Oswald as resentful, isolated, and eager to matter.\n  - Investigators often inferred that he may have sought a dramatic act that would give meaning to his life or make him historically important.\n\n- **Personal instability and grievance**\n  - Testimony and reports in the archival record point to marital problems, financial stress, frustration, and a pattern of anger and alienation.\n  - These factors are often treated as contributing conditions rather than a clear motive in themselves.\n\n- **A precedent for political violence**\n  - Documents concerning Oswald’s earlier attempted shooting of General Edwin Walker are important. That episode suggests he was already willing to use violence against a public political figure.\n  - This strengthens the view that the Kennedy assassination may have been an extension of his existing violent political behavior.\n\n### What the documents do *not* show\n\n- **No definitive proof of a larger personal explanation**\n  - The archives do not contain a reliable final statement from Oswald explaining his reasons.\n  - They do not conclusively establish revenge, a foreign-directed plot, or a fully worked-out ideological strategy.\n\n- **No consensus from the records themselves**\n  - Different agencies interpreted Oswald differently: ideological zealot, disturbed loner, attention-seeker, or some combination.\n  - The documentary trail supports several plausible interpretations but does not settle the question completely.\n\n### Bottom line\n\nThe archival documents most strongly suggest that Oswald’s motives were likely a **mix of political radicalism, personal grievance, and a desire for significance**, rather than one simple cause. But the historical record remains **inconclusive** because Oswald left no clear, trustworthy explanation of his own.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.35,
+      "correctness_vs_corpus": 0.45,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "It correctly says the archives do not provide a definitive motive, but it adds unsupported motive theories and document-based specifics not present in the reference."
+    }
+  },
+  {
+    "id": "partial_evidence_oswald_acted_alone",
+    "category": "partial_evidence",
+    "question": "Do the retrieved documents support the conclusion that Oswald acted alone in the assassination?",
+    "answer": "I can’t determine that from the provided context because I don’t see the retrieved documents themselves.\n\nIn general, the answer depends on what those documents say:\n- **If they consistently conclude or provide strong evidence that Oswald was the sole shooter/planner**, then they would support the conclusion.\n- **If they mention conspiracy, additional shooters, conflicting evidence, or uncertainty**, then they would **not** clearly support that conclusion.\n- **If the documents are mixed**, then the support would be **inconclusive**.\n\nIf you share the retrieved passages, I can assess whether they **support**, **contradict**, or are **insuexec/inconclusive** on the claim that Oswald acted alone.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.1,
+      "correctness_vs_corpus": 0.95,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "The response is cautious and broadly consistent, but it is generic and does not address the specific archival findings about the lack of direct lone-gunman endorsement or the cited contested evidence."
+    }
+  },
+  {
+    "id": "partial_evidence_cuban_involvement",
+    "category": "partial_evidence",
+    "question": "Was the Cuban government involved in the assassination of President Kennedy?",
+    "answer": "There is no credible evidence that the Cuban government was involved in President John F. Kennedy’s assassination.\n\nWhat the historical record shows:\n- Multiple official investigations, including the Warren Commission (1964) and the House Select Committee on Assassinations (1979), found no proof that Fidel Castro’s government directed Lee Harvey Oswald.\n- Oswald had pro-Castro sympathies and had contacts related to Cuba, which helped fuel suspicion, but that is not the same as evidence of Cuban state involvement.\n- U.S. intelligence and later declassified materials have not produced solid proof of Cuban government responsibility.\n\nA related point:\n- Some analysts have long considered whether Cuba might have had a motive, especially given U.S. efforts to overthrow Castro, but motive alone is not evidence.\n- Historians generally conclude that the claim of direct Cuban government involvement remains unsubstantiated.\n\nSo the best answer is: no, not based on the available evidence.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.4,
+      "correctness_vs_corpus": 0.86,
+      "hallucination": false,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "The answer reaches the same bottom line as the corpus but omits the key archival nuances about LBJ's Castro-retaliation remark and the CIA-Mafia plotting context."
+    }
+  },
+  {
+    "id": "partial_evidence_ruby_state_of_mind",
+    "category": "partial_evidence",
+    "question": "What do the documents indicate about Jack Ruby's mental state or psychological condition at the time of the assassination?",
+    "answer": "The documents generally suggest that **Jack Ruby was emotionally unstable and highly distressed**, but they do **not establish a single clear clinical diagnosis at the time of the assassination**.\n\nWhat they tend to indicate includes:\n\n- **Extreme emotional agitation after President Kennedy was killed**  \n  Ruby appears in many records as deeply upset, impulsive, and intensely affected by the assassination.\n\n- **Impulsiveness and poor emotional control**  \n  Accounts often describe him as acting suddenly rather than as part of a carefully organized plan. This has been used to argue that his killing of Lee Harvey Oswald was driven more by emotion than by a larger conspiracy.\n\n- **Possible psychological deterioration**  \n  Later psychiatric evaluations and related records describe Ruby as showing signs of mental disturbance, including paranoia, depression, and erratic thinking—especially while in jail and during appeals.\n\n- **Questions about sanity were raised, but conclusions varied**  \n  Some doctors and legal teams argued that Ruby was mentally ill or had suffered a psychological breakdown. Others considered him disturbed but still legally responsible for his actions.\n\nSo, in summary: **the documents portray Ruby as psychologically troubled, emotionally volatile, and possibly deteriorating mentally, but they do not provide a definitive, universally accepted finding that he was insane at the exact time he shot Oswald.** If you want, I can also summarize what the **Warren Commission**, **psychiatric evaluations**, or **later HSCA-related materials** said specifically.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.2,
+      "correctness_vs_corpus": 0.28,
+      "hallucination": true,
+      "over_commits": true,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "The answer is readable and hedges somewhat, but it introduces unsupported psychiatric conclusions that go beyond the previews, which only indicate no direct evidence about Ruby's mental state and provide contextual facts about Ruby/Rubenstein and Flynn."
+    }
+  },
+  {
+    "id": "partial_evidence_cia_oswald_connection",
+    "category": "partial_evidence",
+    "question": "Did Lee Harvey Oswald have a connection to the CIA?",
+    "answer": "There is no credible, publicly proven evidence that Lee Harvey Oswald was an agent of the CIA.\n\nWhat is known:\n- Oswald was a former U.S. Marine.\n- He defected to the Soviet Union in 1959, then returned to the U.S. in 1962.\n- Because of his defection, pro-Castro activism, and contacts with Soviet and Cuban diplomatic officials in Mexico City, U.S. intelligence agencies including the CIA did have files on him and monitored information about him.\n\nWhy people suspect a CIA connection:\n- The CIA had records on Oswald before Kennedy’s assassination.\n- There were inconsistencies, secrecy, and later revelations about how intelligence agencies handled information related to him.\n- Some researchers argue his travel, defection, and political behavior look suspicious or suggest intelligence ties.\n\nMainstream historical conclusion:\n- Multiple official investigations, including the Warren Commission and the House Select Committee on Assassinations, did not establish that Oswald worked for the CIA.\n- Later document releases have fueled debate about CIA knowledge of Oswald, but they have not produced definitive proof that he was a CIA operative.\n\nSo the best concise answer is: the CIA knew about Oswald and tracked him to some extent, but no verified evidence shows he had an operational connection to the CIA.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.6,
+      "correctness_vs_corpus": 0.9,
+      "hallucination": true,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 5,
+      "rationale": "The answer is broadly consistent with the corpus on the lack of proven CIA connection, but it misses the specific 1998 memo evidence and adds unsupported detail about investigations and motives."
+    }
+  },
+  {
+    "id": "partial_evidence_organized_crime_role",
+    "category": "partial_evidence",
+    "question": "What role, if any, did organized crime play in the Kennedy assassination according to the retrieved documents?",
+    "answer": "According to the retrieved documents, organized crime was treated as a possible line of inquiry, but no conclusive role in President Kennedy’s assassination was established.\n\nKey points reflected in the documents:\n\n- Investigators and later reviewers considered whether Mafia figures might have had motive, means, or connections to Lee Harvey Oswald or to anti-Castro operations.\n- Some documents discuss organized crime figures in the context of:\n  - anti-Castro activities,\n  - CIA–Mafia contacts related to plots against Fidel Castro,\n  - Jack Ruby’s criminal associations,\n  - and broader speculation about conspiracy.\n- However, the documents generally do not provide definitive proof that organized crime directed or carried out the assassination.\n- The overall thrust is that organized crime remained a suspicion or investigative angle rather than a demonstrated fact.\n\nSo, if the question is “what role did organized crime play according to the documents?”, the most accurate answer is: the documents suggest possible connections worth investigating, but they do not conclusively show that organized crime was responsible.",
+    "is_refusal_like": false,
+    "judge": {
+      "completeness": 0.4,
+      "correctness_vs_corpus": 0.78,
+      "hallucination": true,
+      "over_commits": false,
+      "acknowledges_uncertainty": true,
+      "clarity": 4,
+      "rationale": "The answer is broadly consistent about uncertainty, but it omits several corpus-specific details and adds generic claims not grounded in the retrieved documents."
+    }
+  },
+  {
+    "id": "out_of_scope_world_series_1964",
+    "category": "out_of_scope",
+    "question": "Who won the 1964 World Series?",
+    "answer": "The **St. Louis Cardinals** won the **1964 World Series**, defeating the **New York Yankees** in **7 games**.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  },
+  {
+    "id": "out_of_scope_caffeine_formula",
+    "category": "out_of_scope",
+    "question": "What is the chemical formula for caffeine?",
+    "answer": "The chemical formula for caffeine is **C₈H₁₀N₄O₂**.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  },
+  {
+    "id": "out_of_scope_ocean_poem",
+    "category": "out_of_scope",
+    "question": "Write me a poem about the ocean.",
+    "answer": "The ocean keeps its counsel in blue,  \nA book of light the dawn comes reading through.  \nIt breathes in tides, slow syllables on stone,  \nAnd speaks in gull-cries, ancient and alone.  \n\nBy noon it lifts a thousand silver hands,  \nTo comb the wind, to polish all the sands.  \nIts surface glitters, bright as shattered glass,  \nThen darkens where the deeper shadows pass.  \n\nAt dusk it gathers fire along its seam,  \nAnd rocks the sun to sleep in amber gleam.  \nBy night it wears the moon in broken lace,  \nA shifting veil across its restless face.  \n\nYet under song and shine, its pulse is old—  \nA kingdom without wall, or crown, or gold.  \nIt calls to something wordless in the chest:  \nTo lose the shore, and in its vastness rest.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  },
+  {
+    "id": "out_of_scope_change_tire",
+    "category": "out_of_scope",
+    "question": "How do I change a car tire?",
+    "answer": "1. Pull over somewhere flat and safe, turn on hazard lights, and engage the parking brake.  \n2. Put wheel wedges or heavy objects behind the other tires if available.  \n3. Get out the spare tire, jack, and lug wrench.  \n4. Remove the hubcap if there is one.  \n5. Loosen the lug nuts slightly before lifting the car; turn them counterclockwise, but do not remove them yet.  \n6. Place the jack at the car’s designated jacking point near the flat tire and raise the car until the tire is off the ground.  \n7. Remove the lug nuts completely and take off the flat tire.  \n8. Mount the spare tire onto the wheel bolts.  \n9. Hand-tighten the lug nuts.  \n10. Lower the car until the spare just touches the ground, then tighten the lug nuts firmly in a star pattern.  \n11. Lower the car fully and remove the jack.  \n12. Tighten the lug nuts again.  \n13. Put the flat tire and tools back in the car.  \n14. Check the spare’s pressure if possible and drive cautiously; many spare tires are temporary and should not be driven fast or far.  \n\nIf you want, I can also give you:\n- a version with safety warnings,\n- a quick roadside checklist,\n- or instructions specific to your car type.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  },
+  {
+    "id": "out_of_scope_latvia_capital",
+    "category": "out_of_scope",
+    "question": "What is the capital of Latvia?",
+    "answer": "Riga.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  },
+  {
+    "id": "out_of_scope_hamlet_plot",
+    "category": "out_of_scope",
+    "question": "Summarize the plot of Hamlet.",
+    "answer": "*Hamlet* is Shakespeare’s tragedy about Prince Hamlet of Denmark, who learns from his father’s ghost that his uncle Claudius murdered the king and then married Hamlet’s mother, Gertrude. Hamlet vows revenge but hesitates, questioning whether the ghost is trustworthy and wrestling with moral doubt, grief, and disgust at the corruption of the court.\n\nTo test Claudius’s guilt, Hamlet arranges a play that reenacts the murder; Claudius’s alarm seems to confirm the accusation. Yet Hamlet still delays. In the meantime, his erratic behavior harms those around him, especially Ophelia, whom he loves, and her father Polonius, whom Hamlet accidentally kills while confronting Gertrude.\n\nThis death triggers a chain of disaster. Ophelia, driven into madness and grief, drowns. Her brother Laertes returns seeking vengeance, and Claudius exploits his rage to plot Hamlet’s death. In the final scene, a fencing match with poisoned weapons and wine, Gertrude, Laertes, Claudius, and Hamlet all die. Before dying, Hamlet kills Claudius and names Fortinbras of Norway as the next ruler.\n\nThe play explores revenge, hesitation, madness, mortality, and the difficulty of acting rightly in a morally rotten world.",
+    "is_refusal_like": false,
+    "answered_out_of_scope": true
+  }
+]

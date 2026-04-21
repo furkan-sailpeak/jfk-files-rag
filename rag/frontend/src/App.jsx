@@ -139,21 +139,88 @@ function App() {
     setInput('');
     setLoading(true);
 
+    // Insert a placeholder AI message we'll update as SSE events arrive.
+    setMessages(prev => [...prev, { role: 'ai', content: '', sources: [], stage: 'Starting...' }]);
+
+    const updateLastAI = (patch) => {
+      setMessages(prev => {
+        const next = [...prev];
+        for (let i = next.length - 1; i >= 0; i--) {
+          if (next[i].role === 'ai') {
+            next[i] = typeof patch === 'function' ? patch(next[i]) : { ...next[i], ...patch };
+            break;
+          }
+        }
+        return next;
+      });
+    };
+
     try {
       const history = messages.map(m => ({
         role: m.role === 'ai' ? 'assistant' : 'user',
-        content: m.content
+        content: m.content,
       }));
-      const res = await axios.post(`${API_BASE}/chat`, { query: input, history });
-      const aiMsg = {
-        role: 'ai',
-        content: res.data.answer,
-        sources: res.data.sources
-      };
-      setMessages(prev => [...prev, aiMsg]);
+
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: input, history }),
+      });
+
+      if (!res.ok || !res.body) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      // Parse SSE stream: blocks separated by blank lines, each with `event:` + `data:` lines.
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+
+        let sepIdx;
+        while ((sepIdx = buffer.indexOf('\n\n')) !== -1) {
+          const block = buffer.slice(0, sepIdx);
+          buffer = buffer.slice(sepIdx + 2);
+          let event = 'message';
+          let data = '';
+          for (const line of block.split('\n')) {
+            if (line.startsWith('event: ')) event = line.slice(7).trim();
+            else if (line.startsWith('data: ')) data += line.slice(6);
+          }
+          if (!data) continue;
+          let payload;
+          try { payload = JSON.parse(data); } catch { continue; }
+
+          if (event === 'stage') {
+            updateLastAI({ stage: payload.label });
+          } else if (event === 'token') {
+            updateLastAI(prev => ({ ...prev, content: (prev.content || '') + (payload.text || '') }));
+          } else if (event === 'replace') {
+            updateLastAI({ content: '' });
+          } else if (event === 'done') {
+            updateLastAI({
+              content: payload.answer,
+              sources: payload.sources || [],
+              stage: null,
+              timings: payload.timings,
+            });
+          } else if (event === 'error') {
+            updateLastAI({
+              content: `Sorry, I encountered an error: ${payload.message || 'unknown'}`,
+              stage: null,
+            });
+          }
+        }
+      }
     } catch (err) {
-      const errorMsg = err.response?.data?.error || "Sorry, I encountered an error processing your request.";
-      setMessages(prev => [...prev, { role: 'ai', content: errorMsg }]);
+      updateLastAI({
+        content: err.message || "Sorry, I encountered an error processing your request.",
+        stage: null,
+      });
     } finally {
       setLoading(false);
     }
@@ -287,6 +354,11 @@ function App() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="msg-content">
+                  {msg.role === 'ai' && msg.stage && (
+                    <div className="stage-indicator" style={{ opacity: 0.7, fontSize: '0.85em', fontStyle: 'italic', marginBottom: msg.content ? '0.5rem' : 0 }}>
+                      {msg.stage}
+                    </div>
+                  )}
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
@@ -303,11 +375,6 @@ function App() {
               </motion.div>
             ))}
           </AnimatePresence>
-          {loading && (
-            <div className="message ai" style={{ opacity: 0.6 }}>
-              <div className="typing-indicator">Searching classified archives...</div>
-            </div>
-          )}
           <div ref={chatEndRef} />
         </div>
 
