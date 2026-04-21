@@ -4,6 +4,8 @@ A Retrieval-Augmented Generation (RAG) system for querying declassified JFK assa
 
 > *"Topic Modeling and Thematic Analysis of JFK Assassination Files Using NLP"*
 
+https://github.com/furkan-sailpeak/jfk-thesis
+
 ## Features
 
 - **Document Q&A** — Ask questions about the JFK files and get structured research reports with in-text citations linked directly to source PDFs
