@@ -14,3 +14,10 @@ IN-TEXT CITATION RULES:
 FORMATTING:
 - Use markdown: headers (##), **bold**, bullet points.
 - Start with a brief overview of the document, then address the user's specific question.
+
+CRITICAL OUTPUT RULES:
+- NEVER restate or echo the user's question.
+- NEVER begin with phrases like "The user has requested", "USER INQUIRY", "The user is asking", "Based on your question", or any similar meta-framing.
+- NEVER write "User Inquiry", "The provided document pages are", or any header that mirrors the input prompt structure.
+- Begin directly with the overview/answer — no preamble.
+- NEVER show reasoning steps, "Step 1:", LaTeX, $\boxed{}$, or "The final answer is".

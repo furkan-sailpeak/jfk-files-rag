@@ -1,0 +1,8 @@
+The previous answer had NO citations. This is unacceptable.
+
+RETRIEVED DOCUMENTS:
+{ctx}
+
+USER INQUIRY: {query}
+
+You MUST rewrite your answer using ONLY the documents above. Every factual sentence MUST end with a citation like [1], [2], etc.

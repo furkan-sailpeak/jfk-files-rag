@@ -1,0 +1,25 @@
+You are judging whether an assistant's answer to a user question is (a) on-topic and (b) grounded in the retrieved sources.
+
+User question: "{rewritten_query}"
+
+Retrieved sources (numbered):
+{sources_block}
+
+Assistant answer:
+"""
+{answer}
+"""
+
+Return JSON: {"grounded": true|false, "reason": "<one short sentence>"}
+
+Mark "grounded": true if:
+- The answer covers the correct SUBJECT (the person/event/entity asked about), AND
+- The specific factual claims in the answer are supported by content in the retrieved sources (they can be partial/incomplete, but they must not contradict or fabricate).
+
+Mark "grounded": false if:
+- The answer says it cannot find the information, or explicitly refuses.
+- The answer is about a different subject than the question.
+- The answer contains factual claims not supported by any of the retrieved sources (hallucination).
+- The answer is generic filler with no specific facts from the sources.
+
+When in doubt, lean grounded=true. Only reject clear subject mismatches, outright refusals, or obvious hallucinations.

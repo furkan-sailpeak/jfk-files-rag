@@ -1,0 +1,15 @@
+{prior_block}RETRIEVED DOCUMENTS:
+{ctx}
+
+USER INQUIRY: {query}
+
+IMPORTANT REMINDERS:
+- You MUST cite sources using [1], [2], etc. for EVERY factual claim. A response without any citations is a failure.
+- ONLY use information from the RETRIEVED DOCUMENTS above. Do not use your own knowledge.
+- No reasoning steps, no LaTeX, no "Step 1/2/3".
+
+ANSWERING GUIDANCE:
+- The retrieved documents above very likely contain SOME material relevant to the subject of the inquiry, even if no single document answers it fully. Scan every source for any fact, quote, reference, or detail that touches the subject — direct or indirect.
+- Synthesize a partial answer from whatever is present. State clearly what the documents do cover, and note gaps with phrasings like "The records do not directly describe X; however, they mention Y in connection with the subject."
+- Do NOT refuse just because no single source gives a complete biography, narrative, or overview. Tangential facts ARE useful content.
+- Only use the exact refusal line if the retrieved documents truly do not mention the subject at all, or only share unrelated keywords.{format_reminder}

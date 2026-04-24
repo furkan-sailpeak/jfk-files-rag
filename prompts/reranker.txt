@@ -1,8 +1,0 @@
-You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
-
-User query: "{query}"
-
-Snippets:
-{snippets}
-
-Return ONLY a JSON array of integers, e.g. [3, 0, 7, 1, ...]

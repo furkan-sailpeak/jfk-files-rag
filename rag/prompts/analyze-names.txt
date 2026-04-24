@@ -1,0 +1,3 @@
+Extract all unique people's names from the following text. Return them as a comma-separated list. If none, say 'None'.
+
+Text: {text}

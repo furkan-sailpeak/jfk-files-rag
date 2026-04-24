@@ -28,10 +28,14 @@ TIMEOUT = 120
 
 
 def parse_sse(stream):
-    """Parse the SSE stream from /api/chat. Returns the final `done` event payload."""
+    """Parse the SSE stream from /api/chat. Returns the `done` event payload, or
+    a dict `{"_error": "<message>"}` if the stream ended with an `error` event
+    (e.g. upstream 429 rate limit). Callers can use this to decide whether to
+    retry."""
     event = None
     data_lines = []
     final = None
+    last_error = None
     for raw in stream.iter_lines(decode_unicode=True):
         if raw is None:
             continue
@@ -41,11 +45,22 @@ def parse_sse(stream):
         elif line.startswith("data:"):
             data_lines.append(line[5:].lstrip())
         elif line == "":
-            if event == "done" and data_lines:
-                final = json.loads("\n".join(data_lines))
+            if data_lines:
+                try:
+                    payload = json.loads("\n".join(data_lines))
+                except Exception:
+                    payload = None
+                if event == "done" and payload is not None:
+                    final = payload
+                elif event == "error" and payload is not None:
+                    last_error = payload.get("message") or str(payload)
             event = None
             data_lines = []
-    return final
+    if final is not None:
+        return final
+    if last_error is not None:
+        return {"_error": last_error}
+    return None
 
 
 def ask(query, history=None):

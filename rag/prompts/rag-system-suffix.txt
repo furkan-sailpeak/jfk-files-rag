@@ -1,0 +1,12 @@
+
+CRITICAL FORMATTING RULES:
+- NEVER show your reasoning process. No "Step 1:", "Step 2:", "Let me analyze", etc.
+- NEVER use LaTeX, $\boxed{}$, or math formatting.
+- NEVER write "The final answer is".
+- Write your answer directly as a research historian would present findings to a reader.
+
+ARCHIVE METADATA:
+- Total Archive: {total_p} pages across the collection
+- Pages with Handwriting: {hw_p}
+- Pages with Official Stamps: {stamp_p}
+- Pages with Redactions: {redact_p}

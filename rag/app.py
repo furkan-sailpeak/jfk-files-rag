@@ -77,12 +77,15 @@ PROMPTS_DIR = _prompts_local if os.path.isdir(_prompts_local) else _prompts_root
 
 
 def load_prompt(filename, fallback=""):
-    optimized_path = os.path.join(PROMPTS_DIR, 'optimized', filename)
+    """Production path: read prompts only from rag/prompts/<filename>. The
+    old `optimized/` override slot has been retired — optimizer outputs now
+    live in rag/prompts/archive/optimized/ for reference and are promoted to
+    live by copying over the base file, so production never reads an
+    unreviewed override."""
     base_path = os.path.join(PROMPTS_DIR, filename)
-    for path in [optimized_path, base_path]:
-        if os.path.exists(path):
-            with open(path) as f:
-                return f.read()
+    if os.path.exists(base_path):
+        with open(base_path) as f:
+            return f.read()
     return fallback
 
 
@@ -415,20 +418,12 @@ def rerank(candidates, rewritten_query, context_limit):
         f"[{idx}] {r[1]}, Page {r[2]}: {r[0][:300].replace(chr(10), ' ').strip()}"
         for idx, r in enumerate(candidates)
     ]
-    prompt = f"""You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
-
-RANKING RULES:
-- A snippet that SUBSTANTIVELY DISCUSSES the query subject (facts, actions, testimony, analysis) is FAR more relevant than a snippet that merely MENTIONS the subject's name in a list, index, header, declassification cover page, footer, or document-control metadata.
-- Rank discussion > mention. Rank mention > name-only appearance.
-- Snippets that only contain the subject's name inside administrative text (e.g. "Documents concerning X were declassified", "File index: X", "See folder X-12") should be ranked LAST, even if they match keywords.
-- Prefer snippets with specific facts, dates, names of other people, or direct quotes over generic procedural text.
-
-User query: "{rewritten_query}"
-
-Snippets:
-{chr(10).join(snippets)}
-
-Return ONLY a JSON array of integers, e.g. [3, 0, 7, 1, ...]"""
+    prompt = (
+        load_prompt('reranker.txt')
+        .replace('{context_limit}', str(context_limit))
+        .replace('{rewritten_query}', rewritten_query)
+        .replace('{snippets}', '\n'.join(snippets))
+    )
     try:
         res = judge_client.chat.completions.create(
             model=JUDGE_MODEL,
@@ -454,20 +449,14 @@ def build_context(picked):
 
 def build_rag_system_prompt(query_type, stats):
     instructions = load_prompt('rag-simple.txt' if query_type == 'simple' else 'rag-research.txt')
-    return f"""{instructions}
-
-CRITICAL FORMATTING RULES:
-- NEVER show your reasoning process. No "Step 1:", "Step 2:", "Let me analyze", etc.
-- NEVER use LaTeX, $\\boxed{{}}$, or math formatting.
-- NEVER write "The final answer is".
-- Write your answer directly as a research historian would present findings to a reader.
-
-ARCHIVE METADATA:
-- Total Archive: {stats['total_p']:,} pages across the collection
-- Pages with Handwriting: {stats['hw_p']:,}
-- Pages with Official Stamps: {stats['stamp_p']:,}
-- Pages with Redactions: {stats['redact_p']:,}
-"""
+    suffix = (
+        load_prompt('rag-system-suffix.txt')
+        .replace('{total_p}', f"{stats['total_p']:,}")
+        .replace('{hw_p}', f"{stats['hw_p']:,}")
+        .replace('{stamp_p}', f"{stats['stamp_p']:,}")
+        .replace('{redact_p}', f"{stats['redact_p']:,}")
+    )
+    return f"{instructions}\n{suffix}\n"
 
 
 def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research"):
@@ -481,55 +470,17 @@ def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research
     # Format reminder goes LAST because small models weight the tail of the
     # prompt far more than the head; the long system prompt's format rules
     # are otherwise forgotten by the time llama starts generating.
-    if query_type == "simple":
-        format_reminder = """
+    format_reminder = load_prompt(
+        'rag-format-simple.txt' if query_type == 'simple' else 'rag-format-research.txt'
+    )
 
-FORMAT REMINDER — YOUR OUTPUT MUST LOOK EXACTLY LIKE THIS:
-
-**[One bold sentence giving the direct answer.]**
-
-- [First supporting fact, one sentence, ending with a single citation like [2].]
-- [Second supporting fact, one sentence, ending with a citation.]
-- [Third supporting fact, one sentence, ending with a citation.]
-- (2 to 5 bullets total — no more, no fewer.)
-
-*[Optional one-line italic gap note, only if the sources leave an obvious part of the question unanswered. Omit entirely otherwise.]*
-
-HARD RULES:
-- NO prose paragraphs. Only one bold line + bullets (+ optional italic gap).
-- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
-- Each bullet gets its OWN specific citation, not a shared dump at the end of the answer."""
-    else:
-        format_reminder = """
-
-FORMAT REMINDER — YOUR OUTPUT MUST START WITH THESE TWO HEADINGS, IN THIS ORDER:
-
-## Executive Summary
-2–3 sentences. Direct answer, flag contradictions. No preamble above this heading.
-
-## Detailed Findings
-Use `###` subheadings per topic. Within each, choose short paragraphs, bullets, or a markdown table based on what fits.
-
-HARD RULES:
-- NO meta-preamble ("The user is inquiring...", "To address this...", "Based on the documents...").
-- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
-- Each factual claim gets its OWN specific citation — not a shared dump of every source number at the end."""
-
-    return f"""{prior_block}RETRIEVED DOCUMENTS:
-{ctx}
-
-USER INQUIRY: {query}
-
-IMPORTANT REMINDERS:
-- You MUST cite sources using [1], [2], etc. for EVERY factual claim. A response without any citations is a failure.
-- ONLY use information from the RETRIEVED DOCUMENTS above. Do not use your own knowledge.
-- No reasoning steps, no LaTeX, no "Step 1/2/3".
-
-ANSWERING GUIDANCE:
-- The retrieved documents above very likely contain SOME material relevant to the subject of the inquiry, even if no single document answers it fully. Scan every source for any fact, quote, reference, or detail that touches the subject — direct or indirect.
-- Synthesize a partial answer from whatever is present. State clearly what the documents do cover, and note gaps with phrasings like "The records do not directly describe X; however, they mention Y in connection with the subject."
-- Do NOT refuse just because no single source gives a complete biography, narrative, or overview. Tangential facts ARE useful content.
-- Only use the exact refusal line if the retrieved documents truly do not mention the subject at all, or only share unrelated keywords.{format_reminder}"""
+    return (
+        load_prompt('rag-user-template.txt')
+        .replace('{prior_block}', prior_block)
+        .replace('{ctx}', ctx)
+        .replace('{query}', query)
+        .replace('{format_reminder}', format_reminder)
+    )
 
 
 def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, query_type="research"):
@@ -581,14 +532,11 @@ def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary
     )
     text = strip_artifacts(res.choices[0].message.content)
     if picked and not re.search(r'\[\d+\]', text):
-        retry_prompt = f"""The previous answer had NO citations. This is unacceptable.
-
-RETRIEVED DOCUMENTS:
-{ctx}
-
-USER INQUIRY: {query}
-
-You MUST rewrite your answer using ONLY the documents above. Every factual sentence MUST end with a citation like [1], [2], etc."""
+        retry_prompt = (
+            load_prompt('rag-retry-nocite.txt')
+            .replace('{ctx}', ctx)
+            .replace('{query}', query)
+        )
         retry = client.chat.completions.create(
             model=MODEL,
             messages=[
@@ -611,31 +559,12 @@ def check_answer_grounded(answer, picked, rewritten_query, query_type):
     if query_type not in ("simple", "research"):
         return True, ""
     sources_block = build_context(picked)[:4000]
-    judge_prompt = f"""You are judging whether an assistant's answer to a user question is (a) on-topic and (b) grounded in the retrieved sources.
-
-User question: "{rewritten_query}"
-
-Retrieved sources (numbered):
-{sources_block}
-
-Assistant answer:
-\"\"\"
-{answer[:3500]}
-\"\"\"
-
-Return JSON: {{"grounded": true|false, "reason": "<one short sentence>"}}
-
-Mark "grounded": true if:
-- The answer covers the correct SUBJECT (the person/event/entity asked about), AND
-- The specific factual claims in the answer are supported by content in the retrieved sources (they can be partial/incomplete, but they must not contradict or fabricate).
-
-Mark "grounded": false if:
-- The answer says it cannot find the information, or explicitly refuses.
-- The answer is about a different subject than the question.
-- The answer contains factual claims not supported by any of the retrieved sources (hallucination).
-- The answer is generic filler with no specific facts from the sources.
-
-When in doubt, lean grounded=true. Only reject clear subject mismatches, outright refusals, or obvious hallucinations."""
+    judge_prompt = (
+        load_prompt('grounding-judge.txt')
+        .replace('{rewritten_query}', rewritten_query)
+        .replace('{sources_block}', sources_block)
+        .replace('{answer}', answer[:3500])
+    )
     try:
         res = judge_client.chat.completions.create(
             model=JUDGE_MODEL,
@@ -665,24 +594,11 @@ def verify_citations(answer, picked):
         for i, r in enumerate(picked, 1)
     ]
     sources_block = "\n\n".join(parts)
-    prompt = f"""You are auditing citations. For each [N] citation in the answer, decide whether source [N] reasonably supports the sentence it is attached to.
-
-Retrieved sources (numbered):
-{sources_block}
-
-Answer with citations:
-\"\"\"
-{answer[:3500]}
-\"\"\"
-
-JUDGING RULES — be LENIENT, not strict:
-- A citation is SUPPORTED if source [N] contains the core fact, even if the wording differs, the answer paraphrases, or the source gives more/less detail.
-- A citation is SUPPORTED if source [N] contains material the sentence could reasonably be drawn from, even in a summary or glancing mention.
-- Only mark UNSUPPORTED when source [N] clearly does not contain the claimed fact at all — i.e. a topic mismatch or an outright fabrication.
-- When uncertain, mark as SUPPORTED. False-unsupported flags are worse than false-supported flags.
-- Do NOT penalize citations for imprecision, extra context, or minor discrepancies. Only flag clear mismatches.
-
-Return JSON: {{"unsupported": [N1, N2, ...]}} — each N is a citation number whose sentence is clearly not supported by source [N]. Return empty list if all citations are reasonable."""
+    prompt = (
+        load_prompt('citation-verify.txt')
+        .replace('{sources_block}', sources_block)
+        .replace('{answer}', answer[:3500])
+    )
     try:
         res = judge_client.chat.completions.create(
             model=JUDGE_MODEL,
@@ -700,13 +616,11 @@ Return JSON: {{"unsupported": [N1, N2, ...]}} — each N is a citation number wh
 
 def expand_and_retrieve(rewritten_query, reason, seed_results):
     """Generate 3 alternative phrasings, retrieve, merge with seed_results."""
-    prompt = f"""The user asked: "{rewritten_query}"
-
-A first-pass answer was unsatisfactory because: {reason}.
-
-Generate 3 ALTERNATIVE search queries likely to find relevant documents in a JFK-assassination archive. Use synonyms, related entities, and domain vocabulary likely to appear in CIA/FBI/Warren Commission files.
-
-Return JSON: {{"queries": ["query 1", "query 2", "query 3"]}}"""
+    prompt = (
+        load_prompt('expansion.txt')
+        .replace('{rewritten_query}', rewritten_query)
+        .replace('{reason}', reason)
+    )
     try:
         res = judge_client.chat.completions.create(
             model=JUDGE_MODEL,
@@ -873,11 +787,9 @@ def chat():
                         ctx_parts.append(f"[{idx}] Source: {r[1]}, Page {r[2]}\n{snippet}")
                         sources_list.append({"filename": r[1], "page": r[2]})
                     meta_prompt = (
-                        "You are a research historian answering questions about the JFK document archive.\n"
-                        "Below are metadata query results. Present statistics clearly then describe samples.\n"
-                        "Cite samples as [1], [2]. No reasoning steps, no LaTeX.\n\n"
-                        + "\n\n".join(ctx_parts)
-                        + f"\n\nUSER INQUIRY: {query}"
+                        load_prompt('metadata.txt')
+                        .replace('{ctx}', "\n\n".join(ctx_parts))
+                        .replace('{query}', query)
                     )
                     yield sse("stage", {"label": "Generating..."})
                     full = ""
@@ -1112,9 +1024,9 @@ def analyze():
     if not client:
         return jsonify({"error": "LLM client not configured"}), 500
     if action == 'names':
-        prompt = f"Extract all unique people's names from the following text. Return them as a comma-separated list. If none, say 'None'.\n\nText: {text}"
+        prompt = load_prompt('analyze-names.txt').replace('{text}', text)
     elif action == 'summarize':
-        prompt = f"Provide a concise summary of the following text, highlighting key information and events.\n\nText: {text}"
+        prompt = load_prompt('analyze-summarize.txt').replace('{text}', text)
     else:
         return jsonify({"error": "Invalid action"}), 400
     try:

@@ -1,0 +1,18 @@
+You are auditing citations. For each [N] citation in the answer, decide whether source [N] reasonably supports the sentence it is attached to.
+
+Retrieved sources (numbered):
+{sources_block}
+
+Answer with citations:
+"""
+{answer}
+"""
+
+JUDGING RULES — be LENIENT, not strict:
+- A citation is SUPPORTED if source [N] contains the core fact, even if the wording differs, the answer paraphrases, or the source gives more/less detail.
+- A citation is SUPPORTED if source [N] contains material the sentence could reasonably be drawn from, even in a summary or glancing mention.
+- Only mark UNSUPPORTED when source [N] clearly does not contain the claimed fact at all — i.e. a topic mismatch or an outright fabrication.
+- When uncertain, mark as SUPPORTED. False-unsupported flags are worse than false-supported flags.
+- Do NOT penalize citations for imprecision, extra context, or minor discrepancies. Only flag clear mismatches.
+
+Return JSON: {"unsupported": [N1, N2, ...]} — each N is a citation number whose sentence is clearly not supported by source [N]. Return empty list if all citations are reasonable.

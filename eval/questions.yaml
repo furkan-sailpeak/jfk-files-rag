@@ -590,3 +590,190 @@
   reference_evidence: []
   reference_answer: "The retrieved documents do not contain sufficient information to answer this query."
   key_facts: []
+
+# ---------------------------------------------------------------------------
+# Thesis-defence-style research queries. Broad, multi-document prompts that
+# exercise timelines, cross-document synthesis, contradiction detection, and
+# metadata aggregation. Reference evidence intentionally left empty here —
+# these questions are evaluated on LLM-judge metrics (faithfulness,
+# completeness, hallucination, structure) rather than evidence_recall@k,
+# because "every mention of X" has no single ground-truth page set.
+# Populate `reference_evidence` later with _build_evidence.py if tighter
+# grounding is needed.
+# ---------------------------------------------------------------------------
+
+- id: analytical_oswald_mexico_city_sep_oct_63
+  category: analytical
+  question: "Summarise every mention of Oswald's time in Mexico City, September–October 1963."
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    Oswald travelled to Mexico City in late September 1963, arriving on or about 27 September and
+    departing on or about 2 October. During this visit he contacted both the Cuban Consulate and the
+    Soviet Embassy, seeking a transit visa to the USSR via Cuba. The Cuban Consulate refused to issue
+    the visa without prior Soviet approval; the Soviet Embassy declined to recommend him. CIA Mexico
+    City station surveillance recorded telephone calls and at least one photograph attributed to a
+    visitor to the Soviet compound. The files cover his movements, contacts, lodging, and the later
+    reconstruction of the trip by the Warren Commission and HSCA.
+  key_facts:
+    - "Oswald was in Mexico City from approximately 27 September to 2 October 1963"
+    - "He visited both the Cuban Consulate and the Soviet Embassy"
+    - "He sought a transit visa to the USSR via Cuba"
+    - "The Cuban Consulate refused without prior Soviet approval"
+    - "CIA Mexico City station conducted surveillance (telephone and photographic)"
+
+- id: analytical_cross_ref_cia_mexico_cuban_embassy
+  category: analytical
+  question: "Which documents reference both the CIA Mexico station and the Cuban embassy?"
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    Multiple files connect CIA Mexico City station reporting with the Cuban Embassy/Consulate in
+    Mexico City, primarily in the context of Oswald's September–October 1963 visit. These include
+    surveillance summaries from the Mexico City station covering Cuban consular activity, cables
+    from the station to CIA HQ describing contacts at the Cuban compound, and later Warren Commission
+    / HSCA exhibits that reproduce the station's cable traffic. A well-cited answer names the specific
+    document control numbers and summarises each document's contribution.
+  key_facts:
+    - "Mexico City station surveillance of the Cuban consulate is documented"
+    - "Cable traffic from Mexico station to CIA HQ references the Cuban embassy"
+    - "Warren Commission / HSCA exhibits reproduce Mexico station cables"
+    - "Answer should name specific document-control numbers where possible"
+
+- id: analytical_hsca_ruby_witness_timeline
+  category: analytical
+  question: "Reconstruct a timeline of HSCA witness interviews concerning Jack Ruby."
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    The House Select Committee on Assassinations (HSCA, 1976–1979) conducted or reviewed witness
+    interviews concerning Jack Ruby's background, organised-crime contacts, movements on 22–24
+    November 1963, and his time in custody. Relevant interviews in the files include testimony and
+    depositions from associates, Dallas police witnesses, and figures mentioned in Ruby's notebooks.
+    A good answer renders these as a chronological table (date, witness, topic, citation) based only
+    on dates that appear in the retrieved documents, and flags undated interviews explicitly.
+  key_facts:
+    - "HSCA investigated Jack Ruby as part of its 1976–1979 reinvestigation"
+    - "Answer should be rendered as a chronological table (Date | Witness / Event | Source)"
+    - "Witnesses include Ruby associates, Dallas police, and contacts from his notebooks"
+    - "Undated interviews should appear under Unknown rather than be fabricated"
+
+- id: analytical_fbi_vs_wc_rifle_chain_of_custody
+  category: analytical
+  question: "Where do FBI and Warren Commission accounts of the rifle's chain of custody diverge?"
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    The rifle recovered from the Texas School Book Depository (Mannlicher-Carcano, serial C2766) is
+    tracked through FBI evidence-handling reports and Warren Commission exhibits. Divergences appear
+    in the precise timing of transfers (Dallas Police → FBI → Warren Commission), the handling of
+    the weapon on the evening of 22 November 1963, and the identification of the officer or agent
+    who held custody at particular hours. A defensible answer contrasts each account side-by-side,
+    naming the specific exhibits or reports and quoting the divergent time/custodian claims.
+  key_facts:
+    - "Subject weapon is the Mannlicher-Carcano rifle, serial C2766"
+    - "Chain-of-custody passes through Dallas Police, FBI, and the Warren Commission"
+    - "Divergences typically concern timing, named custodians, and transfer locations"
+    - "Answer should present the contrast as a comparison (table or parallel bullets), not a single narrative"
+
+- id: metadata_redacted_pages_by_agency
+  category: analytical
+  question: "How many pages in the archive are redacted, and by which agencies?"
+  query_type_expected: metadata
+  reference_evidence: []
+  reference_answer: >
+    The archive stores a per-page `has_redactions` flag derived from OCR analysis. A correct answer
+    reports the total page count with redactions (from the archive metadata) and breaks down the
+    redacting agency based on the redaction stamps or cover-sheet classifications where visible
+    (CIA, FBI, HSCA, etc.). If the corpus does not attach per-redaction agency attribution beyond
+    cover-sheet cues, the answer should say so rather than invent a breakdown.
+  key_facts:
+    - "Answer should cite the total redacted-page count from archive metadata"
+    - "Agency attribution is typically inferred from redaction stamps or cover sheets"
+    - "CIA, FBI, and HSCA are the agencies most commonly identified"
+    - "If per-redaction agency attribution is not available, the answer must say so explicitly"
+
+- id: analytical_oswald_soviet_embassy_contacts
+  category: analytical
+  question: "What contacts did Oswald have with Soviet officials between his 1959 defection and the assassination? Present as a timeline."
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    Oswald's contacts with Soviet officials span his 1959 defection in Moscow, residence and employment
+    in the USSR, return to the United States in 1962, and the September–October 1963 Mexico City visit
+    during which he approached the Soviet Embassy. The files include consular correspondence, KGB-related
+    references from later defector debriefings, and the Mexico City station surveillance traffic. A good
+    answer is a chronological table sourced to the retrieved documents.
+  key_facts:
+    - "Oswald defected to the USSR in October 1959"
+    - "He lived in Minsk and returned to the US in June 1962"
+    - "He approached the Soviet Embassy in Mexico City in late September 1963"
+    - "Answer should be presented as a timeline table"
+
+- id: analytical_ruby_organised_crime_synthesis
+  category: analytical
+  question: "Synthesise the documentary evidence in the archive about Jack Ruby's alleged ties to organised crime."
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    The archive contains material on Ruby's associations with figures linked to organised crime in
+    Dallas, Chicago, and Louisiana, including names appearing in his notebooks, FBI contact reports,
+    and HSCA findings. A strong answer groups the evidence by source type (FBI field reports,
+    HSCA staff work, witness testimony), names specific individuals documented in the files, and is
+    careful to flag where the sources describe suspicion rather than proven connection.
+  key_facts:
+    - "Ruby's notebooks contained names later investigated for organised-crime links"
+    - "Sources span FBI field reports, HSCA staff work, and witness testimony"
+    - "Answer must distinguish documented contact from alleged conspiracy"
+    - "Specific individuals named in the files should be cited with document numbers"
+
+- id: analytical_new_orleans_ferrie_shaw_banister
+  category: analytical
+  question: "What do the files say about the New Orleans associations between David Ferrie, Clay Shaw, and Guy Banister?"
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    The files touch on the Garrison investigation and related FBI / CIA material concerning David
+    Ferrie, Clay Shaw (also referenced under the alias Clay Bertrand in some documents), and Guy
+    Banister, whose New Orleans detective agency has been linked in the literature to anti-Castro
+    activity. A sound answer reports what the retrieved documents say about overlapping contacts
+    and premises — and does not import claims from the trial or secondary literature that are not
+    present in the retrieved pages.
+  key_facts:
+    - "Relevant figures: David Ferrie, Clay Shaw (alias Clay Bertrand), Guy Banister"
+    - "New Orleans-based anti-Castro activity and the Garrison investigation are the context"
+    - "Answer must stay inside the retrieved corpus and not import trial narrative"
+    - "Overlapping contacts or shared premises should be cited to specific documents"
+
+- id: analytical_cia_prior_knowledge_of_oswald
+  category: analytical
+  question: "What did the CIA know about Lee Harvey Oswald before 22 November 1963?"
+  query_type_expected: research
+  reference_evidence: []
+  reference_answer: >
+    The CIA held a pre-assassination file on Oswald opened after his 1959 defection and updated through
+    his return, New Orleans pro-Castro activity, and the September–October 1963 Mexico City trip.
+    Relevant records include the 201 file traffic, Mexico City station cables, and HQ summaries. A
+    good answer catalogues what the retrieved documents say the CIA had on file, with dates and
+    document identifiers, and makes clear where the corpus is silent.
+  key_facts:
+    - "CIA opened a 201 file on Oswald following his 1959 defection"
+    - "Pre-assassination material includes Mexico City station traffic from Sep–Oct 1963"
+    - "Answer should enumerate file holdings with dates and document IDs"
+    - "Gaps in the retrieved corpus must be named, not filled from outside knowledge"
+
+- id: metadata_handwritten_pages_count
+  category: analytical
+  question: "How many pages in the archive include handwriting, and what is the typical character of the handwritten material?"
+  query_type_expected: metadata
+  reference_evidence: []
+  reference_answer: >
+    The archive stores a per-page `includes_handwriting` flag. A correct answer gives the total count
+    from the archive metadata and characterises the typical handwritten content observed in sample
+    pages (marginalia, signatures, dates, routing notes, annotations on typewritten documents). If a
+    finer breakdown (e.g. by author or by document type) is not available in the metadata, the answer
+    must say so.
+  key_facts:
+    - "Answer should report total handwritten-page count from archive metadata"
+    - "Typical handwritten content: marginalia, signatures, dates, routing notes, annotations"
+    - "If finer author-level attribution is absent, the answer should state that explicitly"

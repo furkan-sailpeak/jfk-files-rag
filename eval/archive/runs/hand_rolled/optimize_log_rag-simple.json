@@ -1,0 +1,68 @@
+{
+  "prompt": "rag-simple",
+  "seed_fitness": 0.7715416666666667,
+  "final_fitness": 0.7715416666666667,
+  "iters": 6,
+  "batch_ids": [
+    "factual_ruby_fbi_flynn_1959",
+    "factual_ruby_real_name",
+    "biographical_jack_ruby",
+    "factual_oswald_mexico_cuban_embassy",
+    "factual_oswald_marine_discharge_1959",
+    "biographical_clay_shaw",
+    "biographical_david_ferrie",
+    "biographical_oswald"
+  ],
+  "history": [
+    {
+      "iter": 0,
+      "fitness": 0.7715416666666667,
+      "rationale": "(seed)",
+      "prompt_len": 2255
+    },
+    {
+      "iter": 1,
+      "fitness": 0.762625,
+      "accepted": false,
+      "rationale": "The revision adds targeted guidance to prioritize explicit identity facts, exhaustively check retrieved documents for specific requested details, and avoid turning allegations or ambiguous investigative material into definitive biography claims.",
+      "prompt_len": 3222
+    },
+    {
+      "iter": 2,
+      "fitness": 0.7175625000000001,
+      "accepted": false,
+      "rationale": "This revision adds narrowly targeted instructions to prioritize direct evidence, answer exact-detail queries before background, and distinguish core identity facts from allegations so the model avoids unsupported absence claims and overstates fewer investigative assertions.",
+      "prompt_len": 3711
+    },
+    {
+      "iter": 3,
+      "fitness": 0.7219791666666667,
+      "accepted": false,
+      "rationale": "This revision adds targeted instructions to prioritize exact requested details, search all retrieved-document fields before declaring absence, and keep biographical openings broad while preserving documentary uncertainty, addressing the missed-specific-fact and overstatement failures without weakening citation strictness.",
+      "prompt_len": 3471
+    },
+    {
+      "iter": 4,
+      "fitness": 0.702375,
+      "accepted": false,
+      "rationale": "This revision adds targeted guidance to prioritize directly responsive, explicitly sourced core facts, search retrieved sources carefully for exact requested details, and separate documented identifications from allegations or investigative claims.",
+      "prompt_len": 3654
+    },
+    {
+      "iter": 5,
+      "fitness": 0.6566875000000001,
+      "accepted": false,
+      "rationale": "This revision adds targeted instructions to prioritize explicit core identifications, carefully scan for direct fact lookups, and clearly label allegations versus settled facts, addressing the observed misses and overstatements without relaxing source or citation constraints.",
+      "prompt_len": 3389
+    },
+    {
+      "iter": 6,
+      "fitness": 0.7314375000000001,
+      "accepted": false,
+      "rationale": "This revision targets the failures by telling the model to prioritize explicit document-supported identifiers and specific facts, avoid premature \"information unavailable\" conclusions, and distinguish allegations from established facts in biographical answers.",
+      "prompt_len": 3302
+    }
+  ],
+  "improved": false,
+  "version_written": null
+}

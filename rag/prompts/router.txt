@@ -3,13 +3,22 @@ Analyze this user query for a RAG system searching JFK files: '{query}'
 If conversation history is provided below, use it to resolve references in the query. For example, if the user previously asked about "Oswald" and now asks "What about his wife?", the keywords should include "Oswald" and "wife", not just "wife".
 
 Return a valid JSON object with these keys:
-1. "keywords": A list of 1-3 most important search terms to find relevant documents. Empty list if not a search/metadata query. Resolve any pronouns or references using conversation history.
-2. "type": one of "simple", "research", "conversational", or "metadata".
-   - "conversational" = greetings, small talk, thanks, or questions about the system itself (not about JFK documents).
-   - "simple" = asking for a specific name, date, fact, or single document verification.
-   - "research" = asking for analysis, summary, relationships, or details on a broad topic.
+1. "rewritten_query": A standalone version of the user's question with ALL pronouns and references resolved from conversation history. If the user asks "who did he trust?" after discussing JFK, rewrite as "who did John F. Kennedy trust the most?". If there is nothing to resolve, copy the query as-is. This must be a full sentence/question, not a keyword list.
+2. "keywords": A list of 1-3 most distinctive search terms, drawn from the rewritten_query, used for full-text search. Empty list if not a search/metadata query.
+   - PREFER: proper nouns (people, places, organizations), specific events, dates, document identifiers, and rare/domain-specific terms. Multi-word proper nouns stay as one string ("Jack Ruby", "Mexico City").
+   - SKIP: question words (who/what/when/where/why/how), stopwords (the, of, in, and, to, a, is, was), generic relational verbs and nouns (role, played, involved, connection, relationship, discuss, describe, mention, analyze, summary, details, information, files, documents, records), and vague adjectives (important, main, key, various).
+   - Rule of thumb: if the word could appear in almost any query to this archive, it's filler — drop it. Keep only terms that narrow the search.
+   - Examples:
+     - "What role did Jack Ruby play according to the files?" → ["Jack Ruby"]
+     - "Analyze the CIA's surveillance activities related to the assassination" → ["CIA surveillance", "assassination"]
+     - "Did Oswald visit the Soviet embassy in Mexico City?" → ["Oswald", "Soviet embassy", "Mexico City"]
+3. "type": one of "simple", "research", "conversational", "metadata", or "out_of_scope".
+   - "conversational" = ONLY greetings ("hi", "thanks"), small talk, or questions about the system/tool itself ("what can you do?", "how does this work?"). Nothing that asks for a factual answer about the outside world.
+   - "simple" = asking for a specific name, date, fact, or single document verification, WHERE THE SUBJECT is JFK/assassination/Cold War related.
+   - "research" = asking for analysis, summary, relationships, or details on a broad topic, WHERE THE SUBJECT is JFK/assassination/Cold War related.
    - "metadata" = asking about document properties like redactions, handwriting, stamps, tables, forms, typewritten pages, document types, or document quality/condition. Examples: "which documents are redacted?", "how many pages have handwriting?", "show me documents with tables", "what types of documents are there?".
-3. "needs_retrieval": true if the query requires searching documents or metadata, false if it's just conversational.
-4. "metadata_filter": (only if type is "metadata") An object with the column to filter on. Valid columns: "has_redactions", "includes_handwriting", "has_stamps", "has_tables", "has_forms", "is_typewritten", "document_type". Example: {"column": "has_redactions", "value": true} or {"column": "document_type", "value": "memo"}.
+   - "out_of_scope" = ANY substantive factual, creative, or advice question whose subject is NOT the JFK archive, assassination investigations, Cold War intelligence, or the people/events surrounding them. This includes general trivia ("capital of Latvia", "who won the 1964 World Series", "chemical formula for caffeine"), creative writing ("write a poem about the ocean"), how-to advice ("how do I change a tire"), literary plot summaries ("summarize Hamlet"), math problems, weather, shopping, etc. If the query is a real question but its subject is unrelated to JFK/assassination/Cold War/CIA/FBI/Cuba/Oswald/Warren Commission, it is out_of_scope — NOT conversational. Be generous on the IN-scope side: anything plausibly related to JFK, his presidency, his family, or the Cold War context is IN scope even if the archive may not contain the answer.
+4. "needs_retrieval": true if the query requires searching documents or metadata, false if it's just conversational.
+5. "metadata_filter": (only if type is "metadata") An object with the column to filter on. Valid columns: "has_redactions", "includes_handwriting", "has_stamps", "has_tables", "has_forms", "is_typewritten", "document_type". Example: {"column": "has_redactions", "value": true} or {"column": "document_type", "value": "memo"}.
 
 Reply ONLY with the JSON.

@@ -230,6 +230,13 @@ def score_one(q, r):
     # judge
     try:
         judged = judge_answer(q, r)
+        # Completeness-optional: if the question has no key_facts (e.g. the 10
+        # broad thesis-style queries where there's no single "right" answer),
+        # drop the judge's completeness number — it's meaningless against an
+        # empty reference list and would otherwise drag the composite down.
+        # scalar_fitness renormalizes around None components.
+        if not q.get("key_facts"):
+            judged["completeness"] = None
         out["judge"] = judged
     except Exception as e:
         out["judge_error"] = str(e)

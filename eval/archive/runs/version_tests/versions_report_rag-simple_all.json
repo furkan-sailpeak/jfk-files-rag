@@ -1,0 +1,847 @@
+{
+  "prompt": "rag-simple",
+  "split": "all",
+  "n": 12,
+  "versions": {
+    "v1": "/Users/furkandemir/Desktop/thesis-rag-dashboard/rag/prompts/rag-simple.v1.txt",
+    "v2": "/Users/furkandemir/Desktop/thesis-rag-dashboard/rag/prompts/rag-simple.v2.txt"
+  },
+  "results": {
+    "v1": {
+      "summary": {
+        "n": 12,
+        "fitness": 0.7553333333333333,
+        "faithfulness": 0.77,
+        "completeness": 0.6433333333333333,
+        "clarity": 4.25,
+        "hallucination_rate": 0.08333333333333333,
+        "over_commits_rate": 0.6666666666666666,
+        "structure_ok_rate": 1.0,
+        "has_citations_rate": 1.0,
+        "recall_at_20": 0.375
+      },
+      "elapsed_s": 174.8257269859314
+    },
+    "v2": {
+      "summary": {
+        "n": 12,
+        "fitness": 0.7563750000000001,
+        "faithfulness": 0.7324999999999999,
+        "completeness": 0.7000000000000001,
+        "clarity": 4.25,
+        "hallucination_rate": 0.08333333333333333,
+        "over_commits_rate": 0.5833333333333334,
+        "structure_ok_rate": 1.0,
+        "has_citations_rate": 1.0,
+        "recall_at_20": 0.375
+      },
+      "elapsed_s": 86.11270403862
+    }
+  },
+  "scored": {
+    "v1": [
+      {
+        "id": "factual_oswald_marine_clearance",
+        "category": "factual",
+        "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+        "answer": "**Lee Harvey Oswald held a \"confidential\" level of security clearance during his Marine Corps service.**\n- Oswald's level of security clearance was stated as \"confidential\" in his fact sheet [1].\n- His unit had security clearance due to the nature of their work, which involved tracking aircraft on a radar scope [2].\n- Oswald's security clearance is also mentioned in the context of his duties involving sitting in front of a large radar screen [2].\n- The level of security clearance is relevant to his role in the Marine Corps, where he was an aeronautical electronics operator [2].\n*The records do not provide further details on the scope or limitations of his security clearance.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ],
+          "missed": [
+            [
+              "180-10078-10492.pdf",
+              5
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.98,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The core claim that Oswald held a 'confidential' clearance is directly supported by source [1], and the added details about his radar duties and unit clearance are also grounded in source [6]."
+        }
+      },
+      {
+        "id": "factual_ruby_real_name",
+        "category": "factual",
+        "question": "What was Jack Ruby's original family name before he changed it?",
+        "answer": "**Jack Ruby's original family name before he changed it was Rubenstein.**\n- Jack Ruby is also known as Jack Rubenstein, as stated in a CIA memo [1].\n- The CIA memo mentions a sanitized file on Jack Ruby, which includes a list of identified FBI documents and Department of State cablegrams [1].\n- The name \"Rubenstein\" is also mentioned in other documents, such as a list of individuals, where Jack Ruby is listed as \"Ruby, Jack aka Jack Rubenstein\" [2].\n- The documents do not provide further information on why Jack Ruby changed his name from Rubenstein [1].\n*The records do not contain detailed information on Jack Ruby's family background or the circumstances of his name change.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.95,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "The core claim that Jack Ruby’s original family name was Rubenstein is supported by the retrieved sources, and the extra remarks about a CIA memo and lack of background details are also grounded, though the specific family-name wording is slightly broader than the source text."
+        }
+      },
+      {
+        "id": "factual_oswald_mexico_cuban_embassy",
+        "category": "factual",
+        "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+        "answer": "**Oswald visited the Cuban Embassy in Mexico City on September 27, 1963, to request a transit visa.**\n- Oswald went to the Cuban Embassy to make an appointment for a visa to Cuba on his way to the USSR [1].\n- He also visited the Soviet Embassy to get a letter of recommendation, but they wouldn't give it to him because they didn't know who he was [1].\n- The Cuban Embassy reported that Oswald requested a transit visa to go to the USSR, which was requested on September 27, 1963, but the visa was never granted [2].\n- Silvia Duran, an employee of the Cuban Embassy, stated that she was certain Oswald signed the application in her presence [3].\n*The records do not contain the exact details of Oswald's conversations with the Cuban Embassy staff.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "104-10413-10306.pdf",
+              35
+            ]
+          ],
+          "missed": [
+            [
+              "144-10001-10125.pdf",
+              18
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.94,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The main date and embassy-visit claims are supported by source [1], and the Soviet-Embassy detail is grounded, but the statement that Oswald requested a 'transit visa' is better supported by other sources than by [1] itself."
+        }
+      },
+      {
+        "id": "factual_ruby_fbi_flynn_1959",
+        "category": "factual",
+        "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+        "answer": "**The records do not directly describe an FBI agent contacting Jack Ruby in 1959, but they mention various FBI reports and documents from different years [2].**\n- A memorandum from 1977 discusses a request for information on Jack Ruby, but does not mention a specific contact in 1959 [2].\n- An FBI report from 1952 is classified as confidential and discusses a different subject, John King Fairbank [1].\n- Another document from 1964 mentions Richard C. Nagell, but does not provide information about Jack Ruby or an FBI agent contacting him in 1959 [4].\n- A document from 1969 discusses convictions of organized crime and gambling figures, but does not mention Jack Ruby or an FBI contact [3].\n*The records do not contain specific information about an FBI agent contacting Jack Ruby in 1959.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.1,
+          "completeness": 0.0,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "The response does not answer the question and instead cites unrelated documents; while it avoids a false specific agent/date, its blanket claim that the records do not contain the information is not supported by the retrieved sources here."
+        }
+      },
+      {
+        "id": "factual_oswald_marine_discharge_1959",
+        "category": "factual",
+        "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+        "answer": "**The Marine Corps hardship or dependency discharge board convened to consider Oswald's case on 27 August 1959.**\n- The board met at 1530 to consider the case of Private First Class Lee H. Oswald, as guided by the provisions of reference (a) [1].\n- The members present at the meeting included Lieutenant Colonel Bolish J. KOZAK, Major George E. MC CLANE, and Major Eugene T. CARD [1].\n- The board examined the basic request, supporting enclosures, and Service record, and interviewed Private First Class Lee H. Oswald [1].\n*The records do not contain detailed information about the board's deliberations or the exact time it took to reach a decision.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 1.0,
+          "k": 20,
+          "hits": [
+            [
+              "180-10072-10186.pdf",
+              46
+            ]
+          ],
+          "missed": []
+        },
+        "judge": {
+          "faithfulness": 0.98,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The answer is fully grounded in source [1] for the date, time, rank, and case details; the added names of board members are also supported there, and the only minor issue is the answer omits the board's full title but not any substantive fact."
+        }
+      },
+      {
+        "id": "factual_cia_mexico_city_cable_date",
+        "category": "factual",
+        "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+        "answer": "**The CIA Headquarters sent the Mexico City Station information responding to Oswald's initial reported contact on June 14, 1967.**\n- The Mexico City Station received a copy of Ruyle's letter to Bowles from CIA Headquarters on this date [1].\n- The CIA considered Ruyle's report \"the first piece of substantive info about Oswald's sojourn in Mexico\" since the assassination [1].\n- The Headquarters instructed the Mexico City Station to elicit the identity of the source from Ruyle [1].\n- The CIA's motives for pursuing the story included confirming that several of Garrison's allegations were false [1].",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "180-10110-10484.pdf",
+              92
+            ],
+            [
+              "180-10110-10484.pdf",
+              172
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.12,
+          "completeness": 0.0,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The cited source supports the June 14, 1967 Ruyle letter claim, not the asserted June 14, 1967 response to Oswald's initial 1963 contact, and that date is unsupported by any retrieved source; the answer also ignores the key October 11, 1963 fact."
+        }
+      },
+      {
+        "id": "biographical_jack_ruby",
+        "category": "biographical",
+        "question": "Who was Jack Ruby?",
+        "answer": "**Jack Ruby was a nightclub owner with connections to the Mafia and was known to have visited the H.L. Hunt offices in Dallas on November 21, 1963, the day before the assassination of President John F. Kennedy.**\n- Jack Ruby was also known as Jack Rubenstein [4].\n- Ruby had connections to the Havana underworld and had visited Cuba, where he met with Santos Trafficante, a Florida Mafia chieftain [1].\n- Ruby's name was found in one of his notebooks, and he was investigated by the Warren Commission for possible links to the Hunts [2].\n- Ruby was contacted by the FBI in 1959 as a potential informant on the criminal element in Dallas [3].\n*The records do not contain a comprehensive biography of Jack Ruby, but they provide glimpses into his connections and activities.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.82,
+          "completeness": 0.67,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded in the retrieved sources (Rubenstein, nightclub operator, FBI contact in 1959), but the Mafia/underworld assertions and the H.L. Hunt visit are presented as settled fact despite being more speculative in the corpus."
+        }
+      },
+      {
+        "id": "biographical_oswald",
+        "category": "biographical",
+        "question": "Who was Lee Harvey Oswald?",
+        "answer": "**Lee Harvey Oswald was an individual who defected to the USSR in 1959 and later attempted to obtain a visa from the Cuban Consulate in Mexico City, as reported in various CIA-controlled documents.**\n- Lee Harvey Oswald was born on October 18, 1939, in New Orleans, Louisiana, and was a former radar operator in the United States Marines [2].\n- Oswald defected to the USSR in October 1959 and later returned to the United States in 1962 [2].\n- He applied for a Cuban in-transit visa at the Cuban Consulate in Mexico City, which was denied [3].\n- Oswald's activities in Mexico City included visiting the Soviet Embassy and attempting to obtain a visa from the Cuban Consulate [1].",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "180-10072-10186.pdf",
+              46
+            ],
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.92,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded in the retrieved sources, but the answer overstates contested Mexico City details as settled fact and omits the key Warren Commission identification of Oswald as Kennedy's assassin."
+        }
+      },
+      {
+        "id": "biographical_david_ferrie",
+        "category": "biographical",
+        "question": "Who was David Ferrie?",
+        "answer": "**David Ferrie was a private investigator and a former airline pilot who was investigated for possible connections to the assassination of President John F. Kennedy.**\n- David Ferrie was employed by Carlos Marcello, a top Mafia kingpin, as a private investigator in New Orleans [1].\n- Ferrie was found dead in his apartment six days after District Attorney Jim Garrison accused him of participating in the plot to assassinate President Kennedy, and his death was ruled a suicide [1].\n- Ferrie had been investigated by the FBI and Secret Service for a possible role in the assassination, and it was rumored that he was to have flown the alleged assassins out of the country [2].\n- Ferrie worked out of the same building as Jim Braden, another figure investigated for possible connections to the assassination, in the months leading up to the assassination [1].\n*The records do not contain a comprehensive biography of David Ferrie, but they provide various details about his connections to other figures and his investigations by law enforcement agencies.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 1.0,
+          "k": 20,
+          "hits": [
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ],
+            [
+              "157-10014-10242.pdf",
+              385
+            ]
+          ],
+          "missed": []
+        },
+        "judge": {
+          "faithfulness": 0.88,
+          "completeness": 0.78,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is largely grounded in the retrieved sources, but it overstates an unsupported claim that Ferrie was employed by Carlos Marcello as a private investigator; the sources support him as a former airline pilot/private investigator and a Garrison target, but not the Marcello employment fact."
+        }
+      },
+      {
+        "id": "biographical_silvia_duran",
+        "category": "biographical",
+        "question": "Who was Silvia Duran?",
+        "answer": "**Silvia Duran was a Mexican national who worked at the Cuban Consulate in Mexico City and had interactions with Lee Harvey Oswald, as reported in various CIA documents and investigations [1].**\n- Silvia Duran was interviewed by the HSCA staff on June 6, 1978, as part of their investigation into the assassination of President John F. Kennedy [5].\n- Duran admitted to having met Oswald at the Cuban Consulate when he applied for a visa and having dated him on several occasions, according to a report from the CIA Mexico City Station [4].\n- The Mexican government arrested Duran on November 23, 1963, and she was rearrested on November 27, 1963, when she attempted to leave Mexico for Cuba [3].\n- Duran's interactions with Oswald and her possible connections to Cuban or Mexican intelligence were investigated by the CIA and the HSCA, but no conclusive evidence of her involvement in the assassination was found [2].\n\n*The records do not contain a comprehensive biography of Silvia Duran or a complete account of her life outside of her interactions with Oswald and her work at the Cuban Consulate.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.3333333333333333,
+          "k": 20,
+          "hits": [
+            [
+              "180-10110-10484.pdf",
+              247
+            ]
+          ],
+          "missed": [
+            [
+              "144-10001-10099.pdf",
+              2
+            ],
+            [
+              "180-10110-10484.pdf",
+              306
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is mostly grounded, but it overstates as settled fact that Duran was a Mexican national and that she had dated Oswald, and it omits key reference facts that she was Horatio Duran's wife and that Cuba protested her maltreatment after arrest."
+        }
+      },
+      {
+        "id": "biographical_clay_shaw",
+        "category": "biographical",
+        "question": "Who was Clay Shaw?",
+        "answer": "**Clay Shaw was a former Director of the International Trade Mart in New Orleans, who was investigated by District Attorney James C. Garrison in connection with the assassination of President John F. Kennedy.**\n- Shaw's name never came up during the FBI's initial investigation of the assassination, and the FBI never investigated him [1].\n- Shaw was accused by Garrison of participating in the assassination conspiracy, and was allegedly connected to Lee Harvey Oswald and David Ferrie [2].\n- The CIA had a relationship with Shaw, but it appears that all of the Pravda charges against him were untrue, except for the fact that there was a CIA-Shaw relationship [3].\n- Shaw was granted a covert security approval in 1962, allowing him to be used in Project JENCHANT [3].\n*The records do not contain detailed information about Shaw's personal life or his activities outside of the investigation.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10330-10081.pdf",
+              15
+            ],
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.87,
+          "completeness": 0.67,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "The main identification and JFK/Garrison-related claims are grounded, but the answer overstates uncertain allegations like the CIA relationship and Project JENCHANT as settled facts, while omitting the reference’s World Trade Center/Permindex linkage."
+        }
+      },
+      {
+        "id": "biographical_jim_garrison",
+        "category": "biographical",
+        "question": "Who was Jim Garrison?",
+        "answer": "**Jim Garrison was the District Attorney of New Orleans who conducted an investigation into the assassination of President John F. Kennedy.**\n- Garrison's investigation was based on information furnished to him by Jack S. Martin and David Lewis, and he claimed that Lee Harvey Oswald, David Ferrie, and Clay Shaw conspired to assassinate President Kennedy [1].\n- Garrison's mental stability was questioned, and he received a medical discharge from the U.S. Army in 1951 for an emotional problem [2].\n- Garrison was quoted as saying that the CIA was involved in the assassination of President Kennedy and that the U.S. press was controlled by the CIA [3].\n- Garrison's investigation was met with resistance from the Federal government, and he was quoted as saying that he had to speak out in Europe because it was impossible to do so in America [3].\n*The records do not contain a comprehensive biography of Jim Garrison.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.6666666666666666,
+          "k": 20,
+          "hits": [
+            [
+              "104-10305-10000.pdf",
+              106
+            ],
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ]
+          ],
+          "missed": [
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.9,
+          "completeness": 0.6,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The core identification and JFK-investigation claim are supported by the sources, as are the Oswald/Ferrie/Shaw conspiracy allegations and Garrison's disputed medical/mental-stability history; however, the statement that his investigation was based on information from Jack S. Martin and David Lewis is unsupported by the cited source [1] in the answer, and several claims are stated too definitively."
+        }
+      }
+    ],
+    "v2": [
+      {
+        "id": "factual_oswald_marine_clearance",
+        "category": "factual",
+        "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+        "answer": "**Lee Harvey Oswald held a \"confidential\" level of security clearance during his Marine Corps service.**\n- Oswald's level of security clearance was specified as \"confidential\" in his fact sheet [1].\n- A Security Termination Statement (OPNAV FORM 5511-14) was executed by Oswald on September 11, 1959, which may be related to his security clearance [1].\n- The level of security clearance was necessary due to the nature of the work that his unit was doing, as stated by Richard Dennis Call, who supervised Oswald [2].\n- Oswald's unit had security clearance, and Call described this level of clearance as being \"confidential\" [2].\n* *_The records do not provide further details on the scope or implications of Oswald's security clearance._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ],
+          "missed": [
+            [
+              "180-10078-10492.pdf",
+              5
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.97,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The answer is fully supported by source [1], and the extra Richard Dennis Call detail is grounded by source [4] without introducing unsupported factual claims."
+        }
+      },
+      {
+        "id": "factual_ruby_real_name",
+        "category": "factual",
+        "question": "What was Jack Ruby's original family name before he changed it?",
+        "answer": "**Jack Ruby's original family name before he changed it was Rubenstein.**\n- The document from the HSCA Request mentions Jack Ruby's alias as Jack Rubensten [1].\n- Another source also refers to Jack Ruby as Jack Rubenstein, indicating a name change [3].\n- The CIA memo to OLC includes a sanitized file on Jack Ruby, which may contain information about his name change, but the details are not provided [1].\n- The FBI investigation into Jack Ruby's background may have uncovered more information about his original family name, but the provided documents do not specify this [2].\n- The HSCA staff's meeting with Cuban officials discussed Jack Ruby, among other topics, but the documents do not mention his original family name [4].\n\n*_The records do not provide a direct explanation for why Jack Ruby changed his name from Rubenstein to Ruby._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.84,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "The core claim that Jack Ruby's original family name was Rubenstein is grounded by the retrieved sources, though several additional explanatory bullets are loosely supported or not directly evidenced."
+        }
+      },
+      {
+        "id": "factual_oswald_mexico_cuban_embassy",
+        "category": "factual",
+        "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+        "answer": "**Oswald visited the Cuban Embassy in Mexico City on 27 September 1963 to request a transit visa.**\n- Oswald went to the Cuban Embassy and made an appointment for a visa to Cuba on his way to the USSR [1].\n- The Cuban Consulate stated that it could not grant the visa without permission of MINREX, and unless permission had been granted previously by the country of destination [3].\n- Oswald's request for a transit visa was never granted, as he gave up annoying the consulate [4].\n- The information about Oswald's visit to the Cuban Embassy was obtained through telephone intercepts which were placed on both the Cuban and Soviet Embassies [2].\n- The Cuban Embassy in Mexico City verified Oswald's request for a transit visa for Russia, which was requested on 27 September from the Cuban Consulate in Merida [5]. \n*_The records do not provide further details on the exact outcome of Oswald's visa application beyond it being ungranted._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 1.0,
+          "k": 20,
+          "hits": [
+            [
+              "104-10413-10306.pdf",
+              35
+            ],
+            [
+              "144-10001-10125.pdf",
+              18
+            ]
+          ],
+          "missed": []
+        },
+        "judge": {
+          "faithfulness": 0.88,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The core date and visit are supported by source [1], and the transit-visa details are supported by [8]-[10]; the only minor issue is that the answer omits the same-day Soviet Embassy visit and refusal for a recommendation, but it does not invent unsupported facts."
+        }
+      },
+      {
+        "id": "factual_ruby_fbi_flynn_1959",
+        "category": "factual",
+        "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+        "answer": "**There is no information in the retrieved documents about an FBI agent contacting Jack Ruby in 1959.**\n- The documents do mention Jack Ruby and his connections to other individuals, such as his visit to the H.L. Hunt offices on November 21, as reported by the Warren Commission [2].\n- They also discuss Jack Bauman's interactions with Howard Hunt and his potential involvement in the Watergate affair [1].\n- Additionally, the documents mention Paul Rothermel, a former FBI agent who was Director of Security for the Hunt Oil Company, but do not link him to Jack Ruby [3].\n- The records do not directly describe any FBI agent contacting Jack Ruby in 1959; however, they provide information on various individuals connected to the Kennedy assassination and the Watergate scandal [4].\n*_The documents do not provide a specific answer to the question about the FBI agent contacting Jack Ruby in 1959._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.08,
+          "completeness": 0.0,
+          "hallucination": true,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "The answer’s main conclusion that no information exists is unsupported because the corpus does contain the specific fact that Special Agent Charles W. Flynn contacted Jack Ruby on March 11, 1959; the rest of the response cites unrelated material and does not answer the question."
+        }
+      },
+      {
+        "id": "factual_oswald_marine_discharge_1959",
+        "category": "factual",
+        "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+        "answer": "**The Marine Corps hardship or dependency discharge board convened to consider Oswald's case on 27 August 1959.**\n- The board met at 1530 to consider the case of Private First Class Lee H. Oswald, as guided by the provisions of reference (a) and in compliance with the Third Endorsement [1].\n- The members present at the meeting included Lieutenant Colonel Bolish J. KOZAK, Major George E. MC CLANE, and Major Eugene T. CARD [1].\n- The board examined the basic request, supporting enclosures, and Service record, and interviewed Private First Class Lee H. Oswald [1].\n- The board's recommendations were returned to the Headquarters by endorsement, as expeditiously as possible, as stated in the Third Endorsement [2].\n*_The records do not provide detailed information about the events leading up to the board's decision, but they do outline the procedures and considerations involved in the process._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 1.0,
+          "k": 20,
+          "hits": [
+            [
+              "180-10072-10186.pdf",
+              46
+            ]
+          ],
+          "missed": []
+        },
+        "judge": {
+          "faithfulness": 0.96,
+          "completeness": 1.0,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "The key date and time (27 August 1959 at 1530) are directly supported by source [1]; the extra procedural details are also grounded in [1], and no substantive unsupported factual claim appears."
+        }
+      },
+      {
+        "id": "factual_cia_mexico_city_cable_date",
+        "category": "factual",
+        "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+        "answer": "**CIA Headquarters sent the Mexico City Station a copy of Ruyle's letter on June 14, 1967, in response to information about Oswald's sojourn in Mexico [1].**\n- The Mexico City Station had previously reported Oswald's contact with the Soviet Embassy on October 1, 1963, and this information was disseminated by CIA Headquarters on October 10, 1963 [2].\n- The CIA's Mexico City Station had been monitoring Oswald's activities, including his visits to the Cuban and Soviet Embassies, through telephone intercepts [4].\n- The information gathered from these intercepts was routinely passed to other agencies and entered into CIA files, but the tapes were erased after a brief period [4].\n- The CIA's interest in Oswald was due to his record of defection to the Soviet Union and his attempts to obtain a visa to travel to Russia via Cuba [3]. \n*_The records do not directly describe the exact timing or content of CIA Headquarters' initial response to Oswald's reported contact, but they mention subsequent actions and investigations._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "180-10110-10484.pdf",
+              92
+            ],
+            [
+              "180-10110-10484.pdf",
+              172
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.35,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is grounded on the October 8/10 dissemination timeline in the sources, but it incorrectly adds an unsupported June 14, 1967 Ruyle-letter claim and overstates details not established by the retrieved texts."
+        }
+      },
+      {
+        "id": "biographical_jack_ruby",
+        "category": "biographical",
+        "question": "Who was Jack Ruby?",
+        "answer": "**Jack Ruby was a nightclub owner with connections to the Mafia and was involved in the assassination of Lee Harvey Oswald, the alleged killer of President John F. Kennedy.**\n- Jack Ruby visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, just twenty-four hours before the President was murdered [1].\n- Ruby had connections in the Havana underworld and had visited Cuba in 1959, with one CIA cable reporting that \"an American gangster type named Ruby\" had visited Santos Trafficante in his Cuban prison [2].\n- Ruby's involvement with the Mafia and his connection to Lee Harvey Oswald raise significant questions about a possible relationship between the two men, with some sources suggesting that Ruby was ordered to eliminate Oswald to prevent him from revealing information about the assassination [2].\n- The Warren Commission investigated several possible links between Jack Ruby and the Hunts, including the fact that Lamar Hunt's name was found inside one of Ruby's notebooks [3].\n- Jack Ruby's true identity and connections were not fully explored by the Warren Commission, with some sources suggesting that he was more deeply involved in the assassination than initially thought [1]. \n*_The records do not provide a complete biography of Jack Ruby or fully explain his motivations for killing Lee Harvey Oswald._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ],
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.35,
+          "completeness": 0.33,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The response is partly grounded on Ruby's Dallas/Hunt-Oil visit and possible Mafia/Cuba references in the sources, but it adds unsupported settled claims about his Mafia role and killing Oswald, and it omits the key fact that Ruby's real name was Rubenstein."
+        }
+      },
+      {
+        "id": "biographical_oswald",
+        "category": "biographical",
+        "question": "Who was Lee Harvey Oswald?",
+        "answer": "**Lee Harvey Oswald was a former United States Marine who defected to the USSR in 1959 and later returned to the United States.**\n- He was born on October 18, 1939, in New Orleans, Louisiana, and was described as five feet ten inches, one hundred sixty five pounds, with light brown wavy hair and blue eyes [2].\n- Oswald's activities in Mexico City included visiting the Soviet and Cuban Consulates, where he attempted to obtain a visa to travel to Cuba [1].\n- The CIA received information about Oswald from CIA Headquarters on October 11, 1963, which described his defection to the USSR and his desire to return to the United States [2].\n- Oswald's visa application and other documents related to his contacts with the Soviet and Cuban diplomatic missions were published as exhibits by the Warren Commission [3].\n*_The records do not provide a comprehensive biography of Oswald, but they do mention various aspects of his life and activities in connection with his trip to Mexico City._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "180-10072-10186.pdf",
+              46
+            ],
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.95,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved sources, but the opening sentence overstates Oswald's status as settled fact despite the sources describing identification/probability and the answer omits the Warren Commission assassin identification explicitly."
+        }
+      },
+      {
+        "id": "biographical_david_ferrie",
+        "category": "biographical",
+        "question": "Who was David Ferrie?",
+        "answer": "**David Ferrie was a private investigator and a former airlines pilot who was investigated for his possible role in the assassination of President Kennedy [1].**\n- He was employed by Carlos Marcello, a top Mafia kingpin, and worked out of the offices of Marcello's criminal attorney, G. Wray Gill, in the Pere Marquette Building in New Orleans [1].\n- Ferrie was found dead in his apartment in New Orleans, and his death was ruled a suicide, six days after District Attorney Jim Garrison accused him of participating in the plot to assassinate President Kennedy [2].\n- The FBI and Secret Service investigated Ferrie's possible role in the assassination, but no evidence was found to prove that he was acquainted with Lee Harvey Oswald [3].\n- *The records do not directly describe Ferrie's full background or his exact activities leading up to the assassination; however, they mention his connections to Marcello and his work as a private investigator in connection with the subject.*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 1.0,
+          "k": 20,
+          "hits": [
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ],
+            [
+              "157-10014-10242.pdf",
+              385
+            ]
+          ],
+          "missed": []
+        },
+        "judge": {
+          "faithfulness": 0.83,
+          "completeness": 0.67,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved sources, but 'employed by Carlos Marcello' is not supported by the cited text and is stated too definitively."
+        }
+      },
+      {
+        "id": "biographical_silvia_duran",
+        "category": "biographical",
+        "question": "Who was Silvia Duran?",
+        "answer": "**Silvia Duran was a Mexican national who worked at the Cuban Consulate in Mexico City and had interactions with Lee Harvey Oswald.**\n- Silvia Duran was rearrested on November 27, 1963, because she was attempting to leave Mexico for Cuba [1].\n- She was a secretary at the Cuban Consulate where Oswald visited to apply for a visa, and she provided him with her business phone number [4].\n- Duran denied having an affair with Oswald, but there is evidence suggesting she had intimate relations with him [3].\n- The CIA and FBI investigated Duran's possible connections to intelligence agencies, but found no evidence that she was an agent for American, Mexican, or Cuban intelligence [2].\n*_The records do not directly describe Silvia Duran's personal life outside of her interactions with Oswald and her work at the Cuban Consulate._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.3333333333333333,
+          "k": 20,
+          "hits": [
+            [
+              "180-10110-10484.pdf",
+              247
+            ]
+          ],
+          "missed": [
+            [
+              "144-10001-10099.pdf",
+              2
+            ],
+            [
+              "180-10110-10484.pdf",
+              306
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.8,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved sources, but the statements about an affair/intimate relations and CIA/FBI intelligence conclusions are presented more strongly than the evidence supports."
+        }
+      },
+      {
+        "id": "biographical_clay_shaw",
+        "category": "biographical",
+        "question": "Who was Clay Shaw?",
+        "answer": "**Clay Shaw was a former Director of the International Trade Mart in New Orleans, who was investigated by New Orleans District Attorney James C. Garrison in connection with the assassination of President John F. Kennedy [1].**\n- Shaw's name never came up in the FBI's initial investigation of the assassination, and the FBI never investigated him [2].\n- Garrison's investigation was based on information from witnesses such as Perry Russo, who claimed that Shaw, David Ferrie, and Lee Harvey Oswald discussed assassinating President Kennedy at a meeting in Ferrie's apartment in September 1963 [3].\n- Shaw had a security clearance and was a source for the CIA's Domestic Contacts Division, and there were allegations of a CIA-Shaw relationship, although the details of this relationship are not fully explained in the documents [4].\n- The CIA had a 201 file on Shaw, which was sanitized for the House Select Committee on Assassinations [5].\n*_The records do not provide a comprehensive biography of Clay Shaw or a complete account of his activities and connections._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10330-10081.pdf",
+              15
+            ],
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.92,
+          "completeness": 0.8,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "Most cited claims are grounded in the retrieved records, but calling Shaw a former International Trade Mart director and asserting specific CIA-source/security-clearance details goes beyond the core reference and is stated too definitively."
+        }
+      },
+      {
+        "id": "biographical_jim_garrison",
+        "category": "biographical",
+        "question": "Who was Jim Garrison?",
+        "answer": "**Jim Garrison was the District Attorney of New Orleans who conducted an investigation into the assassination of President John F. Kennedy.**\n- He was quoted as saying that \"the next U.S. President who tries to put the brakes on the war machine\" will also be slain [3].\n- Garrison claimed that Lee Harvey Oswald, David Ferrie, and Clay Shaw plotted to assassinate President Kennedy [1].\n- He believed that elements of the CIA were involved in the assassination and attempted to cast suspicion on others [3].\n- Garrison's investigation was triggered by his desire for publicity, and he was described as an egomaniac and politically ambitious [2].\n* *_The records do not provide a comprehensive biography of Jim Garrison, but they offer insights into his investigation and allegations regarding the Kennedy assassination._*",
+        "query_type_seen": "simple",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.6666666666666666,
+          "k": 20,
+          "hits": [
+            [
+              "104-10305-10000.pdf",
+              106
+            ],
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ]
+          ],
+          "missed": [
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.88,
+          "completeness": 0.8,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved sources, but the statement that Garrison’s investigation was triggered by a desire for publicity and that he was an egomaniac/politically ambitious is not supported by the cited texts, while the answer also states disputed allegations as fact."
+        }
+      }
+    ]
+  }
+}

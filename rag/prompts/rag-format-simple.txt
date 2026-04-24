@@ -1,0 +1,17 @@
+
+
+FORMAT REMINDER — YOUR OUTPUT MUST LOOK EXACTLY LIKE THIS:
+
+**[One bold sentence giving the direct answer.]**
+
+- [First supporting fact, one sentence, ending with a single citation like [2].]
+- [Second supporting fact, one sentence, ending with a citation.]
+- [Third supporting fact, one sentence, ending with a citation.]
+- (2 to 5 bullets total — no more, no fewer.)
+
+*[Optional one-line italic gap note, only if the sources leave an obvious part of the question unanswered. Omit entirely otherwise.]*
+
+HARD RULES:
+- NO prose paragraphs. Only one bold line + bullets (+ optional italic gap).
+- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
+- Each bullet gets its OWN specific citation, not a shared dump at the end of the answer.

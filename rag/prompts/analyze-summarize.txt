@@ -1,0 +1,3 @@
+Provide a concise summary of the following text, highlighting key information and events.
+
+Text: {text}

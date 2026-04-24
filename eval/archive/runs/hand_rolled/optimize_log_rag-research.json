@@ -1,0 +1,68 @@
+{
+  "prompt": "rag-research",
+  "seed_fitness": 0.5474166666666667,
+  "final_fitness": 0.5922916666666667,
+  "iters": 6,
+  "batch_ids": [
+    "partial_evidence_oswald_acted_alone",
+    "partial_evidence_organized_crime_role",
+    "analytical_hsca_ruby_witness_timeline",
+    "analytical_new_orleans_ferrie_shaw_banister",
+    "partial_evidence_ruby_state_of_mind",
+    "analytical_cross_ref_cia_mexico_cuban_embassy",
+    "analytical_oswald_soviet_embassy_contacts",
+    "partial_evidence_cia_oswald_connection"
+  ],
+  "history": [
+    {
+      "iter": 0,
+      "fitness": 0.5474166666666667,
+      "rationale": "(seed)",
+      "prompt_len": 5095
+    },
+    {
+      "iter": 1,
+      "fitness": 0.5589791666666667,
+      "accepted": true,
+      "rationale": "The revision adds tighter instructions to distinguish direct evidence from speculation, tailor output to document-list and timeline questions, include exact document identifiers when relevant, and avoid overstating unsupported conclusions such as mental state, conspiratorial findings, or inferred relationships.",
+      "prompt_len": 6822
+    },
+    {
+      "iter": 2,
+      "fitness": 0.5053125,
+      "accepted": false,
+      "rationale": "This revision tightens instructions against unsupported inference, requires explicit handling of sparse timelines and cross-document associations, and emphasizes naming exact documents for document-identification questions while preserving the original structure and citation rules.",
+      "prompt_len": 8395
+    },
+    {
+      "iter": 3,
+      "fitness": 0.5922916666666667,
+      "accepted": true,
+      "rationale": "The revision tightens rules for partial evidence, timelines, relationship claims, and document-identification answers so the model reports only explicit links and named records instead of inferring motives, associations, or stronger conclusions than the retrieved documents support.",
+      "prompt_len": 7999
+    },
+    {
+      "iter": 4,
+      "fitness": 0.5584166666666667,
+      "accepted": false,
+      "rationale": "The revision adds explicit guardrails for document-identification, timelines, association claims, support-for-conclusion questions, and mental-state questions so the model sticks to exact retrieved evidence, names concrete documents, and avoids assembling unsupported links or generic filler.",
+      "prompt_len": 10233
+    },
+    {
+      "iter": 5,
+      "fitness": 0.5760000000000001,
+      "accepted": false,
+      "rationale": "The revision adds targeted instructions for document-list, timeline, relationship, conclusion, and mental-state questions so the model stays anchored to explicit document-level evidence, avoids combining separate references into unsupported links, and produces partial but concrete answers instead of generic summaries.",
+      "prompt_len": 10599
+    },
+    {
+      "iter": 6,
+      "fitness": 0.5544166666666667,
+      "accepted": false,
+      "rationale": "The revision adds explicit guards against inferred linkages, mislabeled interview/timeline entries, and overclaiming from single-source allegations while strengthening document-identification requirements for cross-reference and partial-evidence questions.",
+      "prompt_len": 9547
+    }
+  ],
+  "improved": true,
+  "version_written": "v1"
+}

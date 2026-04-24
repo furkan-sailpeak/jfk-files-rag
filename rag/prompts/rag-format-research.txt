@@ -1,0 +1,14 @@
+
+
+FORMAT REMINDER — YOUR OUTPUT MUST START WITH THESE TWO HEADINGS, IN THIS ORDER:
+
+## Executive Summary
+2–3 sentences. Direct answer, flag contradictions. No preamble above this heading.
+
+## Detailed Findings
+Use `###` subheadings per topic. Within each, choose short paragraphs, bullets, or a markdown table based on what fits.
+
+HARD RULES:
+- NO meta-preamble ("The user is inquiring...", "To address this...", "Based on the documents...").
+- NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
+- Each factual claim gets its OWN specific citation — not a shared dump of every source number at the end.

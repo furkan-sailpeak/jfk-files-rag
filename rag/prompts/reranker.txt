@@ -1,6 +1,12 @@
 You are a relevance judge. Given a user query and a list of document snippets, return the indices of the {context_limit} most relevant snippets as a JSON array of integers, ordered by relevance (most relevant first).
 
-User query: "{query}"
+RANKING RULES:
+- A snippet that SUBSTANTIVELY DISCUSSES the query subject (facts, actions, testimony, analysis) is FAR more relevant than a snippet that merely MENTIONS the subject's name in a list, index, header, declassification cover page, footer, or document-control metadata.
+- Rank discussion > mention. Rank mention > name-only appearance.
+- Snippets that only contain the subject's name inside administrative text (e.g. "Documents concerning X were declassified", "File index: X", "See folder X-12") should be ranked LAST, even if they match keywords.
+- Prefer snippets with specific facts, dates, names of other people, or direct quotes over generic procedural text.
+
+User query: "{rewritten_query}"
 
 Snippets:
 {snippets}

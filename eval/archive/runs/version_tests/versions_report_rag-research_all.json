@@ -1,0 +1,1260 @@
+{
+  "prompt": "rag-research",
+  "split": "all",
+  "n": 20,
+  "versions": {
+    "v1": "/Users/furkandemir/Desktop/thesis-rag-dashboard/rag/prompts/rag-research.v1.txt",
+    "v2": "/Users/furkandemir/Desktop/thesis-rag-dashboard/rag/prompts/rag-research.v2.txt"
+  },
+  "results": {
+    "v1": {
+      "summary": {
+        "n": 20,
+        "fitness": 0.5936583333333333,
+        "faithfulness": 0.612,
+        "completeness": 0.4445,
+        "clarity": 3.95,
+        "hallucination_rate": 0.25,
+        "over_commits_rate": 0.8,
+        "structure_ok_rate": 1.0,
+        "has_citations_rate": 1.0,
+        "recall_at_20": 0.09722222222222221
+      },
+      "elapsed_s": 413.6653869152069
+    },
+    "v2": {
+      "summary": {
+        "n": 20,
+        "fitness": 0.5735666666666667,
+        "faithfulness": 0.5815,
+        "completeness": 0.47350000000000003,
+        "clarity": 3.95,
+        "hallucination_rate": 0.35,
+        "over_commits_rate": 0.9,
+        "structure_ok_rate": 1.0,
+        "has_citations_rate": 1.0,
+        "recall_at_20": 0.06944444444444443
+      },
+      "elapsed_s": 298.4503810405731
+    }
+  },
+  "scored": {
+    "v1": [
+      {
+        "id": "analytical_cia_surveillance_oswald",
+        "category": "analytical",
+        "question": "What did the HSCA conclude about the CIA's photographic and electronic surveillance of Oswald in Mexico City, and how forthcoming was the CIA with materials?",
+        "answer": "## Executive Summary\nThe HSCA concluded that the CIA's photographic surveillance operations in Mexico City may have obtained a photograph of Lee Harvey Oswald, but the Agency's withholding of certain production materials prevented the Committee from determining this conclusively [1]. The CIA was not forthcoming with all materials related to Oswald's activities in Mexico City, with some records and transcripts not being made available to the HSCA [4]. The Committee's investigation was hindered by the CIA's lack of transparency and inconsistencies in their written records [3].\n\n## Detailed Findings\n### Photographic Surveillance\nThe HSCA investigated the possibility that the CIA's photographic surveillance operations in Mexico City produced a photograph of Lee Harvey Oswald [1]. The Committee found that the CIA's surveillance bases were positioned to capture photographs of individuals entering and exiting the Cuban and Soviet diplomatic compounds [6]. However, the CIA's withholding of certain production materials, including photographs from the LILYRIC base, prevented the Committee from determining whether a photograph of Oswald was taken [1].\n\n### Electronic Surveillance\nThe CIA had electronic surveillance operations in place to monitor telephone calls to the Soviet and Cuban diplomatic compounds in Mexico City [4]. The Agency had transcripts of calls, including a conversation between Oswald and a guard at the Soviet Embassy, which were reviewed by the Warren Commission [4]. However, the CIA's electronic surveillance operations were not fully disclosed to the HSCA, with some records and transcripts not being made available [5].\n\n### CIA Cooperation with HSCA\nThe CIA was not fully cooperative with the HSCA's investigation, with some records and materials not being made available [1]. The Agency's lack of transparency and inconsistencies in their written records hindered the Committee's investigation [3]. The HSCA had to rely on interviews with CIA personnel and other sources to gather information about the Agency's surveillance operations in Mexico City [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.3333333333333333,
+          "k": 20,
+          "hits": [
+            [
+              "180-10110-10484.pdf",
+              119
+            ]
+          ],
+          "missed": [
+            [
+              "180-10110-10484.pdf",
+              19
+            ],
+            [
+              "180-10110-10484.pdf",
+              35
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.88,
+          "completeness": 0.8,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is largely grounded in the retrieved HSCA text, but it overstates CIA noncooperation by implying broad withholding beyond the source-supported missing photo materials and records; it also softens the committee's conclusion from 'probably obtained a photograph' to 'may have obtained.'"
+        }
+      },
+      {
+        "id": "analytical_warren_ruby_hunts",
+        "category": "analytical",
+        "question": "What links do the retrieved documents draw between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination?",
+        "answer": "## Executive Summary\nThe retrieved documents draw links between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination, suggesting potential connections and relationships. According to the documents, Jack Ruby had connections in the Havana underworld, and there were suspicions that the Cubans may have been involved in the assassination [2]. Additionally, Jim Braden, a possible link to Jack Ruby, visited the Dallas offices of the N.L. Hunt Oil Company on the day before the assassination [1].\n\n## Detailed Findings\n### Jack Ruby's Connections\nThe documents suggest that Jack Ruby had connections in the Havana underworld, which may have been related to the assassination [5]. Ruby's connections to the underworld and his potential involvement in the assassination are also mentioned in other sources [2].\n### The Hunt Family\nThe Hunt family, specifically Lamar Hunt, is mentioned as having a potential connection to Jim Braden, who visited the Dallas offices of the N.L. Hunt Oil Company on the day before the assassination [1]. However, the documents do not provide direct evidence of the Hunt family's involvement in the assassination.\n### Jim Braden's Involvement\nJim Braden, a possible link to Jack Ruby, was arrested on November 22, 1963, and claimed to be in the oil business in Beverly Hills, California [3]. Braden's alibi and potential connections to the assassination are discussed in the documents, but no conclusive evidence is provided [1].\n### CIA Involvement\nThe documents also mention the CIA's involvement in plots to assassinate Castro, which may have been related to the Kennedy assassination [4]. The CIA's involvement in these plots and their potential connections to Jack Ruby and the Hunt family are not fully explored in the documents.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "157-10014-10242.pdf",
+              44
+            ],
+            [
+              "157-10014-10242.pdf",
+              384
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.72,
+          "completeness": 0.35,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer correctly grounds Braden’s November 21 visit to the N.L. Hunt Oil offices and his possible link to Jack Ruby, but it adds unsupported specifics about Havana/Cubans, Lamar Hunt, and CIA plots that do not appear in the retrieved sources."
+        }
+      },
+      {
+        "id": "analytical_kgb_oswald_conclusion",
+        "category": "analytical",
+        "question": "What did U.S. investigators ultimately conclude about whether Lee Harvey Oswald was a Soviet (KGB) agent?",
+        "answer": "## Executive Summary\nU.S. investigators ultimately concluded that Lee Harvey Oswald was not a Soviet (KGB) agent, with multiple sources confirming this assessment, including former KGB agent Yuri Nosenko and the KGB files themselves [2]. However, some inconsistencies and uncertainties remain, such as the possibility of Oswald being an imposter in Mexico City [8]. The CIA and FBI investigations found no evidence of Oswald being a KGB agent, with the CIA receiving copies of Oswald's manuscript from the FBI and the Warren Commission [7].\n\n## Detailed Findings\n### Background on Oswald's Defection\nOswald defected to the Soviet Union in 1959, where he was interviewed by the KGB, but was deemed mentally unstable and not of interest to the KGB [2]. The KGB files, which had surveillance on Oswald for nearly two years in Russia, concluded that he was not a sleeper agent and had no American intelligence contact [2].\n\n### Investigations by U.S. Agencies\nThe CIA and FBI conducted extensive investigations into Oswald's activities, including his trip to Mexico City in September and October 1963 [6]. The CIA found no evidence of Oswald being a KGB agent, with the CIA's Office of Operations (OO) not having any contact with Oswald before or after his time in the Soviet Union [3]. The FBI also found no evidence of Oswald being a KGB agent, with the FBI's investigation concluding that Oswald acted alone in the assassination of President Kennedy [5].\n\n### Testimony of Former KGB Agent Yuri Nosenko\nYuri Nosenko, a former KGB agent, testified that Oswald was not a KGB agent and was deemed mentally unstable by the KGB [1]. Nosenko also stated that the KGB did not trust Oswald and did not consider him to be of interest [4].\n\n### Possibility of Impersonation in Mexico City\nThere is some evidence to suggest that someone may have impersonated Oswald in Mexico City, with inconsistencies in the testimony of Silvia Duran, a secretary at the Cuban Consulate [9]. However, the evidence is not sufficient to conclude that someone impersonated Oswald, and the possibility remains a topic of debate [8].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.62,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "The answer is partly grounded by source [16] stating Oswald was never associated with CIA and by [7] showing Nosenko said Oswald was not a KGB agent, but it overstates this as an ultimate U.S. conclusion and adds unsupported specifics like the KGB files themselves confirming it."
+        }
+      },
+      {
+        "id": "analytical_garrison_theory",
+        "category": "analytical",
+        "question": "How is Jim Garrison's conspiracy theory characterized in the retrieved documents, both by himself and by his critics?",
+        "answer": "## Executive Summary\nJim Garrison's conspiracy theory is characterized as a \"baseless fraud\" by his former chief investigator, William H. Gurvich, who worked with Garrison for seven months [1]. Garrison himself claims that the CIA was involved in the assassination of President Kennedy, and that the next U.S. President who tries to put the brakes on the war machine will also be slain [4]. However, his theory has been met with criticism and skepticism, with some sources suggesting that he is seeking headlines and has a questionable mental stability [2, 4].\n\n## Detailed Findings\n### Garrison's Theory\nGarrison believes that the CIA was involved in the assassination of President Kennedy, and that the organization tried to cast suspicion on others [4]. He also claims that the CIA's alleged involvement was standard procedure for the organization [4]. Additionally, Garrison suggests that President Lyndon B. Johnson knew about the CIA's alleged involvement because the Warren Commission was comprised of persons favorable to the CIA [4].\n\n### Criticisms of Garrison's Theory\nGurvich, Garrison's former chief investigator, testified that Garrison's conspiracy theory is a \"baseless fraud\" [1]. The FBI has also investigated Garrison's claims and found no evidence to support them [2]. Furthermore, some sources suggest that Garrison is seeking headlines and has a questionable mental stability [2, 4]. For example, the FBI notes that Garrison received a medical discharge from the U.S. Army in 1951 for an emotional problem, and that he admitted to receiving psychiatric treatment [3].\n\n### Investigation and Witnesses\nGarrison's investigation has involved several witnesses, including Perry Raymond Russo, who claimed to have been present at a meeting where Lee Harvey Oswald, David Ferrie, and Clay Shaw planned the assassination [2]. However, Russo's testimony has been contradictory, and he has admitted to receiving psychiatric treatment since 1959 [2]. Other witnesses, such as Gordon Novel, have also been involved in Garrison's investigation, but Novel has stated that he knows nothing that could help Garrison's case [4].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "104-10305-10000.pdf",
+              106
+            ],
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ]
+          ],
+          "missed": [
+            [
+              "104-10305-10000.pdf",
+              114
+            ],
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.63,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded, but the answer omits key corpus facts (Ferrie/Oswald/anti-Castro Cubans, Jack S. Martin and David Lewis, Clay Shaw prosecution) and overstates uncertain criticism like \"questionable mental stability\" as if established."
+        }
+      },
+      {
+        "id": "analytical_oswald_cuba_connections",
+        "category": "analytical",
+        "question": "What connections between Oswald and Cuban-related activities do the retrieved documents establish?",
+        "answer": "## Executive Summary\nThe retrieved documents establish connections between Lee Harvey Oswald and Cuban-related activities, including his visits to the Cuban Consulate in Mexico City and his attempts to obtain a visa to travel to Cuba [1], [2], [6]. Oswald's interactions with Cuban officials and his interest in traveling to Cuba are documented in various sources, including CIA-controlled documents and FBI reports [4], [5]. However, the documents also reveal inconsistencies and uncertainties regarding Oswald's activities and associations in Mexico City [3], [7].\n\n## Detailed Findings\n### Oswald's Visits to the Cuban Consulate\nOswald visited the Cuban Consulate in Mexico City on September 27, 1963, and applied for an in-transit visa to Cuba with Russia as his final destination [2]. He showed documents, including his Russian labor card, marriage certificate, and American Communist Party membership card, as identification [2]. The Cuban Consulate allowed visa applicants to take blank application forms, and Oswald's application bears his signature [6].\n\n### Oswald's Interactions with Cuban Officials\nOswald interacted with Silvia Duran, a Cuban Consulate employee, who described him as approximately five feet six, with sparse blonde hair, and weighing about 125 pounds [2]. Oswald also met with Consul Eusebio Azcue, who explained the requisites for an in-transit visa to Oswald and eventually asked him to leave the Consulate [7].\n\n### CIA and FBI Interest in Oswald's Cuban-Related Activities\nThe CIA and FBI took an interest in Oswald's Cuban-related activities, including his attempts to obtain a visa to travel to Cuba [4], [5]. The CIA conducted wiretaps on the Soviet Consulate, which placed Oswald's last visits to the Soviet and Cuban Consulates on Saturday morning, September 28, 1963 [9]. The FBI also investigated Oswald's activities in Mexico City, including his contacts with Cuban officials and his possible connections to Cuban intelligence [10].\n\n### Inconsistencies and Uncertainties\nThe documents reveal inconsistencies and uncertainties regarding Oswald's activities and associations in Mexico City, including allegations that he met with Cuban officials and traveled with \"two beatnik-looking boys\" [7], [8]. However, these allegations remain uncorroborated, and the Committee feels that it cannot dismiss them without further consideration [9].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10337-10001.pdf",
+              162
+            ],
+            [
+              "104-10413-10306.pdf",
+              35
+            ],
+            [
+              "157-10014-10242.pdf",
+              165
+            ],
+            [
+              "180-10106-10008.pdf",
+              1
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.86,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "Most cited claims are grounded in the retrieved Mexico City/Cuban Consulate materials, but the answer omits the Fair Play for Cuba Committee/CIA disinformation thread and the HSCA Carlos Bringuier/Vance Blalock connection."
+        }
+      },
+      {
+        "id": "analytical_hsca_ruby",
+        "category": "analytical",
+        "question": "What investigative findings do the retrieved documents offer regarding the HSCA's examination of Jack Ruby?",
+        "answer": "## Executive Summary\nThe retrieved documents offer some investigative findings regarding the HSCA's examination of Jack Ruby, including his connections to organized crime and his role in the assassination of Lee Harvey Oswald [2]. However, the documents do not provide a comprehensive overview of the HSCA's investigation into Ruby. The records mention Ruby's trial and his connections to the Mafia, but the details of the HSCA's examination are limited [4].\n\n## Detailed Findings\n### Jack Ruby's Connections to Organized Crime\nThe documents suggest that Jack Ruby had connections to organized crime, including the Mafia [2]. Ruby's trial and his connections to the Mafia are mentioned in several documents [4]. However, the details of these connections are not fully explored in the retrieved documents.\n\n### HSCA Investigation\nThe HSCA's investigation into Ruby is mentioned in several documents, including [1] and [2]. However, the documents do not provide a comprehensive overview of the HSCA's findings or conclusions regarding Ruby's role in the assassination [4]. The HSCA's investigation is mentioned as part of a broader examination of the Kennedy assassination and the potential involvement of organized crime [3].\n\n### Trial and Testimony\nRuby's trial and testimony are mentioned in several documents, including [4] and [2]. The documents suggest that Ruby's trial was widely publicized and that his testimony was closely followed by the media [4]. However, the details of his testimony and the outcome of the trial are not fully explored in the retrieved documents.\n\n### Connections to the Mafia\nThe documents suggest that Ruby had connections to the Mafia, including Jim Braden, who was also involved in organized crime [2]. The documents mention that Ruby and Braden visited the Dallas offices of the H.L. Hunt Oil Company on the day before the assassination [2]. However, the significance of this meeting and the nature of Ruby's connections to the Mafia are not fully explored in the retrieved documents.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ],
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.14,
+          "completeness": 0.1,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer mostly invents unsupported specifics about HSCA findings on Ruby (organized crime, Mafia ties, trial testimony, Braden) that do not appear in the retrieved sources, while missing the grounded Ruby-contact facts in the corpus."
+        }
+      },
+      {
+        "id": "partial_evidence_oswald_motivations",
+        "category": "partial_evidence",
+        "question": "What do the archival documents reveal about Lee Harvey Oswald's personal motivations for assassinating President Kennedy?",
+        "answer": "## Executive Summary\nThe archival documents do not directly describe Lee Harvey Oswald's personal motivations for assassinating President Kennedy, but they mention various factors and events that may have contributed to his actions [1]. Oswald's involvement with the Fair Play for Cuba Committee and his trip to Mexico City are noted, which could suggest a potential motive related to his political beliefs [2]. However, the documents do not provide a clear or definitive answer to Oswald's personal motivations.\n\n## Detailed Findings\n### Oswald's Background and Actions\nThe documents mention Oswald's trip to Mexico City, where he visited the Soviet Embassy and attempted to obtain a visa to travel to Cuba [2]. They also note his involvement with the Fair Play for Cuba Committee, which was supportive of Castro and critical of Kennedy's Cuba policy [5]. Additionally, the documents mention Oswald's statement to his captors, \"I'm a patsy\" [1], which could suggest that he felt he was being framed or used for a larger purpose.\n\n### Potential Motives and Influences\nThe documents suggest that Oswald may have been motivated by his political beliefs, particularly his support for Castro and his opposition to Kennedy's Cuba policy [5]. They also mention the possibility of a conspiracy involving anti-Castro Cubans and the CIA [6]. However, the documents do not provide clear evidence of Oswald's personal motivations or the extent to which he was influenced by these factors.\n\n### Investigation and Testimony\nThe documents include testimony and statements from various individuals, including Oswald's mother, who suggested that he was motivated by a desire to prove himself and to make a name for himself [3]. They also include statements from investigators and experts, who have analyzed the evidence and raised questions about the official narrative of the assassination [4]. However, the documents do not provide a consistent or definitive account of Oswald's personal motivations.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "180-10078-10492.pdf",
+              5
+            ],
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.55,
+          "completeness": 0.4,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is partially grounded on Mexico City/Cuban Embassy/Fair Play for Cuba material, but it adds unsupported claims about Oswald's 'support for Castro,' his 'patsy' statement as motive evidence, and his mother saying he wanted to 'prove himself,' none of which appear in the retrieved sources."
+        }
+      },
+      {
+        "id": "partial_evidence_oswald_acted_alone",
+        "category": "partial_evidence",
+        "question": "Do the retrieved documents support the conclusion that Oswald acted alone in the assassination?",
+        "answer": "## Executive Summary\nThe retrieved documents provide some evidence and insights related to the assassination of President John F. Kennedy and the role of Lee Harvey Oswald, but they do not offer a definitive conclusion on whether Oswald acted alone [1]. Some sources suggest that Oswald's actions and background have been thoroughly investigated, with one author, Gerald Posner, concluding that Oswald acted alone [1]. However, other documents and sources raise questions and inconsistencies that could imply a more complex scenario [4].\n\n## Detailed Findings\n### Background on Oswald and the Assassination\nThe documents include various reports, investigations, and analyses related to Oswald and the assassination, such as the Warren Commission's findings and subsequent investigations by the House Select Committee on Assassinations [2]. One document mentions that the CIA had a small file on Oswald before the assassination, which was later expanded to include over 33,000 pages of material [5]. Another source notes that the CIA's Office of Security held a file on Oswald, which was created in 1959 after his defection to the Soviet Union [6].\n\n### Investigations and Inconsistencies\nSome documents highlight inconsistencies and questions surrounding Oswald's activities and the events leading up to the assassination. For example, one source mentions that the CIA's Mexico City station had reported on Oswald's visit to the Soviet Embassy, but the details of these reports are not fully clear [3]. Another document notes that the Warren Commission's primary witness related to Mexico City, Silvia Duran, had given inconsistent testimony [4].\n\n### CIA and FBI Involvement\nThe documents also touch on the involvement of the CIA and FBI in the investigation and their potential interactions with Oswald. One source quotes a CIA official as saying that the agency had no reason to believe Oswald was working for or connected to the CIA [7]. Another document mentions that the FBI had contacted Oswald on several occasions before the assassination, but the purpose of these contacts is not fully explained [7].\n\n### Conclusion and Gaps\nWhile the retrieved documents provide some insights into the events surrounding the assassination and Oswald's role, they do not offer a comprehensive or definitive conclusion on whether Oswald acted alone. The records do not directly describe Oswald's motivations or any potential co-conspirators; however, they mention various investigations and inconsistencies that have been raised over the years [1]. Further research and analysis would be necessary to fully understand the circumstances of the assassination and Oswald's involvement.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10009.pdf",
+              68
+            ],
+            [
+              "104-10433-10209.pdf",
+              255
+            ],
+            [
+              "180-10110-10484.pdf",
+              313
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.83,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded in the retrieved texts, but the answer adds unsupported specifics such as the CIA/FBI contact framing and overstates Posner as concluding Oswald acted alone; it also misses key reference facts like the Dictabelt/NAS issue, the Mexico impersonation uncertainty, and the survey finding that most Americans doubted Oswald acted alone."
+        }
+      },
+      {
+        "id": "partial_evidence_cuban_involvement",
+        "category": "partial_evidence",
+        "question": "Was the Cuban government involved in the assassination of President Kennedy?",
+        "answer": "## Executive Summary\nThe Cuban government's involvement in the assassination of President Kennedy is not directly proven in the retrieved documents, but there are indications of a potential connection. Some sources suggest that Castro may have become aware of the U.S. plot to assassinate him and may have recruited Oswald to retaliate against President Kennedy [13]. However, other sources emphasize that the Cuban government did not contemplate assassination, even against their enemies, and that they welcomed an investigation into the Kennedy assassination [4].\n\n## Detailed Findings\n### Background on CIA Plots Against Castro\nThe CIA had arranged several assassination attempts against Fidel Castro, including a plot to poison him using underworld figures [2], [7], and [8]. These attempts were made between 1960 and 1965, with the first attempt occurring on March 13, 1961 [6]. The CIA also enlisted the help of Mafia figures, such as Sam Giancana and Johnny Roselli, to organize assassination attempts against Castro [3], [5], and [7].\n\n### Potential Cuban Involvement in the Kennedy Assassination\nSome sources suggest that Castro may have become aware of the U.S. plot to assassinate him and may have recruited Oswald to retaliate against President Kennedy [13]. However, this is speculative and not supported by concrete evidence. The Warren Commission found no evidence to support this theory [1].\n\n### Cuban Government's Reaction to the Kennedy Assassination\nThe Cuban government welcomed an investigation into the Kennedy assassination and did not contemplate assassination, even against their enemies [4]. They emphasized that assassination is incompatible with their revolutionary doctrine and that they never contemplated it, even against their former ruler, Batista [4].\n\n### CIA and U.S. Government Involvement\nThe CIA and U.S. government were involved in various plots to overthrow the Castro government, including the Bay of Pigs operation [9], [10], and [12]. The CIA also had contacts with anti-Castro exile groups, such as the Cuban Revolutionary Council [9], [10], and [11]. However, the CIA's involvement in these plots does not necessarily imply a direct connection to the Kennedy assassination.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10333-10001.pdf",
+              114
+            ],
+            [
+              "157-10014-10242.pdf",
+              462
+            ],
+            [
+              "157-10014-10242.pdf",
+              463
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.87,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "Most cited claims are grounded in the retrieved texts, but the answer overstates speculation by suggesting Oswald recruitment as a potential connection; the sources support Castro-retaliation speculation and Cuban denial, not a confirmed recruited-Oswald theory."
+        }
+      },
+      {
+        "id": "partial_evidence_ruby_state_of_mind",
+        "category": "partial_evidence",
+        "question": "What do the documents indicate about Jack Ruby's mental state or psychological condition at the time of the assassination?",
+        "answer": "## Executive Summary\nThe documents do not directly describe Jack Ruby's mental state or psychological condition at the time of the assassination, but they mention his substantial ties to the Mafia and his involvement in areas such as gambling and narcotics [1]. There is no explicit information about Ruby's mental health, but his actions and behavior are discussed in the context of his connections to organized crime. The records do not provide a comprehensive overview of Ruby's psychological condition, but they highlight his significant involvement with the Mafia.\n\n## Detailed Findings\n### Jack Ruby's Mafia Connections\nThe documents indicate that Jack Ruby had substantial ties to the Mafia, particularly in areas such as gambling and narcotics [1]. This connection is mentioned in the context of Jim Braden, another individual who was allegedly involved with the Mafia. The records suggest that Ruby's involvement with the Mafia was significant, but they do not provide detailed information about his mental state or psychological condition.\n\n### Lack of Direct Information\nThe records do not directly describe Jack Ruby's mental state or psychological condition at the time of the assassination. While they mention his connections to the Mafia and his involvement in various activities, they do not provide explicit information about his mental health. The documents primarily focus on the connections between Ruby, Braden, and other individuals, rather than their psychological conditions [1].\n\n### Indirect References\nThere are indirect references to Ruby's behavior and actions, which may be related to his mental state or psychological condition. For example, the documents mention that Ruby visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, just 24 hours before the President's assassination [1]. However, these references are not explicitly linked to his mental health, and the records do not provide a clear understanding of his psychological condition at the time.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ],
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.24,
+          "completeness": 0.1,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is mostly unsupported by the retrieved source because it invents Mafia/narcotics claims about Ruby and omits the relevant grounded facts that the previews give no direct evidence on his mental state, while only the N.L. Hunt Oil visit is supported."
+        }
+      },
+      {
+        "id": "partial_evidence_cia_oswald_connection",
+        "category": "partial_evidence",
+        "question": "Did Lee Harvey Oswald have a connection to the CIA?",
+        "answer": "## Executive Summary\nLee Harvey Oswald was never associated or connected with the CIA, directly or indirectly, in any way whatsoever [1]. The CIA had a file on Oswald, but it was opened due to his defection to the Soviet Union, and the Agency received copies of Oswald's manuscript from the FBI and the Warren Commission after the assassination [1]. There is no evidence to suggest that Oswald was a CIA informant or that he was debriefed by the CIA in Moscow or upon his return from the USSR [1].\n\n## Detailed Findings\n### CIA File on Oswald\nThe CIA had a 201 file on Lee Harvey Oswald, which was opened in December 1960 due to his defection to the Soviet Union [2]. The file served as a depository for records gathered and created during the CIA's investigation of the assassination [2]. The CIA's file on Oswald grew to 58 volumes, containing all information in possession of the Agency on Oswald or his family [6].\n\n### CIA Investigation and Surveillance\nThe CIA conducted an investigation into Oswald's activities, including his trip to Mexico City [3]. The Agency's photo-surveillance operations in Mexico City may have obtained a photograph of Oswald entering the Soviet or Cuban Consulates, but the CIA denies that such a photograph exists [4]. The CIA also intercepted conversations related to Oswald, including a call from someone identifying himself as \"Lee Oswald\" to the Soviet Consulate [5].\n\n### FBI-CIA Liaison and Cooperation\nThe FBI and CIA cooperated in their investigations, with the FBI providing the CIA with information about Oswald [7]. The CIA also received documents from the FBI, including a report on Oswald's intention to attend Albert Schweitzer College in Switzerland [7]. The FBI and CIA worked together to investigate the assassination, with the FBI providing the CIA with information and the CIA providing the FBI with intelligence [8].\n\n### Records and Documents\nThe CIA and FBI have released thousands of documents related to the assassination, including the CIA's Oswald file and the FBI's core and related assassination files [8]. The documents include information about Oswald's defection to the Soviet Union, his activities in Mexico City, and the CIA's investigation into his activities [9]. The CIA has also declassified many of its documents related to the assassination, with minimal deletions [9].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "104-10332-10016.pdf",
+              10
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.6,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "The answer is partly grounded by sources showing no CIA connection and no Oswald debriefing, but it overstates certainty by saying he was connected \"in any way whatsoever\" and omits the memo’s nuanced ambiguity about possible Office of Operations contact."
+        }
+      },
+      {
+        "id": "partial_evidence_organized_crime_role",
+        "category": "partial_evidence",
+        "question": "What role, if any, did organized crime play in the Kennedy assassination according to the retrieved documents?",
+        "answer": "## Executive Summary\nThe retrieved documents suggest that organized crime may have played a role in the Kennedy assassination, with several sources mentioning the involvement of mafia figures such as Johnny Rosselli and Sam Giancana [1], [2]. However, the exact nature of their involvement is not clearly stated, and some sources indicate that the FBI and CIA may have had knowledge of these individuals' activities but did not fully investigate [3], [4]. The documents also reveal that the Senate Intelligence Committee was concerned about the potential links between organized crime and the CIA's plots to assassinate Fidel Castro [1], [2].\n\n## Detailed Findings\n### Organized Crime Figures\nThe documents mention several organized crime figures, including Johnny Rosselli and Sam Giancana, who were allegedly involved in the CIA's plots to assassinate Fidel Castro [1], [2]. Rosselli, in particular, is mentioned as having been recruited by the CIA in 1960 to participate in the plot [1]. Giancana, on the other hand, was murdered in 1975, and his death was attributed to an internal gangland struggle [1], [2].\n### CIA Plots and Organized Crime\nThe documents suggest that the CIA's plots to assassinate Castro may have been linked to organized crime, with Rosselli and Giancana potentially involved [1], [2]. The CIA's use of organized crime figures in its plots is mentioned as being ironic, given Robert Kennedy's efforts to disable organized crime [1].\n### FBI and CIA Knowledge\nThe documents indicate that the FBI and CIA may have had knowledge of the organized crime figures' activities but did not fully investigate [3], [4]. The FBI, in particular, is mentioned as having been aware of Rosselli's CIA activities as early as 1961 [3].\n### Senate Intelligence Committee Concerns\nThe documents reveal that the Senate Intelligence Committee was concerned about the potential links between organized crime and the CIA's plots to assassinate Castro [1], [2]. The committee's concerns were heightened by the deaths of Rosselli and Giancana, who were potential witnesses [1], [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.3333333333333333,
+          "k": 20,
+          "hits": [
+            [
+              "104-10333-10001.pdf",
+              107
+            ]
+          ],
+          "missed": [
+            [
+              "157-10014-10242.pdf",
+              44
+            ],
+            [
+              "157-10014-10242.pdf",
+              462
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.74,
+          "completeness": 0.58,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "The answer is mostly grounded by sources on Rosselli, Giancana, Trafficante, and CIA-Castro plots, but it omits the Marcello/HSCA framing and the \"old Mafia friend\" detail while adding no unsupported substantive claim."
+        }
+      },
+      {
+        "id": "analytical_oswald_mexico_city_sep_oct_63",
+        "category": "analytical",
+        "question": "Summarise every mention of Oswald's time in Mexico City, September–October 1963.",
+        "answer": "## Executive Summary\nLee Harvey Oswald's time in Mexico City, September-October 1963, is documented in various CIA-controlled documents, which reveal his interactions with the Soviet and Cuban Embassies [1]. Oswald's activities during this period include attempts to obtain visas and contacts with embassy officials [4]. However, the records also raise questions about the possibility of an Oswald imposter and the extent of his interactions with the embassies [3].\n\n## Detailed Findings\n### Introduction to Oswald's Mexico City Trip\nOswald's trip to Mexico City was investigated by the House Select Committee on Assassinations, which sought to answer questions about his activities and contacts with the Soviet and Cuban Embassies [1]. The Committee's investigation involved reviewing CIA files and conducting interviews with personnel who may have had knowledge of Oswald's activities [1].\n\n### Contacts with the Soviet Embassy\nOswald contacted the Soviet Embassy on October 1, 1963, identifying himself as Lee Harvey Oswald [1]. He also made phone calls to the Soviet Embassy on September 27 and 28, 1963, which were intercepted by the CIA [4]. Additionally, there is evidence of a phone call from Silvia Duran, a secretary at the Cuban Consulate, to the Soviet Consulate on September 28, 1963, where she mentioned an American citizen who had previously visited the Soviet Consulate [8].\n\n### Contacts with the Cuban Embassy\nOswald visited the Cuban Consulate on multiple occasions, including September 27 and 28, 1963 [6]. He applied for a transit visa to travel to the Soviet Union, but was rebuffed by the Cubans, who regarded his behavior as \"strange\" [5]. The CIA had information about Oswald's contacts with the Cuban Embassy, including a report that he had been seeking a transit visa [5].\n\n### Surveillance and Photographs\nThe CIA conducted surveillance operations in Mexico City, including photographic surveillance of the Soviet and Cuban Embassies [2]. However, there is no conclusive evidence that Oswald was photographed during these operations [7]. The CIA did possess transcripts of intercepted telephone conversations involving Oswald, which were reviewed by the Warren Commission [4].\n\n### Investigation and Aftermath\nThe House Select Committee on Assassinations investigated Oswald's activities in Mexico City, including his contacts with the Soviet and Cuban Embassies [1]. The Committee's investigation raised questions about the possibility of an Oswald imposter and the extent of his interactions with the embassies [3]. The CIA's response to the Committee's inquiries included providing information about Oswald's contacts with the Soviet Embassy and the Cuban Consulate [5].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.83,
+          "completeness": 0.75,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved CIA/HSCA materials, but the answer overstates uncertainty as though there were evidence that Oswald may have been an imposter and that a photographed visitor was not conclusively Oswald, while omitting the reference's specific departure date and the Cuban Consulate's refusal pending Soviet approval."
+        }
+      },
+      {
+        "id": "analytical_cross_ref_cia_mexico_cuban_embassy",
+        "category": "analytical",
+        "question": "Which documents reference both the CIA Mexico station and the Cuban embassy?",
+        "answer": "## Executive Summary\nThe CIA Mexico station and the Cuban embassy are referenced together in several documents, including [1], [2], [3], [5], [6], [8], [9], and [10], which provide information on the station's surveillance and interactions with the embassy. These documents mention the station's monitoring of the embassy, including phone calls and visits from Lee Harvey Oswald, and the station's interest in recruiting certain individuals associated with the embassy. However, the documents do not provide a comprehensive overview of the station's activities related to the Cuban embassy.\n\n## Detailed Findings\n### CIA Mexico Station and Cuban Embassy Interactions\nThe CIA Mexico station had a significant interest in the Cuban embassy, as evidenced by documents [1] and [2], which mention the station's monitoring of the embassy and its interactions with individuals associated with the embassy. Document [3] provides information on the station's surveillance of the embassy, including the use of cameras and intercepts of phone calls.\n### Surveillance and Monitoring\nDocuments [3], [4], and [6] provide details on the station's surveillance and monitoring activities, including the use of cameras and intercepts of phone calls. These documents mention the station's interest in monitoring the activities of individuals associated with the Cuban embassy, including Lee Harvey Oswald.\n### Lee Harvey Oswald and the Cuban Embassy\nDocuments [3], [5], and [9] mention Lee Harvey Oswald's visits to the Cuban embassy and his interactions with individuals associated with the embassy. These documents provide information on the station's monitoring of Oswald's activities and the station's interest in recruiting certain individuals associated with the embassy.\n### Key Individuals and Contacts\nDocuments [1], [2], and [7] mention key individuals associated with the Cuban embassy, including Silvia Duran and Ernesto Mitrani. These documents provide information on the station's interactions with these individuals and the station's interest in recruiting them.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.62,
+          "completeness": 0.35,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "The sources support that Mexico City Station monitored the Cuban Embassy/Consulate and Oswald-related calls, but the answer relies on unspecific placeholders ([1], [2], etc.) and overstates certainty about recruiting/contacts without naming document control numbers or clearly tying each claim to a specific cited document."
+        }
+      },
+      {
+        "id": "analytical_hsca_ruby_witness_timeline",
+        "category": "analytical",
+        "question": "Reconstruct a timeline of HSCA witness interviews concerning Jack Ruby.",
+        "answer": "## Executive Summary\nThe retrieved documents provide some information about Jack Ruby, but a comprehensive timeline of HSCA witness interviews concerning him is not available. The documents mention Jack Ruby in connection with Jim Braden, a possible link to the Kennedy assassination, and his involvement with the Mafia [1]. However, the documents do not provide a detailed timeline of HSCA witness interviews specifically about Jack Ruby.\n\n## Detailed Findings\n### Jack Ruby and Jim Braden\nThe documents reveal a possible link between Jack Ruby and Jim Braden, who was arrested on November 22, 1963, and claimed to be in the oil business in Beverly Hills, California [1]. Braden was found to have a gasoline credit card instead of a driver's license, which raised suspicions [1]. The documents also mention that Ruby and Braden visited the Dallas offices of the H.L. Hunt Oil Company on the afternoon of November 21, 1963, just 24 hours before the Kennedy assassination [1].\n\n### Mafia Involvement\nThe documents suggest that Jack Ruby was involved with the Mafia, particularly in the areas of gambling and narcotics [1]. However, the documents do not provide further information about Ruby's specific activities or connections within the Mafia.\n\n### HSCA Witness Interviews\nThe documents do not contain a comprehensive timeline of HSCA witness interviews concerning Jack Ruby. However, they do mention that Gary Edward Taylor was interviewed, and he stated that he did not recognize a manuscript shown to him by Edward Epstein as the one given to him by Lee Harvey Oswald [2]. The documents also mention that Thomas Hunt, a cousin of Nelson Bunker Hunt and W. Herbert Hunt, was involved in a case related to the H.L. Hunt Oil Company, but it is not clear if this is connected to Jack Ruby [3].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.18,
+          "completeness": 0.08,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 2,
+          "rationale": "The answer mostly avoids unsupported specifics, but it invents a lack of available interview timeline instead of reconstructing one, and it includes unrelated claims about Gary Edward Taylor and Thomas Hunt that are not shown to be Jack Ruby interview chronology."
+        }
+      },
+      {
+        "id": "analytical_fbi_vs_wc_rifle_chain_of_custody",
+        "category": "analytical",
+        "question": "Where do FBI and Warren Commission accounts of the rifle's chain of custody diverge?",
+        "answer": "## Executive Summary\nThe retrieved documents do not provide a direct comparison of the FBI and Warren Commission accounts of the rifle's chain of custody. However, they mention the rifle as a key piece of evidence in the Warren Commission's investigation, with Patrolman Gerald L. Hill testifying that he found three spent bullet hulls on the floor beneath the window from which the fatal shots allegedly were fired [1]. The documents also discuss the controversy surrounding the discovery of evidence, including the \"single bullet\" found on a stretcher at Parkland Hospital [1].\n\n## Detailed Findings\n### Rifle Evidence\nThe Warren Commission relied heavily on the testimony of witnesses who claimed to have seen a gunman in the window of the Texas School Book Depository building, including Howard Brennan, who said he saw a gunman in the \"Oswald window\" firing the last of the shots [1]. However, the documents do not provide a detailed account of the FBI's investigation into the rifle's chain of custody. The CIA's collection of documents related to the assassination includes records from the FBI, but the documents do not specify what these records contain [2].\n\n### Investigation Records\nThe documents mention that the CIA has a large collection of records related to the assassination, including documents from the FBI, but they do not provide details on the FBI's investigation into the rifle [2]. The Warren Commission's investigation and the House Select Committee on Assassinations' investigation are also mentioned, but the documents do not provide a direct comparison of their findings on the rifle's chain of custody [1]. The CIA's records include documents from the Warren Commission and the House Select Committee on Assassinations, but the documents do not specify what these records contain [3]. \n\n### Chain of Custody\nThe documents do not directly address the chain of custody of the rifle, but they mention the controversy surrounding the discovery of evidence, including the \"single bullet\" found on a stretcher at Parkland Hospital [1]. The CIA's collection of documents related to the assassination includes records from the FBI, but the documents do not specify what these records contain [2]. The documents also mention that the CIA has released many documents related to the assassination, but they do not provide details on the FBI's investigation into the rifle [4].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.22,
+          "completeness": 0.1,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 3,
+          "rationale": "The answer is mostly nonresponsive, but its broad statements about Warren Commission/FBI documents and assassination records are grounded in the retrieved CIA records; however, it never provides the required side-by-side custody divergence for rifle C2766, named custodians, or timing/transfer details."
+        }
+      },
+      {
+        "id": "analytical_oswald_soviet_embassy_contacts",
+        "category": "analytical",
+        "question": "What contacts did Oswald have with Soviet officials between his 1959 defection and the assassination? Present as a timeline.",
+        "answer": "## Executive Summary\nLee Harvey Oswald had contacts with Soviet officials between his 1959 defection and the assassination, including a meeting with Valeriy Kostikov at the Soviet Embassy in Mexico City in September 1963 [2]. The records also mention Oswald's application to the Soviet Embassy in Mexico City to re-enter the USSR [1]. However, the documents do not provide a comprehensive timeline of all his contacts with Soviet officials during this period.\n\n## Detailed Findings\n### Defection and Initial Contact\nOswald defected to the Soviet Union in October 1959 [1]. The records do not directly describe his initial contact with Soviet officials, but they mention that he was of no operational interest to the KGB and should be returned to the United States [1].\n\n### Contact with Soviet Embassy in Mexico City\nIn September 1963, Oswald visited the Soviet Embassy in Mexico City, where he met with Valeriy Kostikov, a member of the Consular Section [2]. The purpose of this meeting was to learn if the Soviet Embassy had received a reply from Washington concerning his request [3]. Oswald also applied to the Soviet Embassy in Mexico City to re-enter the USSR [1].\n\n### Timeline of Contacts\nThe records do not provide a complete timeline of Oswald's contacts with Soviet officials. However, the following events are mentioned:\n* October 1959: Oswald defects to the Soviet Union [1]\n* September 1963: Oswald meets with Valeriy Kostikov at the Soviet Embassy in Mexico City [2]\n* September 1963: Oswald applies to the Soviet Embassy in Mexico City to re-enter the USSR [1]\n\n### Gaps in the Records\nThe records do not directly describe Oswald's contacts with Soviet officials between his defection in 1959 and the assassination in 1963, except for the meeting with Kostikov in September 1963 [2]. The documents also do not mention any other significant interactions between Oswald and Soviet officials during this period.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.74,
+          "completeness": 0.6,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "Most cited claims are supported, but the answer overstates that Oswald met Valeriy Kostikov in September 1963 and presents the record as more definite than the sources warrant; it also omits a fuller timeline and key 1962 return context."
+        }
+      },
+      {
+        "id": "analytical_ruby_organised_crime_synthesis",
+        "category": "analytical",
+        "question": "Synthesise the documentary evidence in the archive about Jack Ruby's alleged ties to organised crime.",
+        "answer": "## Executive Summary\nThe documentary evidence in the archive suggests that Jack Ruby had ties to organized crime, particularly in the areas of gambling and narcotics [1]. The records also indicate that Ruby's involvement with the Mafia was not thoroughly investigated by the Warren Commission [1]. However, the documents do not provide a comprehensive overview of Ruby's alleged ties to organized crime, and some information is indirect or tangential [3].\n\n## Detailed Findings\n### Jack Ruby's Mafia Involvement\nThe documents suggest that Jack Ruby was involved in the syndicate areas of gambling and narcotics [1]. Ruby's ties to the Mafia were not fully explored by the Warren Commission, which has led to criticism of the investigation [1]. According to the records, Ruby was particularly involved in the Dallas area, where he operated a nightclub [4].\n\n### Connection to Jim Braden\nThe documents also reveal a possible connection between Jack Ruby and Jim Braden, another figure with alleged ties to organized crime [1]. Both Ruby and Braden visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, just 24 hours before the assassination of President Kennedy [1]. This link raises questions about a potential relationship between the two men [1].\n\n### FBI Investigation\nThe FBI's investigation into Ruby's activities and connections was not thorough, according to the documents [2]. The FBI withheld hundreds of documents related to the Kennedy assassination from the Warren Commission, including information about Ruby's involvement with organized crime [2]. The records show that FBI Director J. Edgar Hoover was critical of the Dallas police chief and President Lyndon Johnson, and that he brought pressure on his subordinates to rush out a preliminary report on the FBI investigation [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.58,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is partly grounded in the retrieved text on Ruby's alleged Mafia involvement and Braden, but it overstates suspicion as settled fact and adds unsupported specifics like narcotics, nightclub operation, and a thorough FBI withholding narrative."
+        }
+      },
+      {
+        "id": "analytical_new_orleans_ferrie_shaw_banister",
+        "category": "analytical",
+        "question": "What do the files say about the New Orleans associations between David Ferrie, Clay Shaw, and Guy Banister?",
+        "answer": "## Executive Summary\nThe retrieved documents provide information on the associations between David Ferrie, Clay Shaw, and Guy Banister in New Orleans, although the details are scattered across multiple sources. According to the documents, David Ferrie was a private investigator employed by Carlos Marcello, a top Mafia kingpin, and worked out of the same building as Jim Braden, another figure of interest, in the months leading up to the assassination [1]. The documents also mention Clay Shaw's arrest and trial, with Perry Raymond Russo testifying that he heard Shaw, Ferrie, and Lee Harvey Oswald discussing the assassination [4].\n\n## Detailed Findings\n### David Ferrie and Clay Shaw\nThe documents suggest a connection between David Ferrie and Clay Shaw, with Russo testifying that he heard them discussing the assassination [4]. Additionally, Ferrie was found dead in his apartment six days after District Attorney Garrison's charges against him were made public [1]. Shaw was arrested and charged with conspiring to murder President Kennedy, with his trial attracting significant attention [5].\n\n### Guy Banister\nThe documents mention Guy Banister as a former FBI agent who was involved in various activities in New Orleans, including an incident at the Absinthe Bar in 1957 [3]. However, there is no direct mention of Banister's association with Ferrie or Shaw in the provided documents.\n\n### New Orleans Associations\nThe documents imply that New Orleans was a hub of activity for various individuals and organizations, including the Mafia, the CIA, and anti-Castro groups [1], [4], [6]. However, the exact nature and extent of the associations between Ferrie, Shaw, and Banister are not fully elaborated in the provided documents. It is clear that Ferrie and Braden worked out of the same building in New Orleans, and that Shaw was a prominent figure in the city, but the details of their interactions and relationships are not fully explored [1], [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.55,
+          "completeness": 0.35,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is only partly grounded: Braden-Ferrie proximity is supported, but claims that Ferrie was employed by Carlos Marcello, that Shaw/Ferrie/Oswald were heard discussing the assassination, and that Banister had no direct association with Ferrie or Shaw are not supported by the retrieved pages."
+        }
+      },
+      {
+        "id": "analytical_cia_prior_knowledge_of_oswald",
+        "category": "analytical",
+        "question": "What did the CIA know about Lee Harvey Oswald before 22 November 1963?",
+        "answer": "## Executive Summary\nThe CIA had some knowledge about Lee Harvey Oswald before November 22, 1963, including his defection to the Soviet Union and his attempts to obtain a visa from the Cuban Embassy in Mexico City [1]. The CIA also had a 201 file on Oswald, which was opened in December 1960, and they received reports of his contacts with the Soviet and Cuban diplomatic missions in Mexico City [2]. However, the extent of the CIA's knowledge about Oswald's activities and intentions before the assassination is not fully clear from the available documents.\n\n## Detailed Findings\n### CIA Files on Oswald\nThe CIA had a 201 file on Lee Harvey Oswald, which was opened in December 1960, and they received reports of his contacts with the Soviet and Cuban diplomatic missions in Mexico City [2]. The CIA also had a general file on Oswald, which was opened as a result of his defection to the Soviet Union, and this file grew to 58 volumes after the assassination [8].\n### Oswald's Contacts with Soviet and Cuban Diplomatic Missions\nOswald had contacts with the Soviet and Cuban diplomatic missions in Mexico City, including a meeting with Valeriy Kostikov, a member of the KGB, at the Soviet Embassy [7]. The CIA was informed of these contacts, including a phone call from Oswald to the Soviet Embassy on October 1, 1963, in which he identified himself as \"Lee Oswald\" [4].\n### CIA Surveillance and Investigation\nThe CIA conducted surveillance of the Soviet and Cuban diplomatic missions in Mexico City, including photo-surveillance and electronic surveillance, and they obtained information about Oswald's activities in the city [3]. However, the CIA did not interview Oswald after his return from the Soviet Union, and there is no indication that they had any direct contact with him [5].\n### CIA Knowledge of Oswald's Plans and Intentions\nThe CIA did not have any specific knowledge of Oswald's plans or intentions to assassinate President Kennedy before November 22, 1963 [1]. However, they did receive reports of Oswald's attempts to obtain a visa from the Cuban Embassy in Mexico City, and they were aware of his interests in traveling to Cuba [6].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.66,
+          "completeness": 0.48,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved sources, but the answer overstates specifics such as the 201 file opening date (December 1960 is supported) and adds unsupported precision about Kostikov and direct CIA knowledge, while omitting the requested document-level enumeration and dates."
+        }
+      }
+    ],
+    "v2": [
+      {
+        "id": "analytical_cia_surveillance_oswald",
+        "category": "analytical",
+        "question": "What did the HSCA conclude about the CIA's photographic and electronic surveillance of Oswald in Mexico City, and how forthcoming was the CIA with materials?",
+        "answer": "## Executive Summary\nThe HSCA concluded that the CIA's photographic and electronic surveillance of Oswald in Mexico City may have obtained a photograph of him, but the Agency's withholding of certain production materials prevented the Committee from determining this conclusively [1]. The CIA did provide some materials, including transcripts of conversations between Oswald and Soviet Embassy officials [5], but the Committee found contradictions in the Agency's written records [3]. The CIA's surveillance operations in Mexico City were aimed at the Cuban and Soviet diplomatic compounds, using photographic and electronic surveillance [6].\n\n## Detailed Findings\n### CIA Surveillance Operations\nThe CIA's Mexico City Station conducted photographic surveillance operations aimed at the Cuban and Soviet diplomatic compounds in September and October 1963 [6]. The operation used impulse cameras that would automatically trigger to photograph anyone entering the Embassy [3]. The CIA also conducted electronic surveillance of telephones at the Soviet and Cuban diplomatic compounds [6].\n\n### HSCA Investigation\nThe HSCA investigated the CIA's surveillance operations and requested production materials from the Agency [1]. However, the CIA withheld certain materials, including production from the LILYRIC base and the pulse camera that covered the Cuban Consulate entrance [1]. The Committee found that the CIA's written records contained contradictions, but some CIA personnel claimed to have seen photographs of Oswald [3].\n\n### CIA Materials Provided\nThe CIA provided some materials to the HSCA, including transcripts of conversations between Oswald and Soviet Embassy officials [5]. The transcripts showed that Oswald had contacted the Soviet Embassy in Mexico City and had discussed his travels and plans [5]. The CIA also provided information on its surveillance operations, including the use of photographic and electronic surveillance [6].\n\n### Gaps in Information\nThe records do not directly describe the CIA's handling of Oswald's file prior to the assassination; however, they mention that the CIA had a file on Oswald and had monitored his activities [7]. The CIA's surveillance operations in Mexico City were not fully disclosed to the HSCA, and the Agency's withholding of certain materials prevented the Committee from determining whether a photograph of Oswald was obtained [1].\n\n### Timeline\n| Date | Event | Source |\n| --- | --- | --- |\n| September 1963 | CIA conducts photographic surveillance of Cuban and Soviet diplomatic compounds [6] | [6] |\n| September 27-28, 1963 | CIA intercepts conversations between Oswald and Soviet Embassy officials [5] | [5] |\n| October 1, 1963 | Oswald contacts Soviet Embassy in Mexico City [2] | [2] |\n| October 9, 1963 | CIA reports Oswald's contact with Soviet Embassy in Mexico City [4] | [4] |\n| 1967-1969 | Daniel Stanley Watson serves as Deputy Chief of Mexico City Station [8] | [8] |\n| August 1978 | James Wilcott and Philip Agee testify at Cuban government's Tribunal [9] | [9] |\n| December 1963 | Griselle Rubio claims Ruby visited Cuba in 1962 or 1963 [9] | [9] |\n| Unknown | CIA withholds certain production materials from HSCA [1] | [1] |",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.3333333333333333,
+          "k": 20,
+          "hits": [
+            [
+              "180-10110-10484.pdf",
+              119
+            ]
+          ],
+          "missed": [
+            [
+              "180-10110-10484.pdf",
+              19
+            ],
+            [
+              "180-10110-10484.pdf",
+              35
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.88,
+          "completeness": 0.9,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The main conclusions are grounded in sources [1], [6], [7], [9], and [14], but the answer overstates the CIA's withholding as the reason the Committee could not determine whether a photograph was obtained, and some specific material details are not directly supported by the retrieved text."
+        }
+      },
+      {
+        "id": "analytical_warren_ruby_hunts",
+        "category": "analytical",
+        "question": "What links do the retrieved documents draw between Jack Ruby's circle, the Hunt family in Dallas, and the events surrounding the assassination?",
+        "answer": "## Executive Summary\nThe retrieved documents suggest a connection between Jack Ruby's circle and the Hunt family in Dallas, with Jim Braden, also known as Eugene Brading, being a possible link [1]. The documents also mention that Jim Braden visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, along with Jack Ruby [1]. However, the records do not directly describe the nature of their relationship or the events surrounding the assassination.\n\n## Detailed Findings\n### Jim Braden and the Hunt Family\nJim Braden, also known as Eugene Brading, was a possible link between Jack Ruby's circle and the Hunt family in Dallas [1]. According to the documents, Braden received permission from the U.S. Board of Parole in Los Angeles to make a trip to Dallas, Texas on November 18, 1963, four days before the assassination [1]. On November 21, 1963, Braden checked in with the U.S. Parole Office in Dallas and advised that he planned to see Lamar Hunt and other oil speculators while in Dallas [1].\n\n### Jack Ruby's Connection to the Hunt Family\nThe documents mention that Jack Ruby visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, along with Jim Braden [1]. However, the records do not provide further information on the nature of their relationship or the purpose of their visit [1]. Additionally, the documents note that Lamar Hunt, the son of H.L. Hunt, was a right-wing oil billionaire [1].\n\n### CIA Involvement and the Hunt Family\nThe documents also mention that the CIA had enlisted Mafia mobsters to kill Fidel Castro, and that Robert Kennedy was briefed on this plot [2]. Furthermore, the records suggest that the CIA's involvement in the plots to assassinate Castro was not divulged to the Warren Commission [2]. However, the documents do not directly link the Hunt family to the CIA's plots or the assassination [2]. \n\n### Gaps in Information\nThe records do not provide direct evidence of the Hunt family's involvement in the events surrounding the assassination [1][2]. However, they do suggest that Jim Braden and Jack Ruby were connected to the Hunt family through their visit to the N.L. Hunt Oil Company [1]. The documents also highlight the CIA's involvement in plots to assassinate Castro, but do not directly link this to the Hunt family or the assassination [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "157-10014-10242.pdf",
+              44
+            ],
+            [
+              "157-10014-10242.pdf",
+              384
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.42,
+          "completeness": 0.5,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Source [1] supports only that Braden and Ruby both visited the N.L. Hunt Oil offices on Nov. 21, but the answer invents Jack Ruby accompanying Braden, Braden’s parole-office trip details, Lamar Hunt/oil-speculator plans, and a CIA segment not grounded in the retrieved texts."
+        }
+      },
+      {
+        "id": "analytical_kgb_oswald_conclusion",
+        "category": "analytical",
+        "question": "What did U.S. investigators ultimately conclude about whether Lee Harvey Oswald was a Soviet (KGB) agent?",
+        "answer": "## Executive Summary\nU.S. investigators ultimately concluded that Lee Harvey Oswald was not a Soviet (KGB) agent, with Uri Nosenko, a former KGB agent, testifying that Oswald was not trusted by the KGB due to his mental instability [2]. The CIA also found no evidence of contact between Oswald and the CIA's Office of Operations [3]. However, some documents suggest that the KGB did have an interest in Oswald, with a report indicating that Soviet experts at FBI Headquarters were informed of Oswald's meeting with Vice Counsel Kostikov at the Soviet Embassy in Mexico City [1].\n\n## Detailed Findings\n### Testimony of Uri Nosenko\nUri Nosenko, a former KGB agent, testified that Lee Harvey Oswald was not a KGB agent, stating that Oswald was mentally unstable and not trusted by the KGB [2]. Nosenko also stated that he did not believe Oswald could have shot President Kennedy for a simple reason, but the reason is not specified in the documents [2].\n\n### CIA Investigation\nThe CIA investigated Oswald's activities and found no evidence of contact between Oswald and the CIA's Office of Operations [3]. The CIA also searched for records related to Oswald and the assassination, but found no evidence of a connection [3].\n\n### KGB Interest in Oswald\nA report indicates that Soviet experts at FBI Headquarters were informed of Oswald's meeting with Vice Counsel Kostikov at the Soviet Embassy in Mexico City [1]. Kostikov was a member of the KGB and believed to be with the KGB department that carried out assassinations and sabotage [1].\n\n### Oswald's Activities in Mexico City\nThe Warren Commission investigated Oswald's activities in Mexico City and concluded that Oswald spent considerable time making his travel arrangements, sightseeing, and checking again with the Soviet Embassy [4]. However, the evidence is not conclusive, and the possibility that someone impersonated Oswald in Mexico cannot be dismissed [4].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.72,
+          "completeness": 0.67,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The cited claims about Nosenko saying Oswald was not a KGB agent and CIA finding no evidence of contact are grounded in the sources, but the answer overstates a contested issue as an ultimate conclusion despite the corpus showing only a divided/uncertain intelligence assessment."
+        }
+      },
+      {
+        "id": "analytical_garrison_theory",
+        "category": "analytical",
+        "question": "How is Jim Garrison's conspiracy theory characterized in the retrieved documents, both by himself and by his critics?",
+        "answer": "## Executive Summary\nJim Garrison's conspiracy theory is characterized as a \"baseless fraud\" by his former chief investigator, William H. Gurvich [1]. Garrison himself claims that the CIA was involved in the assassination of President Kennedy, and that the next U.S. President who tries to put the brakes on the war machine will also be slain [3]. However, his critics, including Gerald Posner, describe his investigation as a \"travesty of justice\" and a \"miscarriage of justice\" [4].\n\n## Detailed Findings\n### Garrison's Claims\nGarrison contends that the CIA was involved in the assassination of President Kennedy, and that the organization tried to cast suspicion on others [3]. He also claims that Lee Harvey Oswald was part of a covert federal operation operating in New Orleans in 1963, along with Kerry Thornley, a former French Quarter waiter [3]. Additionally, Garrison alleges that David Ferrie, a former airlines pilot, conspired with anti-Castro Cubans to assassinate President Kennedy [2].\n\n### Criticisms of Garrison's Theory\nGarrison's former chief investigator, William H. Gurvich, testified that Garrison's conspiracy theory is a \"baseless fraud\" [1]. Gurvich also stated that Garrison once predicted that the assassination probe would end with the suicide of his chief defendant, Clay Shaw [1]. Gerald Posner describes Garrison's investigation as a \"travesty of justice\" and a \"miscarriage of justice\" [4]. The FBI also expresses skepticism about Garrison's claims, stating that he is an egomaniac and that his investigation was triggered by his desire for publicity [2].\n\n### Evaluation of Garrison's Investigation\nThe FBI notes that Garrison's investigation was based on information furnished by Jack S. Martin and David Lewis, who appear to be mental cases [2]. The FBI also states that they found no evidence to show that David Ferrie and Lee Harvey Oswald were acquainted [2]. Additionally, the FBI expresses concern that Garrison is trying to dump his investigation on the Bureau [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.5,
+          "k": 20,
+          "hits": [
+            [
+              "104-10305-10000.pdf",
+              106
+            ],
+            [
+              "124-10273-10289_redacted.pdf",
+              640
+            ]
+          ],
+          "missed": [
+            [
+              "104-10305-10000.pdf",
+              114
+            ],
+            [
+              "104-10337-10001.pdf",
+              195
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.7,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved documents, but the answer adds unsupported specifics like Garrison's Oswald/Kerry Thornley/covert federal operation allegation and Gerald Posner citations, while also overstating critics' characterization beyond the sources."
+        }
+      },
+      {
+        "id": "analytical_oswald_cuba_connections",
+        "category": "analytical",
+        "question": "What connections between Oswald and Cuban-related activities do the retrieved documents establish?",
+        "answer": "## Executive Summary\nThe retrieved documents establish connections between Lee Harvey Oswald and Cuban-related activities, including his attempts to obtain a visa to travel to Cuba and his contacts with the Cuban Consulate in Mexico City [1][4]. Oswald's interactions with Cuban officials and his interest in traveling to Cuba are documented in various sources, including reports from the Cuban Consulate and interviews with individuals who met Oswald in Mexico City [1][7]. The documents also mention Oswald's membership in the Fair Play for Cuba Committee and his possession of a National Membership card [5].\n\n## Detailed Findings\n### Oswald's Visa Application and Contacts with the Cuban Consulate\nOswald visited the Cuban Consulate in Mexico City on September 27, 1963, and applied for an in-transit visa to Cuba with Russia as his final destination [1]. He showed the consulate staff his Russian labor card, marriage certificate, and American Communist Party membership card as identification [1]. The consulate staff found Oswald's behavior suspicious, and he was eventually told to leave the consulate [1].\n\n### Oswald's Membership in the Fair Play for Cuba Committee\nOswald was a member of the Fair Play for Cuba Committee, and he had a National Membership card with the organization [5]. He also had a local membership card for the New Orleans chapter of the committee [5].\n\n### Connections to Cuban Officials and Individuals\nThe documents mention Oswald's interactions with various individuals, including Silvia Duran, a Cuban Consulate employee, and Oscar Contreras Lartigue, a reporter who claimed to have met Oswald in Mexico City [7][8]. However, the documents do not provide conclusive evidence of any significant connections between Oswald and Cuban officials or individuals [4].\n\n### Investigations and Reports\nThe documents include reports and investigations into Oswald's activities and connections to Cuban-related organizations [2][3]. These reports mention Oswald's travels to Mexico City and his attempts to obtain a visa to travel to Cuba [2][4]. However, the documents do not provide a comprehensive overview of Oswald's connections to Cuban-related activities, and some information is still classified or redacted [6].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10337-10001.pdf",
+              162
+            ],
+            [
+              "104-10413-10306.pdf",
+              35
+            ],
+            [
+              "157-10014-10242.pdf",
+              165
+            ],
+            [
+              "180-10106-10008.pdf",
+              1
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.92,
+          "completeness": 0.9,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 5,
+          "rationale": "The answer is well grounded in the retrieved texts for Oswald's Cuba visa visit, Fair Play for Cuba Committee membership, and contacts with the Cuban Consulate; it adds some unsupported detail about specific local card possession and individuals, but nothing rises to a substantive invented claim."
+        }
+      },
+      {
+        "id": "analytical_hsca_ruby",
+        "category": "analytical",
+        "question": "What investigative findings do the retrieved documents offer regarding the HSCA's examination of Jack Ruby?",
+        "answer": "## Executive Summary\nThe retrieved documents do not provide a comprehensive examination of the HSCA's investigation into Jack Ruby, but they do offer some insights into Ruby's connections and the potential involvement of organized crime [1]. The documents mention Ruby's ties to the Mafia and his possible links to other individuals, such as Jim Braden [1]. However, the records do not directly describe the HSCA's specific findings or conclusions regarding Ruby's role in the assassination.\n\n## Detailed Findings\n### Jack Ruby's Connections\nThe documents suggest that Jack Ruby had significant ties to the Mafia, particularly in the areas of gambling and narcotics [1]. Ruby's connections to organized crime are highlighted, and his possible links to other individuals, such as Jim Braden, are also mentioned [1]. The records note that both Ruby and Braden visited the Dallas offices of the N.L. Hunt Oil Company on the day before the assassination [1].\n\n### HSCA Investigation\nWhile the documents do not provide a detailed account of the HSCA's investigation into Ruby, they do mention the committee's efforts to examine various aspects of the assassination, including the potential involvement of organized crime [2]. The records also note that the HSCA reviewed various files and documents, including those related to Ruby and other individuals connected to the assassination [2].\n\n### Organized Crime Involvement\nThe documents suggest that organized crime may have played a role in the assassination, with some individuals, such as Jim Braden, potentially being involved [1]. The records also mention the possibility of a conspiracy involving the Mafia and other groups [3]. However, the documents do not provide conclusive evidence of organized crime involvement, and the HSCA's findings on this topic are not directly addressed.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ],
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.2,
+          "completeness": 0.25,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer cites some grounded themes from the sources (Ruby-Mafia ties and a possible Braden link), but it invents HSCA-specific findings and adds unsupported claims about gambling/narcotics, Jim Braden's role, and organized-crime conclusions that are not substantiated by the retrieved texts."
+        }
+      },
+      {
+        "id": "partial_evidence_oswald_motivations",
+        "category": "partial_evidence",
+        "question": "What do the archival documents reveal about Lee Harvey Oswald's personal motivations for assassinating President Kennedy?",
+        "answer": "## Executive Summary\nThe archival documents do not directly describe Lee Harvey Oswald's personal motivations for assassinating President Kennedy, but they provide information about his actions and interactions in the months leading up to the assassination [1]. Oswald's statements and behaviors, such as his attempt to obtain a visa to travel to Cuba, suggest that he had strong feelings about the Cuban revolution and the Soviet Union [3]. However, the documents do not offer a clear explanation of his motivations for targeting President Kennedy.\n\n## Detailed Findings\n### Oswald's Interactions with the Cuban and Soviet Consulates\nOswald visited the Cuban Consulate in Mexico City, where he met with Silvia Duran, an employee of the consulate, and applied for a visa to travel to Cuba [1]. He also contacted the Soviet Embassy in Mexico City, where he spoke with Vice Counsel Kostikov, a member of the KGB [3]. These interactions suggest that Oswald was interested in traveling to Cuba and the Soviet Union, but the documents do not reveal his motivations for these actions.\n\n### Oswald's Statements and Behaviors\nOswald stated that he had previously visited the Soviet Union and had been granted permission to reside there [1]. He also told Silvia Duran that he could not wait for a visa to travel to Cuba because his Mexican visa was about to expire [5]. These statements suggest that Oswald was eager to travel to Cuba and the Soviet Union, but the documents do not provide a clear explanation of his motivations.\n\n### Investigation and Intelligence Gathering\nThe CIA and FBI gathered intelligence on Oswald's activities, including his interactions with the Cuban and Soviet consulates [4]. The CIA also conducted an investigation into Oswald's background and activities, but the documents do not reveal any information about his personal motivations for assassinating President Kennedy [2]. The investigation did reveal that Oswald had been in contact with various individuals and organizations, including the Fair Play for Cuba Committee, but the significance of these contacts is not clear [4].\n\n### Gaps in Information\nThe records do not directly describe Oswald's personal motivations for assassinating President Kennedy; however, they mention his interactions with the Cuban and Soviet consulates, as well as his statements and behaviors, in connection with the subject [1][3]. The documents also reveal that the CIA and FBI gathered intelligence on Oswald's activities, but they do not provide a clear explanation of his motivations [4].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "180-10078-10492.pdf",
+              5
+            ],
+            [
+              "180-10104-10354.pdf",
+              13
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.74,
+          "completeness": 0.52,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is mostly grounded in the retrieved Mexico City material, but it overstates inference by treating Oswald's travel/consulate contacts as suggesting strong feelings about Cuba and the USSR; it also omits the explicit biographical motive-context facts about his Marine Russian studies, Soviet defection/return, and the CIA's 'small-potatoes defector' characterization."
+        }
+      },
+      {
+        "id": "partial_evidence_oswald_acted_alone",
+        "category": "partial_evidence",
+        "question": "Do the retrieved documents support the conclusion that Oswald acted alone in the assassination?",
+        "answer": "## Executive Summary\nThe retrieved documents provide various perspectives on the JFK assassination, including the conclusion that Lee Harvey Oswald acted alone, as stated by Gerald Posner in his book \"Case Closed\" [1]. However, other documents discuss investigations and theories involving potential conspiracies, such as those related to the CIA, Mafia, and Cuban exile activities [4]. The records do not present a unified conclusion on whether Oswald acted alone or as part of a larger conspiracy.\n\n## Detailed Findings\n### Introduction to the Debate\nThe question of whether Lee Harvey Oswald acted alone in the assassination of President John F. Kennedy is a topic of ongoing debate, with various theories and investigations presented in the retrieved documents. Gerald Posner's book \"Case Closed\" concludes that Oswald acted alone [1], while other sources discuss potential conspiracies involving the CIA, Mafia, and Cuban exile activities [4].\n\n### Investigations and Theories\nSeveral documents mention investigations into the JFK assassination, including those conducted by the Warren Commission, the House Select Committee on Assassinations, and other agencies [2][3]. These investigations have led to various theories, including the possibility of a second shooter or a larger conspiracy [1]. However, the documents do not provide conclusive evidence to support or refute these theories.\n\n### CIA and FBI Involvement\nThe CIA and FBI are mentioned in several documents as having been involved in investigations and activities related to the JFK assassination [4][5]. The CIA's involvement in anti-Cuban operations and potential links to Oswald are discussed in some documents [6], while others mention the FBI's investigation into Oswald's activities and potential connections to organized crime [4].\n\n### Key Figures and Organizations\nSeveral key figures and organizations are mentioned in the documents, including Lee Harvey Oswald, the CIA, the FBI, and various Cuban exile groups [1][4][6]. These individuals and organizations are discussed in the context of the JFK assassination and potential conspiracies.\n\n### Destruction of Records\nOne document mentions the destruction of a file related to the Kennedy assassination, which was discovered by the Information Management Officer of the Office of the Inspector General in 1997 [7]. However, it is noted that copies of the documents were made available to the House Select Committee on Assassinations and are part of the sequestered collection.\n\n### Conclusion\nThe retrieved documents provide a range of perspectives and information on the JFK assassination, including the conclusion that Oswald acted alone and discussions of potential conspiracies. However, the records do not present a unified conclusion on the matter, and the debate remains ongoing.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": false,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10009.pdf",
+              68
+            ],
+            [
+              "104-10433-10209.pdf",
+              255
+            ],
+            [
+              "180-10110-10484.pdf",
+              313
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.72,
+          "completeness": 0.5,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is partly grounded by source [1] on Posner/Case Closed and source [7] on conspiracy theories, but it overstates Posner’s view as a direct conclusion that Oswald acted alone and omits the stronger contested-evidence points in the corpus (e.g., the Dictabelt/NAS rebuttal and the Mexico City impersonation uncertainty)."
+        }
+      },
+      {
+        "id": "partial_evidence_cuban_involvement",
+        "category": "partial_evidence",
+        "question": "Was the Cuban government involved in the assassination of President Kennedy?",
+        "answer": "## Executive Summary\nThe Cuban government's involvement in the assassination of President Kennedy is not directly proven in the retrieved documents, but there are indications of a potential connection. The documents mention various plots and attempts to assassinate Fidel Castro, as well as the CIA's involvement in these plots [2]. Additionally, there are reports of a possible link between the CIA's attempts to kill Castro and the assassination of President Kennedy [7].\n\n## Detailed Findings\n### Background on CIA Plots Against Castro\nThe CIA was involved in at least eight plots to assassinate Fidel Castro from 1960 to 1965, including the use of poison pills and high-powered rifles [2]. One of these plots involved the use of an underworld figure, John Roselli, who was given poison capsules to slip into Castro's food [4]. The CIA also provided Roselli with triple-strength capsules to be slipped into Castro's food several weeks after the Bay of Pigs invasion [4].\n\n### Potential Connection to Kennedy Assassination\nThere is a suggestion that the CIA's attempts to kill Castro may have been connected to the assassination of President Kennedy [7]. The documents mention that the CIA learned of a plot to assassinate President Kennedy in December 1962, and that this plot was potentially linked to the CIA's attempts to kill Castro [8]. However, the documents do not provide conclusive evidence of a direct connection between the two events.\n\n### Cuban Government's Reaction to Kennedy Assassination\nThe Cuban government has denied any involvement in the assassination of President Kennedy, and has instead suggested that the real origin of the assassination lies in anti-Castro circles [3]. The documents mention that the Cuban government has provided information and testimony to investigators, but that this information does not provide conclusive evidence of their involvement or lack thereof [1].\n\n### Investigations and Testimony\nThe documents mention various investigations and testimony related to the Kennedy assassination, including the testimony of ex-CIA employees James Wilcott and Philip Agee [6]. The documents also mention the investigation of a Cuban American who was suspected of being involved in the assassination, but the results of this investigation are not provided [5].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10333-10001.pdf",
+              114
+            ],
+            [
+              "157-10014-10242.pdf",
+              462
+            ],
+            [
+              "157-10014-10242.pdf",
+              463
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.35,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims about CIA plots against Castro and possible links to Kennedy are grounded in the sources, but the answer overstates uncertainty by implying a Cuban-government connection and omits the key ground-truth point that the documents do not establish Cuban state involvement."
+        }
+      },
+      {
+        "id": "partial_evidence_ruby_state_of_mind",
+        "category": "partial_evidence",
+        "question": "What do the documents indicate about Jack Ruby's mental state or psychological condition at the time of the assassination?",
+        "answer": "## Executive Summary\nThe documents do not provide a direct description of Jack Ruby's mental state or psychological condition at the time of the assassination. However, they mention his involvement with the Mafia and his possible connection to Jim Braden, another figure of interest in the assassination investigation [1]. The documents also discuss the inadequate investigative work by the Warren Commission, which may have overlooked Ruby's Mafia involvement [1].\n\n## Detailed Findings\n### Jack Ruby's Mafia Involvement\nThe documents suggest that Jack Ruby had substantial ties to the Mafia, particularly in the areas of gambling and narcotics [1]. This involvement may have played a role in the assassination, but the documents do not explicitly state Ruby's mental state or psychological condition at the time.\n\n### Investigation and Connections\nThe Warren Commission's investigation has been criticized for being inadequate, and it appears that they may have overlooked Ruby's Mafia involvement [1]. The documents also mention Jim Braden, who was picked up by the police at the scene of the assassination and later released [6][7]. Braden's true identity and his connection to Ruby are still unclear, but the documents suggest that they may have been involved in the same Mafia circles [1].\n\n### Psychological Condition\nWhile the documents do not provide a direct description of Ruby's mental state, they do mention that he was \"highly emotional\" and had a history of violence [2]. However, this information is not specific to the time of the assassination, and it is unclear how it may have affected his actions on that day. The documents also discuss Richard Case Nagell, who claimed to have been involved in the assassination and had a history of mental health issues [2][3][4][5]. However, Nagell's story is not directly related to Ruby's mental state or psychological condition.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": false,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "135-10001-10288.pdf",
+              18
+            ],
+            [
+              "157-10014-10242.pdf",
+              441
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.28,
+          "completeness": 0.2,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer correctly says the sources do not directly describe Ruby's mental state, but it adds unsupported claims about Ruby's Mafia ties, Braden connections, and Ruby being 'highly emotional' or violent, none of which appear in the retrieved previews."
+        }
+      },
+      {
+        "id": "partial_evidence_cia_oswald_connection",
+        "category": "partial_evidence",
+        "question": "Did Lee Harvey Oswald have a connection to the CIA?",
+        "answer": "## Executive Summary\nLee Harvey Oswald was never associated or connected with the CIA, directly or indirectly, in any way whatsoever [1]. The CIA had a 201 file on Oswald, which was opened in December 1960 due to his defection to the Soviet Union [2]. The CIA received copies of Oswald's manuscript from the FBI and the Warren Commission after the assassination [1].\n\n## Detailed Findings\n### CIA Connection\nThe CIA had no connection with Lee Harvey Oswald, and he was not an informant or a source for the agency [1]. The CIA did have a file on Oswald, but it was opened due to his defection to the Soviet Union, and it served as a repository for records gathered during the CIA's investigation of the assassination [2].\n\n### CIA Investigation\nThe CIA investigation into Oswald's activities reflected a Soviet orientation, with exhaustive studies of his time in the Soviet Union [5]. However, there is no corresponding CIA analysis of Oswald's contacts with pro and anti-Castro groups in the US [5]. The CIA did conduct interviews with some tourists who visited the Soviet Union during the period 1959-1963, but there was no standard policy to interview all defectors [4].\n\n### Mexico City Trip\nOswald's trip to Mexico City in September and October 1963 was investigated by the House Select Committee on Assassinations [3]. The committee found that someone who identified himself as Lee Harvey Oswald called the Soviet Consulate on October 1, 1963 [8]. The CIA's photo-surveillance operations in Mexico City may have obtained a photograph of Oswald entering the Soviet or Cuban Consulate, but the CIA denies that such a photograph exists [11].\n\n### FBI-CIA Liaison\nThe FBI and CIA did have some liaison concerning Oswald, including information about his intention to attend Albert Schweitzer College in Switzerland [9]. The CIA also received reports from the FBI about Oswald's activities, including his contact with the Soviet Embassy in Mexico City [10].\n\n### Documents and Records\nThe CIA had a number of documents and records related to Oswald, including a 201 file and a \"Segregated Collection\" of files related to the assassination [2]. The CIA also had a number of other records, including reports and memoranda, that were related to Oswald's activities [6]. However, some of these records may have been withheld or redacted, and the CIA has acknowledged that some information may still be classified [7].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10332-10014.pdf",
+              56
+            ],
+            [
+              "104-10332-10016.pdf",
+              10
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.72,
+          "completeness": 0.4,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 5,
+          "rationale": "The citations mostly support the absence of a direct CIA-Oswald connection and the existence of a 201 file, but the answer overstates certainty ('in any way whatsoever') despite source language showing ambiguity and no evidence of OO contact; it also omits the 1998 memo's uncertainty and the Scelso 'small-potatoes defector' point."
+        }
+      },
+      {
+        "id": "partial_evidence_organized_crime_role",
+        "category": "partial_evidence",
+        "question": "What role, if any, did organized crime play in the Kennedy assassination according to the retrieved documents?",
+        "answer": "## Executive Summary\nThe retrieved documents suggest that organized crime may have played a role in the Kennedy assassination, with connections to the CIA and anti-Castro activities [1][2]. However, the exact nature and extent of this involvement are not clearly established in the documents. The records do mention the involvement of organized crime figures, such as Johnny Rosselli and Sam Giancana, in CIA plots to assassinate Fidel Castro [1][3].\n\n## Detailed Findings\n### Organized Crime Figures\nThe documents mention several organized crime figures, including Johnny Rosselli and Sam Giancana, who were involved in CIA plots to assassinate Fidel Castro [1][3]. Rosselli, in particular, is mentioned as having been convinced that the people he put around Castro in the CIA plot turned around and killed Kennedy [3]. Giancana, on the other hand, was murdered in 1975, before he could be questioned by the committee staff [1].\n\n### CIA Plots\nThe documents reveal that the CIA had plots to assassinate Fidel Castro, and that organized crime figures were involved in these plots [1][3]. The CIA's role in these plots and their potential connection to the Kennedy assassination are not fully explored in the documents. However, it is mentioned that the CIA's plots against Castro may have been kept from the Warren Commission [3].\n\n### Connections to the Kennedy Assassination\nThe documents suggest that there may be connections between the CIA's anti-Castro activities and the Kennedy assassination [1][2]. For example, Rosselli's death is mentioned as having caused concern on Capitol Hill, with some speculating that his murder may have been related to his knowledge of the CIA's plots against Castro [3]. Additionally, the documents mention that the CIA's plots against Castro may have been the incentive for pro-Castro forces to kill Kennedy [3].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": 0.0,
+          "k": 20,
+          "hits": [],
+          "missed": [
+            [
+              "104-10333-10001.pdf",
+              107
+            ],
+            [
+              "157-10014-10242.pdf",
+              44
+            ],
+            [
+              "157-10014-10242.pdf",
+              462
+            ]
+          ]
+        },
+        "judge": {
+          "faithfulness": 0.78,
+          "completeness": 0.6,
+          "hallucination": false,
+          "over_commits": false,
+          "clarity": 4,
+          "rationale": "Most claims are grounded in the retrieved documents (Rosselli, Giancana, Trafficante, and CIA-Castro links), but the answer misses the specific HSCA/Blakey-Billings and Roger Bauman points from the reference."
+        }
+      },
+      {
+        "id": "analytical_oswald_mexico_city_sep_oct_63",
+        "category": "analytical",
+        "question": "Summarise every mention of Oswald's time in Mexico City, September–October 1963.",
+        "answer": "## Executive Summary\nLee Harvey Oswald's time in Mexico City, September-October 1963, is documented in various CIA-controlled documents, which reveal his interactions with the Soviet and Cuban diplomatic missions [1][2]. The records show that Oswald visited the Cuban Consulate and requested a transit visa to travel to the Soviet Union, but was denied [7][8]. Additionally, there are reports of Oswald attending a \"twist party\" at the home of Ruben Duran Navarro, the brother-in-law of Silvia Duran [3].\n\n## Detailed Findings\n### Introduction to Oswald's Mexico City Visit\nOswald's visit to Mexico City in September and October 1963 has been the subject of investigation by the House Select Committee on Assassinations [5]. The Committee conducted extensive interviews, depositions, and executive session hearings involving Central Intelligence Agency personnel, as well as Mexican and Cuban citizens who could have knowledge of Oswald's activities [5].\n\n### Interactions with the Soviet and Cuban Diplomatic Missions\nOswald visited the Cuban Consulate on September 27, 1963, and requested a transit visa to travel to the Soviet Union [7][8]. He was denied the visa, and the Cuban Government later stated that the visa was never granted [7][8]. There are also reports of Oswald contacting the Soviet Embassy, including a phone call on October 1, 1963, where he identified himself as Lee Harvey Oswald [5].\n\n### Social Activities and Associations\nOswald attended a \"twist party\" at the home of Ruben Duran Navarro, the brother-in-law of Silvia Duran [3]. Additionally, there are allegations that Oswald traveled with \"two beatnik-looking boys\" while in Mexico City, but these allegations have not been confirmed [3].\n\n### Surveillance and Investigation\nThe CIA's Mexico City Station had Oswald under surveillance during his visit, and there are reports of photographic and electronic surveillance operations aimed at the Soviet and Cuban diplomatic compounds [6]. The Station also intercepted telephone calls between the Soviet Embassy and the Cuban Consulate, including calls that may have involved Oswald [9][11].\n\n### Timeline of Events\n| Date | Event | Source |\n| --- | --- | --- |\n| September 23, 1963 | Oswald failed to obtain visas at both the Cuban and Soviet Embassies | [4] |\n| September 27, 1963 | Oswald visited the Cuban Consulate and requested a transit visa | [7][8] |\n| September 27, 1963 | Silvia Duran contacted the Soviet Consulate on behalf of Oswald | [10] |\n| September 28, 1963 | Silvia Duran made a phone call to the Soviet Consulate regarding Oswald | [12] |\n| October 1, 1963 | Oswald made a phone call to the Soviet Embassy, identifying himself as Lee Harvey Oswald | [5] |\n| October 2, 1963 | Oswald left Mexico City on a bus bound for the United States | [4] |\n| November 22, 1963 | President John F. Kennedy was assassinated | [12] |\n| November 23, 1963 | The Mexico City Station reviewed electronic surveillance files and found evidence of Oswald's contacts with the Soviet Embassy | [12] |\n\n### Cross-References and Contradictions\nThere are some contradictions and inconsistencies in the records, including discrepancies in the testimony of Silvia Duran and other witnesses [2]. Additionally, there are reports of the CIA withholding photographic materials relevant to the investigation [13].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.76,
+          "completeness": 0.68,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded in the retrieved sources, but the answer overstates uncertain items as fact—especially the 'twist party' and beatnik-boys allegations, which are presented too definitively despite being unconfirmed in the source."
+        }
+      },
+      {
+        "id": "analytical_cross_ref_cia_mexico_cuban_embassy",
+        "category": "analytical",
+        "question": "Which documents reference both the CIA Mexico station and the Cuban embassy?",
+        "answer": "## Executive Summary\nThe CIA Mexico station and the Cuban embassy are referenced in multiple documents, including [1], [2], [3], [4], [5], [6], [7], and [8]. These documents provide information on the CIA's surveillance operations, including photographic and electronic surveillance, as well as interactions between the CIA and the Cuban embassy. The documents also mention specific individuals, such as David Phillips and Silvia Duran, who were involved in these operations.\n\n## Detailed Findings\n### CIA Mexico Station and Cuban Embassy References\nThe CIA Mexico station and the Cuban embassy are mentioned in several documents, including [1], which discusses David Phillips' role in the CIA's Cuban affairs, and [2], which provides an organizational chart of the CIA's Mexico City station. The Cuban embassy is also mentioned in [3], which discusses the CIA's photographic surveillance operations, and [4], which provides information on the CIA's electronic surveillance of the Soviet and Cuban diplomatic compounds.\n\n### Surveillance Operations\nThe CIA's surveillance operations are discussed in several documents, including [3], which mentions the use of cameras to monitor the Cuban embassy, and [5], which discusses the CIA's intercepts of mail and telephone calls to and from the Cuban embassy. The documents also mention the use of electronic surveillance, including the tapping of telephone lines, as discussed in [4] and [7].\n\n### Interactions between CIA and Cuban Embassy\nThe documents provide information on interactions between the CIA and the Cuban embassy, including [6], which discusses Silvia Duran's role as a secretary at the Cuban embassy and her interactions with Lee Harvey Oswald. The documents also mention the CIA's attempts to gather information on the Cuban embassy, including [7], which discusses the CIA's use of a \"cut-out\" to gather information.\n\n### Individuals Involved\nThe documents mention several individuals who were involved in the CIA's operations, including David Phillips, who is discussed in [1] and [2], and Silvia Duran, who is mentioned in [4] and [6]. The documents also mention other individuals, such as Winston Scott, who is discussed in [1], and Herbert Manel, who is mentioned in [2].\n\n### Gaps in Information\nThe records do not directly describe the full extent of the CIA's surveillance operations or the nature of all interactions between the CIA and the Cuban embassy. However, they do provide some information on the CIA's operations and the individuals involved, as discussed in [1], [2], [3], [4], [5], [6], [7], and [8].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.44,
+          "completeness": 0.25,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "The answer is broadly grounded on CIA Mexico City Station/Cuban Embassy material, but it invents unsupported specifics by naming eight generic items [1]-[8] without actual document-control numbers and by attributing several claims to sources that do not clearly mention them; it also overstates certainty about which documents specifically reference both entities."
+        }
+      },
+      {
+        "id": "analytical_hsca_ruby_witness_timeline",
+        "category": "analytical",
+        "question": "Reconstruct a timeline of HSCA witness interviews concerning Jack Ruby.",
+        "answer": "## Executive Summary\nThe retrieved documents provide some information about Jack Ruby, including his possible connections to the Mafia and his involvement in the assassination of Lee Harvey Oswald [3]. However, the documents do not contain a comprehensive timeline of HSCA witness interviews concerning Jack Ruby. The records do mention various individuals and events related to Ruby, but a detailed timeline of witness interviews is not directly described [4].\n\n## Detailed Findings\n### HSCA Requests and Investigations\nThe HSCA requested information on Jack Ruby, including his background and connections to organized crime [3]. The committee also investigated Ruby's possible involvement in the assassination of Lee Harvey Oswald [4].\n### Witness Interviews and Testimony\nWhile the documents do not provide a detailed timeline of HSCA witness interviews, they do mention various individuals who were interviewed or provided testimony, including Gary Edward Taylor [2] and Robert M. McNamara [5]. However, these interviews are not specifically focused on Jack Ruby.\n### Connections to Organized Crime\nThe documents suggest that Jack Ruby had connections to organized crime, including possible ties to the Mafia [1]. However, the nature and extent of these connections are not fully described in the retrieved documents.\n### Timeline of Relevant Events\n| Date | Event | Source |\n| --- | --- | --- |\n| November 21, 1963 | Jim Braden and Jack Ruby visit the Dallas offices of the H.L. Hunt Oil Company | [1] |\n| November 22, 1963 | Jim Braden is arrested and questioned by Deputy C.L. Lewis | [6] |\n| January 1964 | Jim Braden is interviewed by two FBI agents at his office in Beverly Hills | [6] |\n| 1977 | HSCA requests information on Jack Ruby and other individuals connected to the assassination | [3] |\n| 1998 | The Review Board inspects additional files related to the assassination, including those related to Jack Ruby | [5] |\nNote: The timeline is based on events mentioned in the retrieved documents and may not be comprehensive or exhaustive.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.34,
+          "completeness": 0.16,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "Most dated entries are unsupported as HSCA witness interviews about Ruby, and the answer fabricates a timeline structure despite only loosely grounded references to Ruby-related material and no sourced witness-interview chronology."
+        }
+      },
+      {
+        "id": "analytical_fbi_vs_wc_rifle_chain_of_custody",
+        "category": "analytical",
+        "question": "Where do FBI and Warren Commission accounts of the rifle's chain of custody diverge?",
+        "answer": "## Executive Summary\nThe retrieved documents do not directly describe the divergence of FBI and Warren Commission accounts of the rifle's chain of custody. However, they mention the rifle as one of the principal points used by the Warren Commission to link Oswald to the assassination [1]. The documents also discuss the controversy surrounding the discovery of evidence, including the \"single bullet\" theory [1].\n\n## Detailed Findings\n### Rifle Evidence\nThe Warren Commission relied on the testimony of Patrolman Gerald L. Hill, who found three spent bullet hulls on the floor beneath the window from which the fatal shots allegedly were fired [1]. The Commission also considered the testimony of Dr. Malcolm Perry, who performed a tracheostomy on President Kennedy and initially thought the wound in the front of the neck was an entry wound [1]. However, the autopsy report later concluded that the wound was an exit wound [1].\n\n### Chain of Custody\nThe documents do not provide a detailed account of the chain of custody of the rifle. However, they mention that the FBI received the rifle and performed ballistic tests [1]. The documents also discuss the controversy surrounding the autopsy and the handling of evidence, including the disappearance of the brain and other tissue samples [1].\n\n### Warren Commission and FBI Accounts\nThe documents suggest that there may be discrepancies between the Warren Commission and FBI accounts of the evidence. For example, the Commission relied on the testimony of Howard Brennan, who claimed to have seen a gunman in the \"Oswald window\" [1]. However, the documents also mention that the FBI's \"core and related\" files include records that may be relevant to the assassination, but do not provide further details [2].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.22,
+          "completeness": 0.08,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 3,
+          "rationale": "The answer is largely off-target and cites unsupported material such as Dr. Malcolm Perry, the autopsy wound interpretation, and the disappearance of brain/tissue samples, while failing to give the rifle chain-of-custody divergence requested by the question."
+        }
+      },
+      {
+        "id": "analytical_oswald_soviet_embassy_contacts",
+        "category": "analytical",
+        "question": "What contacts did Oswald have with Soviet officials between his 1959 defection and the assassination? Present as a timeline.",
+        "answer": "## Executive Summary\nLee Harvey Oswald had contacts with Soviet officials between his 1959 defection and the assassination, including a meeting with Vice Counsel Kostikov at the Soviet Embassy in Mexico City [1]. The records do not directly describe the full extent of these contacts; however, they mention Oswald's attempts to obtain a visa to travel to Cuba and the Soviet Union [4]. Oswald's interactions with Soviet officials were also reported to the CIA and the FBI, with some reports indicating that he had been in touch with the Soviet Embassy in Washington, D.C. [5].\n\n## Detailed Findings\n### Timeline of Contacts\nThe following table outlines the known contacts between Oswald and Soviet officials:\n| Date | Event | Source |\n| --- | --- | --- |\n| October 1959 | Oswald defects to the Soviet Union | [8] |\n| 1959-1960 | Oswald is of no operational interest to the KGB, according to Nosenko | [2] |\n| September 27, 1963 | Oswald visits the Cuban Consulate in Mexico City | [4] |\n| September 28, 1963 | Oswald visits the Soviet Embassy in Mexico City and talks with Valeriy Kostikov | [1] |\n| October 1, 1963 | Oswald contacts the Soviet Embassy again | [7] |\n| October 8, 1963 | The CIA receives a cable about Oswald's contact with the Soviet Embassy | [3] |\n| October 11, 1963 | The CIA receives information about Oswald from Headquarters | [5] |\n| Unknown | Oswald meets with a KGB officer under Consular cover at the Soviet Embassy in Mexico City | [2] |\n\n### Oswald's Visa Applications\nOswald applied for a visa to travel to Cuba and the Soviet Union, but was denied [4]. He showed his Russian labor card, marriage certificate, and American Communist Party membership card as identification [4]. The Cuban Consulate found his behavior suspicious, as he was traveling with multiple documents, including a \"Fair Play for Cuba\" membership card [4].\n\n### CIA and FBI Reports\nThe CIA and FBI received reports about Oswald's contacts with Soviet officials, including his meeting with Kostikov [1]. The CIA also received information about Oswald's background, including his defection to the Soviet Union and his attempts to obtain a visa to travel to Cuba [5]. The FBI reported on Oswald's activities, including his visit to the Cuban Consulate in Mexico City [6].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.62,
+          "completeness": 0.65,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most timeline items are grounded in the retrieved records, but the answer overstates the specific 'meeting with Vice Counsel Kostikov' and presents uncertain Mexico City details as settled facts; it also omits the broader 1959-1962 USSR residence/return context."
+        }
+      },
+      {
+        "id": "analytical_ruby_organised_crime_synthesis",
+        "category": "analytical",
+        "question": "Synthesise the documentary evidence in the archive about Jack Ruby's alleged ties to organised crime.",
+        "answer": "## Executive Summary\nThe documents suggest that Jack Ruby had substantial ties to the Mafia, particularly in the areas of gambling and narcotics [1][3]. Ruby's involvement with the Mafia is also linked to Jim Braden, another figure with alleged Mafia connections [1][5]. The records do not provide a comprehensive overview of Ruby's organized crime ties, but they do indicate that his connections were significant enough to warrant investigation.\n\n## Detailed Findings\n### Jack Ruby's Mafia Involvement\nThe documents indicate that Jack Ruby was involved in the syndicate areas of gambling and narcotics [1]. Ruby's ties to the Mafia were substantial, and he was particularly involved in these areas [3]. The records also suggest that Ruby's involvement with the Mafia was not fully investigated by the Warren Commission [1][5].\n\n### Connection to Jim Braden\nThe documents reveal that Jack Ruby and Jim Braden were both important Mafia figures operating in the same general areas and times [1][5]. Both Ruby and Braden visited the Dallas offices of the N.L. Hunt Oil Company on the afternoon of November 21, 1963, just twenty-four hours before the President's assassination [1][3]. This link between Ruby and Braden raises significant questions about a possible relationship between the two men [1].\n\n### Investigation and Evidence\nThe FBI withheld hundreds of documents about the assassination of President Kennedy from the Warren Commission, including some that may have related to Ruby's Mafia involvement [2][4]. The documents that were provided to the commission did not contain any startling information that would overturn the commission's verdict, but they did reveal how the FBI handled its most important case [2]. The records do not directly describe the extent of Ruby's organized crime ties, but they do mention his connections to the Mafia in several contexts [1][3][5].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": false,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.23,
+          "completeness": 0.2,
+          "hallucination": true,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The sources support claims that Ruby had alleged Mafia involvement and that he and Braden were linked in investigative materials, but the answer overstates this as 'substantial ties' to 'the Mafia' and adds unsupported specifics about gambling, narcotics, and Jim Braden visiting Hunt Oil as an established link rather than allegation."
+        }
+      },
+      {
+        "id": "analytical_new_orleans_ferrie_shaw_banister",
+        "category": "analytical",
+        "question": "What do the files say about the New Orleans associations between David Ferrie, Clay Shaw, and Guy Banister?",
+        "answer": "## Executive Summary\nThe retrieved documents reveal associations between David Ferrie, Clay Shaw, and Guy Banister in New Orleans, with Ferrie working as a private investigator for Carlos Marcello and having connections to the CIA [1][2]. The documents also mention Clay Shaw's involvement with the CIA and his connection to the World Trade Center [3][5]. However, the records do not provide a comprehensive overview of the relationships between these individuals.\n\n## Detailed Findings\n### David Ferrie and Clay Shaw\nThe documents indicate that David Ferrie was employed as a private investigator by Carlos Marcello, a top Mafia kingpin, and worked out of the offices of Marcello's criminal attorney, G. Wray Gill, in the Pere Marquette Building in New Orleans [1]. Around the same time, Clay Shaw, a prominent businessman, was also connected to the CIA, although the nature of this relationship is not fully explained in the documents [3][5].\n\n### Guy Banister and David Ferrie\nGuy Banister, a former FBI agent, was operating out of Room 1701 in the Pere Marquette Building, just a short distance from David Ferrie's office in Room 1707 [1]. This proximity suggests a potential connection between the two, although the documents do not provide direct evidence of their interactions.\n\n### CIA Connections\nThe documents mention that Clay Shaw had a relationship with the CIA, but the details of this connection are not fully disclosed [3][5]. Additionally, David Ferrie's work as a private investigator for Carlos Marcello and his potential connections to the CIA are noted, but the extent of these connections is not clearly stated [1][2].\n\n### New Orleans Investigations\nThe documents reference investigations into organized crime in New Orleans, including the involvement of Guy Banister and his associates [4][6]. However, the records do not provide a direct link between these investigations and the associations between Ferrie, Shaw, and Banister.",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.36,
+          "completeness": 0.38,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "The answer is partly grounded on Ferrie's and Banister's New Orleans office proximity, but it adds unsupported specifics about Marcello, CIA ties, Shaw's World Trade Center role, and Banister investigations beyond what the cited sources actually show."
+        }
+      },
+      {
+        "id": "analytical_cia_prior_knowledge_of_oswald",
+        "category": "analytical",
+        "question": "What did the CIA know about Lee Harvey Oswald before 22 November 1963?",
+        "answer": "## Executive Summary\nThe CIA had knowledge of Lee Harvey Oswald before 22 November 1963, including his defection to the Soviet Union and his attempts to obtain a visa to travel to the USSR via Cuba [1]. The CIA also had transcripts of conversations between Oswald and a guard at the Soviet Embassy in Mexico City, which were made on 27 and 28 September and 1 October 1963 [4]. However, the CIA claimed that Oswald was not an investigative responsibility of the Agency and that they had not received an official request from those agencies having investigative responsibility to obtain further information [6].\n\n## Detailed Findings\n### CIA Knowledge of Oswald's Defection\nThe CIA was aware of Oswald's defection to the Soviet Union and had opened a 201 file on him in December 1960 [2]. The CIA also received copies of Oswald's manuscript from the FBI and the Warren Commission [1]. The CIA had a single general file on Oswald at the time of the assassination, which was opened as a result of his defection to the Soviet Union [3].\n\n### CIA Surveillance of Oswald in Mexico City\nThe CIA had a photosurveillance operation in Mexico City that may have obtained a photograph of Lee Harvey Oswald entering or exiting the Soviet or Cuban Embassies [5]. The CIA also had transcripts of conversations between Oswald and a guard at the Soviet Embassy in Mexico City, which were made on 27 and 28 September and 1 October 1963 [4]. However, the CIA claimed that they did not have any recordings of calls between the Cuban and Soviet Embassies in which Oswald participated [4].\n\n### Timeline of CIA Knowledge of Oswald\n| Date | Event | Source |\n| --- | --- | --- |\n| December 1960 | CIA opens 201 file on Oswald | [2] |\n| 27-28 September 1963 | CIA makes transcripts of conversations between Oswald and a guard at the Soviet Embassy in Mexico City | [4] |\n| 1 October 1963 | CIA makes transcript of conversation between Oswald and a guard at the Soviet Embassy in Mexico City | [4] |\n| 5 October 1963 | CIA asks Headquarters for a photograph of Oswald | [6] |\n| 22 November 1963 | CIA initiates review of all transcripts of telephone calls to the Soviet Embassy | [6] |\n| Unknown | CIA receives copies of Oswald's manuscript from the FBI and the Warren Commission | [1] |\n\n### CIA Analysis of Oswald's Activities\nThe CIA investigation of Oswald reflected a Soviet orientation, with exhaustive studies of Oswald's activities in the Soviet Union [7]. However, there is no corresponding CIA analysis of Oswald's contacts with pro and anti-Castro groups in the US [7]. The CIA also had information on Oswald's attempts to obtain a visa to travel to the USSR via Cuba [6].",
+        "query_type_seen": "research",
+        "has_citations": true,
+        "no_bulk_cite": true,
+        "structure_ok": true,
+        "evidence": {
+          "evidence_recall_at_k": null,
+          "k": 20
+        },
+        "judge": {
+          "faithfulness": 0.72,
+          "completeness": 0.58,
+          "hallucination": false,
+          "over_commits": true,
+          "clarity": 4,
+          "rationale": "Most cited claims are grounded in the retrieved materials, but the answer overstates uncertain Mexico City/photo-surveillance points as facts and does not fully enumerate the pre-assassination file holdings with dates and document identifiers."
+        }
+      }
+    ]
+  }
+}
