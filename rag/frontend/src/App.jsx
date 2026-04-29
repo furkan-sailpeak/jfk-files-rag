@@ -328,11 +328,9 @@ function App() {
               <div className="sample-prompts">
                 {[
                   "What was Oswald's connection to the Soviet embassy in Mexico City?",
-                  "Which documents contain redacted information?",
-                  "Analyze the CIA's surveillance activities related to the assassination",
                   "Show me document 104-10004-10143",
                   "How many pages include handwriting?",
-                  "What role did Jack Ruby play according to the files?",
+                  "Why did Jack Ruby kill Oswald?",
                 ].map((prompt, i) => (
                   <button
                     key={i}
@@ -391,6 +389,9 @@ function App() {
               <Send size={14} />
             </button>
           </form>
+          <div className="copyright">
+            © 2026 Furkan Demir · KU Leuven · All rights reserved · For academic research purposes only.
+          </div>
         </div>
       </div>
     </div>

@@ -4,7 +4,10 @@ A Retrieval-Augmented Generation (RAG) system for querying the 2025 declassified
 
 > *"Topic Modeling and Thematic Analysis of JFK Assassination Files Using NLP"*
 
+Live demo: https://jfk-files-rag-production.up.railway.app/
 Thesis repo: https://github.com/furkan-sailpeak/jfk-thesis
+
+![JFK Files Research System](screenshot.png)
 
 ## What it does
 
@@ -109,44 +112,6 @@ The system is evaluated against a **30-question, corpus-grounded ground-truth se
 
 See `eval/README.md` for run instructions.
 
-### Head-to-head: RAG vs. plain GPT-5.4
-
-The system was benchmarked against OpenAI's **GPT-5.4 with no retrieval** — the model answers each question from training knowledge alone. Out-of-scope is excluded from the head-to-head (RAG refuses by design; plain GPT is expected to answer — not comparable).
-
-![RAG vs GPT-5.4 comparison](eval/comparison_chart.png)
-
-*Interactive version with hover tooltips: open `eval/comparison_chart.html` in a browser.*
-
-**Headline composite score** (equal-weight mean of completeness, 1 − hallucination rate, faithfulness/correctness, clarity ÷ 5):
-
-| System | Completeness | Non-hallucination | Faithfulness / Correctness | Clarity (÷5) | **Overall** |
-|---|---|---|---|---|---|
-| **JFK-RAG** | 0.56 | 0.92 | 0.74 | 0.87 | **0.77** |
-| GPT-5.4 (no retrieval) | 0.48 | 0.38 | 0.70 | 0.93 | 0.62 |
-
-**Per-category hallucination rate** (share of answers with fabricated claims):
-
-| Category | JFK-RAG | GPT-5.4 |
-|---|---|---|
-| factual | 0% | 50% |
-| biographical | 0% | 50% |
-| analytical | 17% | 83% |
-| partial_evidence | 17% | 67% |
-
-The qualitative story the numbers tell:
-
-- **RAG rarely invents.** When the retriever finds a page, the answer sticks to it. When retrieval fails, the system says so rather than fabricating — the faithfulness scores on partial-evidence questions stay high *because* the answer admits the gap.
-- **Plain GPT is fluent but confabulates on specifics.** It produces prettier prose (clarity edge: 4.63 vs 4.33 on 1–5) and wins *biographical* completeness on the strength of training-data familiarity with famous figures — but invents dates, document IDs, and specific archival details on half of all questions, and over 80% of analytical ones.
-- **The gap that matters for a criminologist** is the 0.92-vs-0.38 gap on non-hallucination. A researcher can use a partial, hedged RAG answer — they cannot use a confident GPT paragraph that contains an invented date.
-
-### Regenerating the chart
-
-```bash
-cd eval
-python make_chart.py          # writes comparison_chart.html
-open comparison_chart.html
-```
-
 ## Setup
 
 ### Prerequisites
@@ -169,7 +134,6 @@ cp .env.example .env
 | `OPENAI_API_KEY` | OpenAI key (query embeddings; eval judge) |
 | `JUDGE_MODEL` | *optional* — override Groq judge model (default `llama-3.3-70b-versatile`) |
 | `JUDGE_MODEL_EVAL` | *optional* — override eval judge (default `gpt-5.4-mini`) |
-| `BASELINE_MODEL` | *optional* — override baseline model (default `gpt-5.4`) |
 
 ### Local development
 
@@ -229,10 +193,6 @@ docker run -p 5001:5001 \
 │   ├── questions.yaml         # 30 corpus-grounded questions
 │   ├── run.py                 # Drive the RAG server over every question
 │   ├── score.py               # Deterministic + LLM-judge metrics → scores.json + report.md
-│   ├── baseline.py            # Plain GPT-5.4 baseline (no retrieval)
-│   ├── baseline_score.py      # Same rubric, corpus-correctness added
-│   ├── compare.py             # Merges both score files → comparison.md
-│   ├── make_chart.py          # Plotly visual (comparison_chart.html)
 │   └── README.md              # Framework docs
 ├── database/                  # SQL schema + pgvector migration scripts
 ├── scripts/                   # OCR ingestion, misc utilities
@@ -242,4 +202,6 @@ docker run -p 5001:5001 \
 
 ## License
 
-Academic project, KU Leuven. The JFK records are public domain (NARA, 2025 release).
+© 2026 Furkan Demir · KU Leuven · All rights reserved · For academic research purposes only.
+
+Academic project, KU Leuven. The JFK records are public domain (NARA, 2025 release). See [LICENSE](LICENSE) for details.

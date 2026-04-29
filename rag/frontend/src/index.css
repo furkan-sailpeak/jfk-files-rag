@@ -2,9 +2,9 @@
   --bg: #000;
   --bg-surface: #0a0a0a;
   --bg-card: #111;
-  --text-main: #e8e4de;
-  --text-muted: #8a8578;
-  --text-dim: #5a564e;
+  --text-main: #f2efe9;
+  --text-muted: #a8a294;
+  --text-dim: #787264;
   --accent: #c8a96e;
   --accent-dim: rgba(200, 169, 110, 0.15);
   --red-stamp: #8b2020;
@@ -151,6 +151,14 @@ body {
   background: var(--bg-surface);
 }
 
+.copyright {
+  margin-top: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
 .input-wrapper {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -290,39 +298,38 @@ input::placeholder {
 }
 
 .welcome-screen h2 {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--text-muted);
+  color: var(--text-main);
   margin-bottom: 0.75rem;
 }
 
 .welcome-screen p {
-  font-size: 0.75rem;
-  color: var(--text-dim);
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .sample-prompts {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
   margin-top: 1.25rem;
-  justify-content: center;
 }
 
 .sample-prompt-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-light);
-  color: var(--text-muted);
+  color: var(--text-main);
   font-family: inherit;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   padding: 0.45rem 0.75rem;
   border-radius: 6px;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
   text-align: left;
-  max-width: 260px;
+  width: 100%;
 }
 
 .sample-prompt-btn:hover {
