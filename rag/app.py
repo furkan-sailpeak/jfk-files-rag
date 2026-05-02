@@ -411,11 +411,24 @@ def route_query(query, history):
 # ---------------------------------------------------------------------------
 # RAG pipeline helpers
 # ---------------------------------------------------------------------------
-def rerank(candidates, rewritten_query, context_limit):
+def _rerank_snippet(content, terms, width=400):
+    # Center the snippet on the first query-term hit so the judge sees the
+    # match in context. Slicing from position 0 hides the match whenever the
+    # page starts with a routing header (common in JFK records).
+    low = content.lower()
+    hits = [low.find(t.lower()) for t in terms if t and t.lower() in low]
+    if not hits:
+        return content[:width]
+    start = max(0, min(hits) - 80)
+    return content[start:start + width]
+
+
+def rerank(candidates, rewritten_query, context_limit, search_terms=None):
     if len(candidates) <= context_limit:
         return candidates[:context_limit]
+    terms = [t for t in (search_terms or rewritten_query.split()) if t]
     snippets = [
-        f"[{idx}] {r[1]}, Page {r[2]}: {r[0][:300].replace(chr(10), ' ').strip()}"
+        f"[{idx}] {r[1]}, Page {r[2]}: {_rerank_snippet(r[0], terms).replace(chr(10), ' ').strip()}"
         for idx, r in enumerate(candidates)
     ]
     prompt = (
@@ -897,7 +910,7 @@ def chat():
 
             yield sse("stage", {"label": "Reranking..."})
             t_rr = time.time()
-            final_results = rerank(unique_results, rewritten_query, context_limit)
+            final_results = rerank(unique_results, rewritten_query, context_limit, search_terms)
             timings["rerank_ms"] = int((time.time() - t_rr) * 1000)
 
             system_prompt = build_rag_system_prompt(query_type, stats)
@@ -933,7 +946,7 @@ def chat():
                 timings["expand_ms"] = int((time.time() - t_exp) * 1000)
 
                 yield sse("stage", {"label": "Reranking expanded results..."})
-                final_results = rerank(unique_results, rewritten_query, context_limit)
+                final_results = rerank(unique_results, rewritten_query, context_limit, search_terms)
 
                 # Second generation — also silent; we still stream only the final answer.
                 # No second grounding check: we trust the expanded-regen output and let
