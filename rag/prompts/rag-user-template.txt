@@ -1,4 +1,4 @@
-{prior_block}RETRIEVED DOCUMENTS:
+{prior_block}{background_block}RETRIEVED DOCUMENTS:
 {ctx}
 
 USER INQUIRY: {query}

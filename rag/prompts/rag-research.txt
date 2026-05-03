@@ -5,7 +5,13 @@ You will receive:
 - A category label such as analytical or partial_evidence
 - A numbered set of source documents
 
-Your task is to answer the question using ONLY the numbered sources. Do not use outside knowledge, background assumptions, or training-data facts.
+Your task is to answer the question using ONLY the numbered sources for cited factual claims. Do not use outside knowledge, background assumptions, or training-data facts — except as permitted by the BACKGROUND CONTEXT rule below.
+
+## Background context
+
+- The user prompt may include an optional BACKGROUND block listing one-sentence identifications of named entities from mainstream historical consensus.
+- You MAY use BACKGROUND only to write ONE brief, uncited identifying clause inside the Executive Summary that establishes who/what the subject is and their canonical historical role.
+- Do NOT cite BACKGROUND. Do NOT use BACKGROUND for any further factual claim about actions, relationships, dates, or events — those must come from the numbered sources with citations.
 
 ## Core workflow
 

@@ -508,6 +508,72 @@ def build_context(picked):
     return "\n\n".join(parts)
 
 
+_entity_brief_cache = {}
+
+
+def entity_brief(name):
+    """Return a one-sentence canonical identification of a JFK-context entity,
+    or None. Uses Groq + an in-memory cache so a given name is only resolved
+    once per process. Returns None for generic terms, ambiguous names, or
+    anything the model is not confident about."""
+    if not name:
+        return None
+    cleaned = name.strip()
+    if len(cleaned) < 3:
+        return None
+    # Skip terms that don't look like proper nouns (no capitalized word).
+    if not any(w[:1].isupper() for w in cleaned.split()):
+        return None
+    key = cleaned.lower()
+    if key in _entity_brief_cache:
+        return _entity_brief_cache[key]
+    try:
+        prompt = load_prompt('entity-brief.txt').replace('{name}', cleaned)
+        res = client.chat.completions.create(
+            model=MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+            max_tokens=80,
+        )
+        out = (res.choices[0].message.content or '').strip()
+        # Strip a leading "Identification:" if the model echoes it.
+        out = re.sub(r'^Identification:\s*', '', out, flags=re.IGNORECASE).strip()
+        if not out or out.upper().startswith('NONE') or len(out) > 280:
+            _entity_brief_cache[key] = None
+            return None
+        _entity_brief_cache[key] = out
+        return out
+    except Exception as e:
+        print(f"[entity_brief] failed for {cleaned!r}: {e}")
+        _entity_brief_cache[key] = None
+        return None
+
+
+def build_background_block(search_terms):
+    """Build an optional BACKGROUND block from router-extracted entity names.
+    Empty string if no usable identifications. Each line is one entity brief."""
+    if not search_terms:
+        return ""
+    seen = set()
+    lines = []
+    for term in search_terms:
+        key = (term or '').strip().lower()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        brief = entity_brief(term)
+        if brief:
+            lines.append(f"- {brief}")
+    if not lines:
+        return ""
+    return (
+        "BACKGROUND (mainstream historical identification — uncited; use only "
+        "to identify the subject in one sentence at the start of the answer):\n"
+        + "\n".join(lines)
+        + "\n\n"
+    )
+
+
 def build_rag_system_prompt(query_type, stats):
     instructions = load_prompt('rag-simple.txt' if query_type == 'simple' else 'rag-research.txt')
     suffix = (
@@ -520,7 +586,7 @@ def build_rag_system_prompt(query_type, stats):
     return f"{instructions}\n{suffix}\n"
 
 
-def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research"):
+def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research", background_block=""):
     prior_block = ""
     if prior_answer_summary:
         prior_block = (
@@ -538,17 +604,18 @@ def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research
     return (
         load_prompt('rag-user-template.txt')
         .replace('{prior_block}', prior_block)
+        .replace('{background_block}', background_block or "")
         .replace('{ctx}', ctx)
         .replace('{query}', query)
         .replace('{format_reminder}', format_reminder)
     )
 
 
-def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, query_type="research"):
+def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, query_type="research", background_block=""):
     """Stream the generation. Yields (kind, payload) tuples:
     ("token", text) for incremental text, ("done", full_text) at end."""
     ctx = build_context(picked)
-    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type)
+    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type, background_block)
     full_text = ""
     try:
         stream = client.chat.completions.create(
@@ -580,9 +647,9 @@ def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, q
     yield ("done", full_text)
 
 
-def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary, query_type="research"):
+def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary, query_type="research", background_block=""):
     ctx = build_context(picked)
-    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type)
+    user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type, background_block)
     res = client.chat.completions.create(
         model=MODEL,
         messages=[
@@ -963,13 +1030,14 @@ def chat():
 
             system_prompt = build_rag_system_prompt(query_type, stats)
             prior_summary = summarize_last_answer(history)
+            background_block = build_background_block(search_terms)
 
             # First generation — collected silently (not streamed to client yet).
             # We stream only the final verified answer after grounding + citation checks.
             yield sse("stage", {"label": "Generating..."})
             t_gen = time.time()
             full_text = ""
-            for kind, payload in generate_answer_stream(query, final_results, system_prompt, prior_summary, query_type):
+            for kind, payload in generate_answer_stream(query, final_results, system_prompt, prior_summary, query_type, background_block):
                 if kind == "token":
                     full_text += payload
                 else:
@@ -1000,7 +1068,7 @@ def chat():
                 # No second grounding check: we trust the expanded-regen output and let
                 # verify_citations strip bad [N] markers below instead of refusing outright.
                 yield sse("stage", {"label": "Regenerating with new sources..."})
-                answer_text = generate_answer_nonstream(query, final_results, system_prompt, prior_summary, query_type)
+                answer_text = generate_answer_nonstream(query, final_results, system_prompt, prior_summary, query_type, background_block)
 
             # Citation verification — strip bad citations (or regenerate if many bad)
             yield sse("stage", {"label": "Verifying citations..."})

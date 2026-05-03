@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Send, Users, FileText, Search, Menu, X, Plus, Download, MessageSquare, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import { renderToStaticMarkup } from 'react-dom/server';
 import remarkGfm from 'remark-gfm';
 
 const API_BASE = '/api';
@@ -42,33 +43,77 @@ function chatTitle(messages) {
   return text.length > 40 ? text.slice(0, 40) + '...' : text;
 }
 
+function renderMarkdownToHTML(text) {
+  return renderToStaticMarkup(
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+  );
+}
+
 function downloadChat(messages) {
-  let md = '# JFK Files Research — Chat Export\n\n';
-  md += `_Exported: ${new Date().toLocaleString()}_\n\n---\n\n`;
-
-  for (const msg of messages) {
+  const exportedAt = new Date().toLocaleString();
+  const sections = messages.map((msg) => {
     if (msg.role === 'user') {
-      md += `## Q: ${msg.content}\n\n`;
-    } else {
-      md += `${msg.content}\n\n`;
-      if (msg.sources && msg.sources.length > 0) {
-        md += '**Sources:**\n';
-        msg.sources.forEach((s, i) => {
-          md += `- [${i + 1}] ${s.filename}, Page ${s.page}\n`;
-        });
-        md += '\n';
-      }
-      md += '---\n\n';
+      return `<section class="turn user"><h2>Q: ${escapeHtml(msg.content)}</h2></section>`;
     }
-  }
+    const linked = injectCitationLinks(msg.content, msg.sources);
+    let html = `<section class="turn assistant">${renderMarkdownToHTML(linked)}`;
+    if (msg.sources && msg.sources.length > 0) {
+      html += '<div class="sources"><h3>Sources</h3><ol>';
+      msg.sources.forEach((s) => {
+        const url = getNaraUrl(s.filename) + `#page=${s.page}`;
+        html += `<li><a href="${url}">${escapeHtml(s.filename)}, p. ${s.page}</a></li>`;
+      });
+      html += '</ol></div>';
+    }
+    html += '</section>';
+    return html;
+  }).join('\n');
 
-  const blob = new Blob([md], { type: 'text/markdown' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `jfk-research-${new Date().toISOString().slice(0, 10)}.md`;
-  a.click();
-  URL.revokeObjectURL(url);
+  const doc = `<!doctype html>
+<html><head><meta charset="utf-8"/>
+<title>JFK Files Research — Chat Export</title>
+<style>
+  @page { margin: 18mm; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; color: #111; line-height: 1.55; max-width: 760px; margin: 0 auto; padding: 1.5rem; }
+  h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+  .meta { color: #666; font-size: 0.85rem; margin-bottom: 1.5rem; border-bottom: 1px solid #ddd; padding-bottom: 0.75rem; }
+  .turn { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; page-break-inside: avoid; }
+  .turn.user h2 { font-size: 1.05rem; color: #1a3a6c; margin: 0 0 0.5rem; }
+  .turn.assistant { font-size: 0.95rem; }
+  .turn.assistant h1, .turn.assistant h2, .turn.assistant h3 { color: #222; }
+  .turn.assistant h3 { font-size: 1rem; margin-top: 1rem; }
+  .turn.assistant p { margin: 0.5rem 0; }
+  .turn.assistant ul, .turn.assistant ol { margin: 0.5rem 0 0.5rem 1.25rem; }
+  .turn.assistant code { background: #f4f4f4; padding: 0 0.2em; border-radius: 3px; font-size: 0.9em; }
+  .turn.assistant pre { background: #f4f4f4; padding: 0.75rem; border-radius: 4px; overflow-x: auto; }
+  .turn.assistant a { color: #1a5fb4; text-decoration: none; }
+  .turn.assistant a:hover { text-decoration: underline; }
+  .sources { margin-top: 0.75rem; font-size: 0.85rem; }
+  .sources h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin: 0 0 0.4rem; }
+  .sources ol { margin: 0 0 0 1.2rem; }
+  .sources a { color: #1a5fb4; word-break: break-all; }
+</style>
+</head><body>
+<h1>JFK Files Research — Chat Export</h1>
+<div class="meta">Exported: ${escapeHtml(exportedAt)}</div>
+${sections}
+<script>window.addEventListener('load', () => { setTimeout(() => window.print(), 250); });</script>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if (!w) {
+    alert('Pop-up blocked. Please allow pop-ups to export PDF.');
+    return;
+  }
+  w.document.open();
+  w.document.write(doc);
+  w.document.close();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
 }
 
 function App() {
@@ -306,7 +351,7 @@ function App() {
           <h3 style={{ marginBottom: '0.75rem', color: 'var(--text-dim)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Tools</h3>
           <div style={{ display: 'grid', gap: '0.5rem' }}>
             <button className="tool-btn" onClick={() => downloadChat(messages)} disabled={messages.length === 0}>
-              <Download size={14} /> Export Chat
+              <Download size={14} /> Export PDF
             </button>
             <button className="tool-btn" onClick={() => analyzeContent(messages[messages.length - 1]?.content, 'names')} disabled={messages.length === 0}>
               <Users size={14} /> Extract Names
