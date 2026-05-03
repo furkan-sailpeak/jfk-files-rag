@@ -411,16 +411,63 @@ def route_query(query, history):
 # ---------------------------------------------------------------------------
 # RAG pipeline helpers
 # ---------------------------------------------------------------------------
+_WS_RE = re.compile(r'\s+')
+
+
+def _normalize_ws(s):
+    # OCR splits phrases across newlines (e.g. "Robert\nFulton"), so any
+    # exact-substring search on raw content under-counts hits. Collapse
+    # whitespace before searching.
+    return _WS_RE.sub(' ', s)
+
+
 def _rerank_snippet(content, terms, width=400):
     # Center the snippet on the first query-term hit so the judge sees the
     # match in context. Slicing from position 0 hides the match whenever the
     # page starts with a routing header (common in JFK records).
-    low = content.lower()
-    hits = [low.find(t.lower()) for t in terms if t and t.lower() in low]
+    norm = _normalize_ws(content).lower()
+    hits = [norm.find(t.lower()) for t in terms if t and t.lower() in norm]
     if not hits:
         return content[:width]
+    # Hit positions are in the normalized string; that's fine for windowing —
+    # serve the slice from normalized text so the judge isn't fighting OCR
+    # newlines either.
+    norm_full = _normalize_ws(content)
     start = max(0, min(hits) - 80)
-    return content[start:start + width]
+    return norm_full[start:start + width]
+
+
+def _dedupe_picks(candidates, picked_indices, context_limit, fill_pool):
+    # Drop near-duplicate pages (same first 200 chars after whitespace
+    # normalization) so three copies of the same memo don't crowd out a
+    # second, distinct passage. Backfill from the next-ranked candidates.
+    seen_keys = set()
+    out, out_idx = [], set()
+    def key(r):
+        return _normalize_ws(r[0])[:200].strip().lower()
+    for i in picked_indices:
+        if i in out_idx:
+            continue
+        k = key(candidates[i])
+        if k in seen_keys:
+            continue
+        seen_keys.add(k)
+        out_idx.add(i)
+        out.append(candidates[i])
+        if len(out) >= context_limit:
+            return out
+    for i in fill_pool:
+        if len(out) >= context_limit:
+            break
+        if i in out_idx:
+            continue
+        k = key(candidates[i])
+        if k in seen_keys:
+            continue
+        seen_keys.add(k)
+        out_idx.add(i)
+        out.append(candidates[i])
+    return out
 
 
 def rerank(candidates, rewritten_query, context_limit, search_terms=None):
@@ -447,10 +494,11 @@ def rerank(candidates, rewritten_query, context_limit, search_terms=None):
         raw = json.loads(res.choices[0].message.content)
         indices = list(raw.values())[0] if isinstance(raw, dict) else raw
         valid = [i for i in indices if isinstance(i, int) and 0 <= i < len(candidates)]
-        return [candidates[i] for i in valid[:context_limit]]
+        fill_pool = [i for i in range(len(candidates)) if i not in set(valid)]
+        return _dedupe_picks(candidates, valid, context_limit, fill_pool)
     except Exception as e:
         print(f"Rerank failed, using FTS order: {e}")
-        return candidates[:context_limit]
+        return _dedupe_picks(candidates, list(range(len(candidates))), context_limit, [])
 
 
 def build_context(picked):
