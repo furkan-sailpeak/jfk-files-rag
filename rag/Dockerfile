@@ -17,6 +17,11 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
+# Without this, print() goes to block-buffered stdout and app-level logs
+# never reach the platform — gunicorn's own stderr lines appear while the
+# application's are swallowed, which makes a boot failure look like silence.
+ENV PYTHONUNBUFFERED=1
+
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
