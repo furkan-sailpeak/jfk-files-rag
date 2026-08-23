@@ -245,16 +245,42 @@ def init_db_pool():
         _db_pool = None
 
 
-if DATABASE_URL:
+# NOT called at import. gunicorn binds the listen socket in the master before
+# workers import this module, so anything slow here is invisible to the
+# platform: connections are accepted and then never served, which surfaces as
+# a 502 "application failed to respond" against a service reporting healthy.
+#
+# ensure_schema() was the specific offender. It issues CREATE INDEX on
+# jfk_pages, and with preload_app=False every worker ran it at once, so N
+# workers serialized behind each other on the same table lock. It is a
+# one-time migration, not per-boot work, so it is opt-in now: deploy once with
+# RUN_SCHEMA_BOOTSTRAP=1 (or run it out of band) when the schema changes.
+if DATABASE_URL and os.getenv("RUN_SCHEMA_BOOTSTRAP", "0").lower() in ("1", "true", "yes"):
     ensure_schema()
-    init_db_pool()
+
+_db_pool_lock = threading.Lock()
+
+
+def _get_pool():
+    """Pool built on first use rather than at import, so a slow or unreachable
+    database degrades individual requests instead of preventing the worker
+    from ever serving. Double-checked under a lock: gevent makes greenlet
+    switches possible inside connect()."""
+    global _db_pool
+    if _db_pool is not None or not DATABASE_URL:
+        return _db_pool
+    with _db_pool_lock:
+        if _db_pool is None:
+            init_db_pool()
+    return _db_pool
 
 
 @contextmanager
 def db_cursor():
     """Pooled connection, returned as soon as the DB work is done.
     Never held across an LLM roundtrip."""
-    conn = _db_pool.getconn() if _db_pool else psycopg2.connect(DATABASE_URL)
+    pool = _get_pool()
+    conn = pool.getconn() if pool else psycopg2.connect(DATABASE_URL)
     try:
         cur = conn.cursor()
         yield cur
@@ -267,8 +293,10 @@ def db_cursor():
             pass
         raise
     finally:
-        if _db_pool:
-            _db_pool.putconn(conn)
+        # Return the connection to the pool that produced it — re-reading the
+        # global here could hand it to a pool built by another greenlet.
+        if pool:
+            pool.putconn(conn)
         else:
             conn.close()
 
