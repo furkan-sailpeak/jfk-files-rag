@@ -11,7 +11,10 @@ is spent waiting on network I/O (LLM APIs, Postgres), not on CPU.
 import multiprocessing
 import os
 
-bind = f"0.0.0.0:{os.getenv('PORT', '5001')}"
+# Default matches the Dockerfile's EXPOSE so the image listens where the
+# platform expects even if PORT is unset. Local dev does not use gunicorn
+# (app.py's __main__ runs Flask on 5001, which the Vite proxy targets).
+bind = f"0.0.0.0:{os.getenv('PORT', '8080')}"
 
 worker_class = "gevent"
 # Each greenlet is cheap; the real ceiling is upstream API rate limits, not
