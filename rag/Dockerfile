@@ -30,6 +30,10 @@ COPY gunicorn.conf.py ./
 COPY prompts/ ./prompts/
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
-EXPOSE 5001
+# Must match the port gunicorn actually binds. Railway injects PORT=8080 and
+# routes to the EXPOSEd port when the service has no explicit target port
+# set, so declaring 5001 here sent traffic to a port nothing listened on --
+# an instant connection-refused 502 against a container reporting healthy.
+EXPOSE 8080
 
 CMD ["gunicorn", "--config", "gunicorn.conf.py", "app:app"]
