@@ -26,3 +26,6 @@ Thumbs.db
 .claude/
 
 ocr_output/
+
+# Local notes
+todo.md

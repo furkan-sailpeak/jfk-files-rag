@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Send, Users, FileText, Search, Menu, X, Plus, Download, MessageSquare, Trash2 } from 'lucide-react';
+import { Send, Users, FileText, Search, Menu, X, Plus, Download, MessageSquare, Trash2, LogIn, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
-import { renderToStaticMarkup } from 'react-dom/server';
 import remarkGfm from 'remark-gfm';
+import Auth from './Auth';
+import { supabase, authEnabled, getAccessToken } from './supabaseClient';
 
 const API_BASE = '/api';
 
@@ -43,10 +44,118 @@ function chatTitle(messages) {
   return text.length > 40 ? text.slice(0, 40) + '...' : text;
 }
 
+// Inline markdown -> HTML. Input is already HTML-escaped, so quotes inside
+// link titles arrive as &quot; and are matched as such.
+function mdInline(escaped) {
+  return escaped
+    // Code spans first, so ** and * inside them are left alone.
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // [text](url "title") — link text may contain backslash-escaped brackets,
+    // which is exactly what injectCitationLinks emits for [\[1\]].
+    .replace(
+      /\[((?:\\.|[^\]\\])*)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g,
+      (_m, text, url, title) =>
+        `<a href="${url}"${title ? ` title="${title}"` : ''}>${text}</a>`
+    )
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+    // Finally drop markdown backslash escapes (\[1\] -> [1]).
+    .replace(/\\([\\`*_{}[\]()#+\-.!])/g, '$1');
+}
+
+// Minimal Markdown -> HTML renderer for the PDF export.
+//
+// This previously called renderToStaticMarkup(<ReactMarkdown/>), which pulled
+// React's entire server renderer into the *client* bundle purely to build an
+// export document — bytes every visitor downloads for a feature most never
+// use. The export only ever sees LLM-generated markdown (headings, bold,
+// lists, tables, and the citation links injected above), so a string transform
+// covers it at a fraction of the download cost.
 function renderMarkdownToHTML(text) {
-  return renderToStaticMarkup(
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-  );
+  const lines = escapeHtml(text).replace(/\r\n?/g, '\n').split('\n');
+  const out = [];
+  let listType = null;
+  let i = 0;
+
+  const closeList = () => {
+    if (listType) { out.push(`</${listType}>`); listType = null; }
+  };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (/^\s*```/.test(line)) {                       // fenced code block
+      closeList();
+      const body = [];
+      i++;
+      while (i < lines.length && !/^\s*```/.test(lines[i])) body.push(lines[i++]);
+      i++;
+      out.push(`<pre><code>${body.join('\n')}</code></pre>`);
+      continue;
+    }
+
+    // GFM table: header row followed by a |---|---| separator
+    if (line.includes('|') && i + 1 < lines.length &&
+        /^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(lines[i + 1])) {
+      closeList();
+      const cells = (row) => row.replace(/^\s*\|/, '').replace(/\|\s*$/, '')
+        .split('|').map((c) => mdInline(c.trim()));
+      const head = cells(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && lines[i].includes('|') && lines[i].trim()) {
+        rows.push(cells(lines[i++]));
+      }
+      out.push(
+        '<table><thead><tr>' + head.map((c) => `<th>${c}</th>`).join('') +
+        '</tr></thead><tbody>' +
+        rows.map((r) => '<tr>' + r.map((c) => `<td>${c}</td>`).join('') + '</tr>').join('') +
+        '</tbody></table>'
+      );
+      continue;
+    }
+
+    const heading = line.match(/^\s{0,3}(#{1,6})\s+(.*)$/);
+    if (heading) {
+      closeList();
+      const level = heading[1].length;
+      out.push(`<h${level}>${mdInline(heading[2].trim())}</h${level}>`);
+      i++; continue;
+    }
+
+    if (/^\s*([-*_])\s*(\1\s*){2,}$/.test(line)) {    // horizontal rule
+      closeList(); out.push('<hr/>'); i++; continue;
+    }
+
+    const quote = line.match(/^\s*&gt;\s?(.*)$/);      // '>' is escaped by now
+    if (quote) {
+      closeList();
+      out.push(`<blockquote>${mdInline(quote[1])}</blockquote>`);
+      i++; continue;
+    }
+
+    const bullet = line.match(/^\s*[-*+]\s+(.*)$/);
+    const numbered = line.match(/^\s*\d+[.)]\s+(.*)$/);
+    if (bullet || numbered) {
+      const want = bullet ? 'ul' : 'ol';
+      if (listType !== want) { closeList(); out.push(`<${want}>`); listType = want; }
+      out.push(`<li>${mdInline((bullet || numbered)[1])}</li>`);
+      i++; continue;
+    }
+
+    if (!line.trim()) { closeList(); i++; continue; }
+
+    closeList();                                       // paragraph
+    const para = [];
+    while (i < lines.length && lines[i].trim() &&
+           !/^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s|```|&gt;)/.test(lines[i])) {
+      para.push(lines[i++]);
+    }
+    out.push(`<p>${mdInline(para.join(' '))}</p>`);
+  }
+
+  closeList();
+  return out.join('\n');
 }
 
 function downloadChat(messages) {
@@ -88,6 +197,10 @@ function downloadChat(messages) {
   .turn.assistant pre { background: #f4f4f4; padding: 0.75rem; border-radius: 4px; overflow-x: auto; }
   .turn.assistant a { color: #1a5fb4; text-decoration: none; }
   .turn.assistant a:hover { text-decoration: underline; }
+  .turn.assistant blockquote { margin: 0.5rem 0; padding-left: 0.9rem; border-left: 3px solid #ddd; color: #444; }
+  .turn.assistant table { border-collapse: collapse; width: 100%; margin: 0.75rem 0; font-size: 0.9em; }
+  .turn.assistant th, .turn.assistant td { border: 1px solid #ddd; padding: 0.35rem 0.5rem; text-align: left; }
+  .turn.assistant th { background: #f4f4f4; }
   .sources { margin-top: 0.75rem; font-size: 0.85rem; }
   .sources h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin: 0 0 0.4rem; }
   .sources ol { margin: 0 0 0 1.2rem; }
@@ -123,6 +236,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authReason, setAuthReason] = useState('');
+  const [quotaLeft, setQuotaLeft] = useState(null);
   const chatEndRef = useRef(null);
 
   const activeChat = chats.find(c => c.id === activeChatId) || chats[0];
@@ -161,6 +278,35 @@ function App() {
   useEffect(() => {
     fetchStats();
   }, []);
+
+  // Track the Supabase session. detectSessionInUrl handles the magic-link
+  // callback, which fires onAuthStateChange rather than a page-load event.
+  useEffect(() => {
+    if (!authEnabled) return;
+    supabase.auth.getSession().then(({ data }) => setSession(data?.session ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+      setSession(next);
+      if (next) {
+        // Signing in clears the trial banner and closes the modal.
+        setAuthOpen(false);
+        setQuotaLeft(null);
+        // Strip the magic-link tokens from the address bar.
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+    return () => sub?.subscription?.unsubscribe();
+  }, []);
+
+  const promptSignIn = (reason) => {
+    setAuthReason(reason || '');
+    setAuthOpen(true);
+  };
+
+  const signOut = async () => {
+    if (authEnabled) await supabase.auth.signOut();
+    setSession(null);
+    setQuotaLeft(null);
+  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -206,15 +352,33 @@ function App() {
         content: m.content,
       }));
 
+      const token = await getAccessToken();
       const res = await fetch(`${API_BASE}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ query: input, history }),
       });
+
+      // 401 = anonymous trial used up; 429 = burst or daily quota. Both come
+      // back as plain JSON rather than an SSE stream.
+      if (res.status === 401 || res.status === 429) {
+        const body = await res.json().catch(() => ({}));
+        const msg = body.message || 'Rate limit reached.';
+        updateLastAI({ content: msg, stage: null });
+        if (res.status === 401) promptSignIn(msg);
+        setQuotaLeft(0);
+        return;
+      }
 
       if (!res.ok || !res.body) {
         throw new Error(`HTTP ${res.status}`);
       }
+
+      const remainingHeader = res.headers.get('X-Quota-Remaining');
+      if (remainingHeader !== null) setQuotaLeft(Number(remainingHeader));
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -274,13 +438,19 @@ function App() {
   const analyzeContent = async (text, action) => {
     try {
       setLoading(true);
-      const res = await axios.post(`${API_BASE}/analyze`, { text, action });
+      const token = await getAccessToken();
+      const res = await axios.post(`${API_BASE}/analyze`, { text, action }, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       const aiMsg = {
         role: 'ai',
         content: `### ${action.toUpperCase()} ANALYSIS\n\n${res.data.result}`
       };
       setMessages(prev => [...prev, aiMsg]);
     } catch (err) {
+      if (err?.response?.status === 401) {
+        promptSignIn(err.response.data?.message);
+      }
       console.error("Analysis error:", err);
     } finally {
       setLoading(false);
@@ -298,6 +468,34 @@ function App() {
           JFK Files Research System
           <span className="logo-sub">Declassified Document Archive</span>
         </div>
+
+        {authEnabled && (
+          <div className="account-box">
+            {session ? (
+              <>
+                <div className="account-email" title={session.user?.email}>
+                  {session.user?.email}
+                </div>
+                <button className="account-btn" onClick={signOut}>
+                  <LogOut size={13} /> Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="account-trial">
+                  {quotaLeft === null
+                    ? 'Unauthenticated access'
+                    : quotaLeft > 0
+                      ? `${quotaLeft} unauthenticated request${quotaLeft === 1 ? '' : 's'} left`
+                      : 'Unauthenticated limit reached'}
+                </div>
+                <button className="account-btn" onClick={() => promptSignIn('')}>
+                  <LogIn size={13} /> Sign in
+                </button>
+              </>
+            )}
+          </div>
+        )}
 
         <div style={{ fontSize: '0.65rem', color: 'var(--text-dim)', borderLeft: '1px solid var(--border-light)', paddingLeft: '0.75rem' }}>
           <p style={{ fontWeight: '600', color: 'var(--text-muted)', marginBottom: '0.15rem' }}>Master of Statistics & Data Science</p>
@@ -439,6 +637,10 @@ function App() {
           </div>
         </div>
       </div>
+
+      {authEnabled && (
+        <Auth open={authOpen} onClose={() => setAuthOpen(false)} reason={authReason} />
+      )}
     </div>
   );
 }

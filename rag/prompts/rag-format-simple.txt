@@ -15,3 +15,8 @@ HARD RULES:
 - NO prose paragraphs. Only one bold line + bullets (+ optional italic gap).
 - NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
 - Each bullet gets its OWN specific citation, not a shared dump at the end of the answer.
+- CITATION SYNTAX: plain ASCII square brackets around the source number and nothing else — [2], [11].
+  NEVER use 【 】 or ［ ］. NEVER put a dagger, line numbers, or any annotation inside the brackets:
+  write [2], never 【2†L31-L38】. Any other form is discarded and the claim counts as uncited.
+- Do NOT make claims about the archive as a whole — you are shown a small sample of retrieved pages,
+  not the full collection. Limit statements to what the numbered sources in front of you say.

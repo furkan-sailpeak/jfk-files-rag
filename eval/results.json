@@ -1,0 +1,634 @@
+[
+  {
+    "id": "factual_oswald_marine_clearance",
+    "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Lee Harvey Oswald held a “confidential” level security clearance during his Marine Corps service.**\n\n- The Marine Corps fact sheet lists Oswald’s security clearance as “confidential” [1].  \n- An interview with a Marine supervisor notes that Oswald’s unit required a “confidential” clearance for its radar work [2].",
+    "sources": [
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 13
+      },
+      {
+        "filename": "180-10078-10492.pdf",
+        "page": 3
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 11
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 127
+      },
+      {
+        "filename": "180-10117-10032.pdf",
+        "page": 81
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 111
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 257
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 3
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 15
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 15
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 61
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 48
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 131
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 115
+      }
+    ],
+    "timings": {
+      "router_ms": 396,
+      "retrieve_ms": 1094,
+      "rerank_ms": 509,
+      "generate_ms": 727,
+      "ground_ms": 577,
+      "cite_verify_ms": 483,
+      "total_ms": 6020
+    },
+    "elapsed_s": 6.274328947067261
+  },
+  {
+    "id": "factual_ruby_real_name",
+    "question": "What was Jack Ruby's original family name before he changed it?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Jack Ruby’s original family name was Rubenstein.**\n\n- A CIA memo lists him as “RUBY, Jack aka Jack RUBENSTEIN”[2].  \n- An interview transcript notes “Jack Ruby, I understand that his real name was Rubenstein”[1].",
+    "sources": [
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 18
+      },
+      {
+        "filename": "104-10079-10016.pdf",
+        "page": 64
+      },
+      {
+        "filename": "157-10002-10165.pdf",
+        "page": 2
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 383
+      },
+      {
+        "filename": "104-10332-10022.pdf",
+        "page": 59
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 44
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 384
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 68
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 78
+      },
+      {
+        "filename": "180-10073-10093.pdf",
+        "page": 1
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 441
+      },
+      {
+        "filename": "104-10332-10022.pdf",
+        "page": 65
+      },
+      {
+        "filename": "180-10145-10446.pdf",
+        "page": 116
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 178
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 177
+      }
+    ],
+    "timings": {
+      "router_ms": 242,
+      "retrieve_ms": 579,
+      "rerank_ms": 957,
+      "generate_ms": 681,
+      "ground_ms": 452,
+      "cite_verify_ms": 443,
+      "total_ms": 4166
+    },
+    "elapsed_s": 4.426943063735962
+  },
+  {
+    "id": "factual_oswald_mexico_cuban_embassy",
+    "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Lee Harvey Oswald visited the Cuban Embassy in Mexico City to request a transit visa on 27 September 1963.**\n\n- The record notes that “OSWALD went to Cuban Embassy, Mexico City and made appoint for visa to Cuba on way to USSR” on 27 September 63[1].",
+    "sources": [
+      {
+        "filename": "104-10413-10306.pdf",
+        "page": 35
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 195
+      },
+      {
+        "filename": "180-10110-10100.pdf",
+        "page": 4
+      },
+      {
+        "filename": "104-10413-10306.pdf",
+        "page": 32
+      },
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 10
+      },
+      {
+        "filename": "157-10004-10144.pdf",
+        "page": 3
+      },
+      {
+        "filename": "135-10001-10283.pdf",
+        "page": 6
+      },
+      {
+        "filename": "157-10014-10017.pdf",
+        "page": 95
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 306
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 353
+      },
+      {
+        "filename": "104-10306-10018.pdf",
+        "page": 17
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 37
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 158
+      },
+      {
+        "filename": "104-10308-10163.pdf",
+        "page": 1
+      },
+      {
+        "filename": "104-10506-10028.pdf",
+        "page": 77
+      }
+    ],
+    "timings": {
+      "router_ms": 358,
+      "retrieve_ms": 1215,
+      "rerank_ms": 1573,
+      "generate_ms": 1051,
+      "ground_ms": 424,
+      "cite_verify_ms": 616,
+      "total_ms": 6944
+    },
+    "elapsed_s": 7.3455891609191895
+  },
+  {
+    "id": "factual_ruby_fbi_flynn_1959",
+    "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**Special Agent Charles N. Flynn contacted Jack Ruby on March 11, 1959.**\n\n- The FBI record notes that Ruby was contacted by Special Agent Charles N. Flynn of the Dallas Office on March 11, 1959, to determine whether he had knowledge of the criminal element in Dallas [1].",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 441
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 384
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 44
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 115
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 111
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 116
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 59
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 64
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 114
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 60
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 634
+      },
+      {
+        "filename": "124-10185-10099_multirif.pdf",
+        "page": 62
+      },
+      {
+        "filename": "157-10011-10121.pdf",
+        "page": 100
+      },
+      {
+        "filename": "124-10274-10044.pdf",
+        "page": 169
+      },
+      {
+        "filename": "124-10185-10099.pdf",
+        "page": 112
+      }
+    ],
+    "timings": {
+      "router_ms": 223,
+      "retrieve_ms": 747,
+      "rerank_ms": 552,
+      "generate_ms": 732,
+      "ground_ms": 621,
+      "cite_verify_ms": 521,
+      "total_ms": 4415
+    },
+    "elapsed_s": 4.76464581489563
+  },
+  {
+    "id": "factual_oswald_marine_discharge_1959",
+    "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**The Marine Corps Hardship/Dependency Discharge Board convened on 27 August 1959 to consider Private First Class Lee H. Oswald’s case.**  \n\n- The board met at 1530 on 27 August 1959 to review Oswald’s dependency discharge request[1].  \n- A prior notice dated 26 August 1959 instructed that the board be convened “as soon as practicable” for Oswald’s case[2].",
+    "sources": [
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 46
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 45
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 4
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 41
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 24
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 23
+      },
+      {
+        "filename": "104-10222-10038.pdf",
+        "page": 190
+      },
+      {
+        "filename": "104-10222-10040.pdf",
+        "page": 141
+      },
+      {
+        "filename": "104-10225-10003.pdf",
+        "page": 63
+      },
+      {
+        "filename": "104-10224-10008.pdf",
+        "page": 69
+      },
+      {
+        "filename": "104-10291-10000.pdf",
+        "page": 14
+      },
+      {
+        "filename": "104-10194-10023.pdf",
+        "page": 221
+      },
+      {
+        "filename": "104-10193-10079.pdf",
+        "page": 183
+      },
+      {
+        "filename": "104-10291-10004.pdf",
+        "page": 68
+      },
+      {
+        "filename": "104-10193-10079.pdf",
+        "page": 16
+      }
+    ],
+    "timings": {
+      "router_ms": 243,
+      "retrieve_ms": 565,
+      "rerank_ms": 1703,
+      "generate_ms": 1354,
+      "ground_ms": 572,
+      "cite_verify_ms": 525,
+      "total_ms": 5985
+    },
+    "elapsed_s": 6.292104005813599
+  },
+  {
+    "id": "factual_cia_mexico_city_cable_date",
+    "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+    "category": "factual",
+    "query_type_seen": "simple",
+    "answer": "**CIA Headquarters sent the response to Mexico City Station on 11 October 1963.**\n\n- The Mexico City Station received a cable from CIA Headquarters on 11 October 1963 containing information about Lee Oswald, following the station’s earlier report of his contact with the Soviet Embassy [1].",
+    "sources": [
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "filename": "180-10131-10329.pdf",
+        "page": 63
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 182
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 168
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 134
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 133
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 18
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 278
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 144
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 120
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 194
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 34
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 190
+      },
+      {
+        "filename": "104-10332-10014.pdf",
+        "page": 34
+      }
+    ],
+    "timings": {
+      "router_ms": 259,
+      "retrieve_ms": 781,
+      "rerank_ms": 1657,
+      "generate_ms": 1059,
+      "ground_ms": 568,
+      "cite_verify_ms": 488,
+      "total_ms": 6975
+    },
+    "elapsed_s": 7.3211188316345215
+  },
+  {
+    "id": "biographical_jack_ruby",
+    "question": "Who was Jack Ruby?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Jack Ruby was a Dallas nightclub owner who shot and killed Lee Harvey Oswald, the alleged assassin of President John F. Kennedy.**\n\n- Ruby was described as having “substantial ties to the Mafia” and was involved in gambling and narcotics activities [1].\n- The Warren Commission recorded that Ruby drove a woman friend to the H.L. Hunt Oil Company offices in Dallas on the afternoon of November 21, 1963, the day before the assassination [2][3].\n- FBI records show that Special Agent Charles N. Flynn contacted Ruby in March 1959 to determine whether he possessed knowledge of criminal elements in Dallas; Ruby expressed willingness to provide information, but no useful intelligence was obtained [4].",
+    "sources": [
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 383
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 44
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 384
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 441
+      },
+      {
+        "filename": "135-10001-10288.pdf",
+        "page": 18
+      },
+      {
+        "filename": "104-10433-10209.pdf",
+        "page": 162
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 68
+      },
+      {
+        "filename": "104-10332-10009.pdf",
+        "page": 74
+      },
+      {
+        "filename": "104-10305-10005.pdf",
+        "page": 21
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 265
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 325
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 326
+      },
+      {
+        "filename": "157-10014-10242.pdf",
+        "page": 450
+      },
+      {
+        "filename": "104-10423-10337.pdf",
+        "page": 49
+      },
+      {
+        "filename": "104-10333-10001.pdf",
+        "page": 110
+      }
+    ],
+    "timings": {
+      "router_ms": 410,
+      "retrieve_ms": 709,
+      "rerank_ms": 866,
+      "generate_ms": 1078,
+      "ground_ms": 498,
+      "cite_verify_ms": 856,
+      "total_ms": 6236
+    },
+    "elapsed_s": 6.549137830734253
+  },
+  {
+    "id": "biographical_oswald",
+    "question": "Who was Lee Harvey Oswald?",
+    "category": "biographical",
+    "query_type_seen": "simple",
+    "answer": "**Lee Harvey Oswald was a former United States Marine who later became a suspect in the assassination of President John F. Kennedy.**\n\n- He was born in New Orleans on October 18, 1939, and his Social Security number was 433‑54‑3937[2].  \n- He served in the U.S. Marine Corps from 24 Oct 1956 to 11 Sept 1959, bearing service number 1653230, and received an “undesirable” discharge on 13 Sept 1960[2][3].  \n- During his Marine service he held a “confidential” security clearance, as noted by a fellow Marine who supervised him[4].  \n- CIA records state that Oswald was never an informant or directly connected with the Agency, and the number 110669 cited in other contexts does not refer to him[1].",
+    "sources": [
+      {
+        "filename": "135-10001-10276.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10091-10228.pdf",
+        "page": 4
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 27
+      },
+      {
+        "filename": "180-10078-10492.pdf",
+        "page": 3
+      },
+      {
+        "filename": "180-10117-10032.pdf",
+        "page": 81
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 13
+      },
+      {
+        "filename": "180-10091-10228.pdf",
+        "page": 9
+      },
+      {
+        "filename": "180-10104-10354.pdf",
+        "page": 8
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 314
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 102
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 16
+      },
+      {
+        "filename": "180-10072-10186.pdf",
+        "page": 2
+      },
+      {
+        "filename": "104-10335-10014.pdf",
+        "page": 44
+      },
+      {
+        "filename": "104-10332-10023.pdf",
+        "page": 57
+      },
+      {
+        "filename": "180-10110-10484.pdf",
+        "page": 4
+      }
+    ],
+    "timings": {
+      "router_ms": 249,
+      "retrieve_ms": 1134,
+      "rerank_ms": 1478,
+      "generate_ms": 1055,
+      "ground_ms": 612,
+      "cite_verify_ms": 745,
+      "total_ms": 7086
+    },
+    "elapsed_s": 7.327347040176392
+  }
+]
