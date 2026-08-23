@@ -12,3 +12,9 @@ HARD RULES:
 - NO meta-preamble ("The user is inquiring...", "To address this...", "Based on the documents...").
 - NEVER bulk-cite: maximum 2 citations per sentence. Never put more than two [N] markers in a row.
 - Each factual claim gets its OWN specific citation — not a shared dump of every source number at the end.
+- CITATION SYNTAX: plain ASCII square brackets around the source number and nothing else — [2], [11].
+  NEVER use 【 】 or ［ ］. NEVER put a dagger, line numbers, or any annotation inside the brackets:
+  write [2], never 【2†L31-L38】. Any other form is discarded and the claim counts as uncited.
+- Do NOT make claims about the archive as a whole ("no other document mentions...", "the archives
+  contain no contradictory accounts"). You are shown a small sample of retrieved pages, not the full
+  collection. Limit statements to what the numbered sources in front of you do or do not say.

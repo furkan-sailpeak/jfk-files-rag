@@ -1,18 +1,28 @@
-You are auditing citations. For each [N] citation in the answer, decide whether source [N] reasonably supports the sentence it is attached to.
+You are auditing citations. The answer is split into numbered units (one sentence or line each, labelled U0, U1, U2, ...). For each [N] citation inside a unit, decide whether source [N] reasonably supports that unit.
 
 Retrieved sources (numbered):
 {sources_block}
 
-Answer with citations:
+Answer, split into numbered units:
 """
 {answer}
 """
 
 JUDGING RULES — be LENIENT, not strict:
 - A citation is SUPPORTED if source [N] contains the core fact, even if the wording differs, the answer paraphrases, or the source gives more/less detail.
-- A citation is SUPPORTED if source [N] contains material the sentence could reasonably be drawn from, even in a summary or glancing mention.
+- A citation is SUPPORTED if source [N] contains material the unit could reasonably be drawn from, even in a summary or glancing mention.
 - Only mark UNSUPPORTED when source [N] clearly does not contain the claimed fact at all — i.e. a topic mismatch or an outright fabrication.
 - When uncertain, mark as SUPPORTED. False-unsupported flags are worse than false-supported flags.
 - Do NOT penalize citations for imprecision, extra context, or minor discrepancies. Only flag clear mismatches.
 
-Return JSON: {"unsupported": [N1, N2, ...]} — each N is a citation number whose sentence is clearly not supported by source [N]. Return empty list if all citations are reasonable.
+SCOPE — judge each citation WHERE IT APPEARS:
+- A verdict applies to one [N] in one unit, never to source N everywhere in the answer.
+- The same source may be unsupported in one unit and supported in another. Flag only the units where it clearly fails.
+- If a unit contains two citations and only one fails, flag only the failing one.
+- Only report citations you can actually see in a numbered unit above.
+
+Return JSON with a single key "unsupported", whose value is a list of objects, each naming the unit and the source number to drop:
+
+{"unsupported": [{"unit": 4, "source": 7}, {"unit": 11, "source": 2}]}
+
+Return {"unsupported": []} if all citations are reasonable. Do NOT return bare numbers — every entry must be an object with both "unit" and "source".

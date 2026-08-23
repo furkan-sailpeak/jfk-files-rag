@@ -5,7 +5,9 @@ import time
 import threading
 from contextlib import contextmanager
 
+import jwt
 import psycopg2
+from psycopg2 import pool as pgpool
 from flask import Flask, request, jsonify, redirect, send_from_directory, Response, stream_with_context
 from flask_cors import CORS
 from groq import Groq
@@ -15,7 +17,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__, static_folder='frontend/dist', static_url_path='/')
-CORS(app)
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -24,24 +25,102 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# --- CORS -------------------------------------------------------------------
+# Bare CORS(app) allows every origin, which lets any third-party site drive
+# this backend on our LLM budget. Lock to our own domains in production;
+# fall back to permissive only when ALLOWED_ORIGINS is unset (local dev).
+ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+if ALLOWED_ORIGINS:
+    CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
+    print(f"CORS locked to: {ALLOWED_ORIGINS}")
+else:
+    CORS(app)
+    print("WARNING: ALLOWED_ORIGINS unset — CORS is open to all origins (dev mode).")
+
+# --- Auth (Supabase JWT) ----------------------------------------------------
+# Supabase supports two token-signing schemes and which one a project uses
+# depends on when it was created:
+#   * Asymmetric (ES256/RS256) — current default. Tokens are verified against
+#     the project's public JWKS endpoint. Nothing secret goes in the env.
+#   * HS256 — the legacy shared "JWT Secret". Still valid on older projects.
+# Support both so this works regardless of project age, and so a future
+# key rotation to asymmetric doesn't lock every user out.
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
+SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
+
+_jwks_client = None
+_jwks_lock = threading.Lock()
+
+
+def _get_jwks_client():
+    """Lazily build a JWKS client. PyJWT caches the fetched keys, so this is
+    one network call per process, not per request."""
+    global _jwks_client
+    if _jwks_client is not None or not SUPABASE_URL:
+        return _jwks_client
+    with _jwks_lock:
+        if _jwks_client is None:
+            _jwks_client = jwt.PyJWKClient(
+                f"{SUPABASE_URL}/auth/v1/.well-known/jwks.json",
+                cache_keys=True,
+            )
+    return _jwks_client
+
+
+AUTH_CONFIGURED = bool(SUPABASE_URL or SUPABASE_JWT_SECRET)
+if not AUTH_CONFIGURED:
+    print("WARNING: neither SUPABASE_URL nor SUPABASE_JWT_SECRET set — "
+          "authentication disabled; the sign-in quota gate is not enforced.")
+
+# --- Abuse / cost limits ----------------------------------------------------
+# TEMPORARILY DISABLED (see todo.md): the whole sign-in + quota gate is off by
+# default so the thesis demo runs without a login wall. Set GATE_ENABLED=1 to
+# turn the limiter back on; nothing below was removed.
+GATE_ENABLED = os.getenv("GATE_ENABLED", "0").lower() in ("1", "true", "yes")
+
+# Anonymous visitors get a small free trial so media traffic can try the tool
+# without signing up; signed-in users get a real daily quota.
+ANON_DAILY_LIMIT = int(os.getenv("ANON_DAILY_LIMIT", "3"))
+USER_DAILY_LIMIT = int(os.getenv("USER_DAILY_LIMIT", "50"))
+BURST_PER_MIN = int(os.getenv("BURST_PER_MIN", "5"))
+
+# Hard caps on anything that reaches an LLM call — unbounded input is a
+# direct cost-drain vector on a public endpoint.
+MAX_QUERY_CHARS = int(os.getenv("MAX_QUERY_CHARS", "2000"))
+MAX_HISTORY_MSGS = int(os.getenv("MAX_HISTORY_MSGS", "20"))
+MAX_HISTORY_CHARS = int(os.getenv("MAX_HISTORY_CHARS", "4000"))
+MAX_ANALYZE_CHARS = int(os.getenv("MAX_ANALYZE_CHARS", "20000"))
+
+# Cosmetic token-replay pacing for the final answer. Total replay is capped at
+# REPLAY_BUDGET_S regardless of answer length; per-token delay never exceeds
+# REPLAY_MAX_DELAY_S so short answers still animate visibly. Set the budget to
+# 0 to disable the animation entirely.
+REPLAY_BUDGET_S = float(os.getenv("REPLAY_BUDGET_S", "1.5"))
+REPLAY_MAX_DELAY_S = float(os.getenv("REPLAY_MAX_DELAY_S", "0.015"))
+
 NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
 
-# Main LLM client: Groq + llama for everything.
+# Main LLM client. llama-3.3-70b-versatile was decommissioned by Groq on
+# 2026-08-16 and now returns 404 model_not_found; gpt-oss-120b is Groq's
+# recommended replacement. Overridable so a swap needs no code change.
+DEFAULT_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 if GROQ_API_KEY:
     client = Groq(api_key=GROQ_API_KEY)
-    MODEL = "llama-3.3-70b-versatile"
+    MODEL = DEFAULT_MODEL
     LLM_PROVIDER = "groq"
     print(f"LLM provider: Groq, model={MODEL}")
 else:
     print("WARNING: GROQ_API_KEY not found; /api/chat will 500.")
     client = None
-    MODEL = "llama-3.3-70b-versatile"
+    MODEL = DEFAULT_MODEL
     LLM_PROVIDER = "none"
 
-# Judge/rerank/router/expansion/citation-verify calls always go to Groq + llama.
-# These are cheap, high-volume utility calls; using the premium MODEL for them
-# balloons cost without measurable quality gain.
-JUDGE_MODEL = os.getenv("JUDGE_MODEL", "llama-3.3-70b-versatile")
+# Judge/rerank/router/expansion/citation-verify are cheap, high-volume utility
+# calls that emit small structured JSON rather than prose. The 20B model is
+# sized for exactly that; using the 120B here balloons cost and latency for no
+# measurable quality gain. Raise to the 120B via JUDGE_MODEL if eval scores
+# regress on these stages.
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "openai/gpt-oss-20b")
 if GROQ_API_KEY:
     judge_client = Groq(api_key=GROQ_API_KEY)
     print(f"Judge/rerank provider: Groq, model={JUDGE_MODEL}")
@@ -59,6 +138,24 @@ EMBED_DIM = 512  # Matryoshka-truncated; stored on-disk as halfvec(512) for ~6x 
 embed_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 if not embed_client:
     print("WARNING: OPENAI_API_KEY not set; hybrid retrieval will fall back to FTS-only.")
+
+
+def reasoning_kwargs(model_name):
+    """gpt-oss models emit chain-of-thought before the answer. Left at the
+    defaults that costs real latency (0.40s to first token vs 0.14s) and,
+    worse, the hidden reasoning still counts against max_tokens — a small cap
+    can be consumed entirely by reasoning, returning empty content.
+
+    'hidden' keeps reasoning out of the response, 'low' keeps it short.
+    Returns {} for non-reasoning models so this stays a no-op after a swap.
+    """
+    if "gpt-oss" in model_name:
+        return {"reasoning_effort": "low", "reasoning_format": "hidden"}
+    return {}
+
+
+GEN_KW = reasoning_kwargs(MODEL)
+JUDGE_KW = reasoning_kwargs(JUDGE_MODEL)
 
 
 def token_limit_kwargs(limit):
@@ -92,7 +189,8 @@ def load_prompt(filename, fallback=""):
 # ---------------------------------------------------------------------------
 # Database
 # ---------------------------------------------------------------------------
-def ensure_fts_index():
+def ensure_schema():
+    """One-time bootstrap: FTS index + the rate-limit counter table."""
     try:
         conn = psycopg2.connect(DATABASE_URL)
         cur = conn.cursor()
@@ -100,29 +198,79 @@ def ensure_fts_index():
             CREATE INDEX IF NOT EXISTS idx_jfk_pages_content_fts
             ON jfk_pages USING GIN (to_tsvector('english', content))
         """)
+        # Rate-limit counters live in Postgres rather than process memory so
+        # the limit is shared across gunicorn workers. An in-memory counter
+        # would multiply every quota by the worker count.
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS rate_limits (
+                bucket      text PRIMARY KEY,
+                count       integer NOT NULL DEFAULT 0,
+                window_start timestamptz NOT NULL DEFAULT now()
+            )
+        """)
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_rate_limits_window
+            ON rate_limits (window_start)
+        """)
         conn.commit()
         cur.close()
         conn.close()
-        print("FTS index ready.")
+        print("Schema ready (FTS index + rate_limits).")
     except Exception as e:
-        print(f"FTS index creation skipped: {e}")
+        print(f"Schema bootstrap skipped: {e}")
+
+
+# ---------------------------------------------------------------------------
+# Connection pool
+# ---------------------------------------------------------------------------
+# Previously every db_cursor() opened a fresh connection — a full TCP + TLS
+# handshake to Supabase per query, several per request. Under launch traffic
+# that exhausts Supabase's connection limit long before the app itself
+# saturates. Pool instead; connections are still returned promptly so none is
+# held across a multi-second LLM roundtrip.
+DB_POOL_MIN = int(os.getenv("DB_POOL_MIN", "1"))
+DB_POOL_MAX = int(os.getenv("DB_POOL_MAX", "8"))
+_db_pool = None
+
+
+def init_db_pool():
+    global _db_pool
+    if not DATABASE_URL or _db_pool is not None:
+        return
+    try:
+        _db_pool = pgpool.ThreadedConnectionPool(DB_POOL_MIN, DB_POOL_MAX, DATABASE_URL)
+        print(f"DB pool ready ({DB_POOL_MIN}-{DB_POOL_MAX} connections).")
+    except Exception as e:
+        print(f"DB pool init failed, falling back to per-request connects: {e}")
+        _db_pool = None
 
 
 if DATABASE_URL:
-    ensure_fts_index()
+    ensure_schema()
+    init_db_pool()
 
 
 @contextmanager
 def db_cursor():
-    """Short-lived connection. Held ONLY for the duration of a DB read.
-    Prevents holding idle connections across multi-second LLM roundtrips."""
-    conn = psycopg2.connect(DATABASE_URL)
+    """Pooled connection, returned as soon as the DB work is done.
+    Never held across an LLM roundtrip."""
+    conn = _db_pool.getconn() if _db_pool else psycopg2.connect(DATABASE_URL)
     try:
         cur = conn.cursor()
         yield cur
+        conn.commit()
         cur.close()
+    except Exception:
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        raise
     finally:
-        conn.close()
+        if _db_pool:
+            _db_pool.putconn(conn)
+        else:
+            conn.close()
 
 
 _stats_cache = {"ts": 0, "total_p": 0, "hw_p": 0, "stamp_p": 0, "redact_p": 0}
@@ -158,6 +306,130 @@ def get_archive_stats():
     return dict(_stats_cache)
 
 
+# ---------------------------------------------------------------------------
+# Auth (Supabase JWT) + rate limiting
+# ---------------------------------------------------------------------------
+def get_user():
+    """Decode a Supabase access token from the Authorization header.
+    Returns {"id", "email"} for a valid token, else None (anonymous).
+    Verification is local (HS256 against the project JWT secret) so it costs
+    no network roundtrip per request."""
+    header = request.headers.get("Authorization", "")
+    if not header.startswith("Bearer "):
+        return None
+    token = header[7:].strip()
+    if not token:
+        return None
+    try:
+        # The header tells us which scheme signed this token; pick the
+        # matching verification path rather than guessing.
+        alg = jwt.get_unverified_header(token).get("alg", "")
+        if alg.startswith("HS"):
+            if not SUPABASE_JWT_SECRET:
+                return None
+            key, algorithms = SUPABASE_JWT_SECRET, ["HS256"]
+        else:
+            client_jwks = _get_jwks_client()
+            if not client_jwks:
+                return None
+            key = client_jwks.get_signing_key_from_jwt(token).key
+            algorithms = ["ES256", "RS256"]
+
+        payload = jwt.decode(
+            token,
+            key,
+            algorithms=algorithms,
+            audience="authenticated",
+        )
+        return {"id": payload.get("sub"), "email": payload.get("email")}
+    except Exception as e:
+        print(f"[auth] rejected token: {e}")
+        return None
+
+
+def _client_ip():
+    """Railway sits behind a proxy, so remote_addr is the proxy. Take the
+    first hop from X-Forwarded-For, which is the real client."""
+    xff = request.headers.get("X-Forwarded-For", "")
+    if xff:
+        return xff.split(",")[0].strip()
+    return request.remote_addr or "unknown"
+
+
+def _bump(bucket):
+    """Atomically increment a counter bucket and return its new value."""
+    with db_cursor() as cur:
+        cur.execute(
+            """
+            INSERT INTO rate_limits (bucket, count) VALUES (%s, 1)
+            ON CONFLICT (bucket) DO UPDATE SET count = rate_limits.count + 1
+            RETURNING count
+            """,
+            (bucket,),
+        )
+        return cur.fetchone()[0]
+
+
+def check_rate_limit(user):
+    """Two windows: a per-minute burst guard and a daily quota. Buckets carry
+    the window in the key, so they expire implicitly — no sweeper needed on
+    the hot path.
+
+    Returns (allowed, reason, remaining_today).
+
+    Fails OPEN on database error: a rate-limiter outage should not take the
+    whole app down during a launch. The burst guard still caps the blast
+    radius if that ever happens.
+    """
+    if not GATE_ENABLED:
+        return True, "", USER_DAILY_LIMIT
+
+    now = time.gmtime()
+    day = time.strftime("%Y-%m-%d", now)
+    minute = time.strftime("%Y-%m-%dT%H:%M", now)
+
+    if user:
+        ident, daily_cap = f"user:{user['id']}", USER_DAILY_LIMIT
+    else:
+        # When auth isn't configured there is no sign-in to upgrade to, so
+        # applying the small unauthenticated allowance would strand the user
+        # at a dead end. Fall back to the full quota; the burst guard still
+        # applies.
+        ident = f"ip:{_client_ip()}"
+        daily_cap = ANON_DAILY_LIMIT if AUTH_CONFIGURED else USER_DAILY_LIMIT
+
+    try:
+        if _bump(f"{ident}:m:{minute}") > BURST_PER_MIN:
+            return False, "burst", 0
+        used = _bump(f"{ident}:d:{day}")
+    except Exception as e:
+        print(f"[ratelimit] check failed, allowing request: {e}")
+        return True, "", daily_cap
+
+    if used > daily_cap:
+        return False, "daily", 0
+    return True, "", max(0, daily_cap - used)
+
+
+def sanitize_history(raw):
+    """Trim conversation history to a bounded size. History is echoed into
+    LLM prompts, so an unbounded list is a direct cost-amplification vector."""
+    if not isinstance(raw, list):
+        return []
+    clean = []
+    for msg in raw[-MAX_HISTORY_MSGS:]:
+        if not isinstance(msg, dict):
+            continue
+        role = msg.get("role")
+        if role not in ("user", "assistant"):
+            continue
+        content = msg.get("content")
+        if not isinstance(content, str):
+            continue
+        clean.append({"role": role, "content": content[:MAX_HISTORY_CHARS]})
+    return clean
+
+
 # Minimal English stopword set for expansion-term filtering.
 _STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has",
@@ -177,10 +449,10 @@ def _tokenize_terms(text):
     return terms[:6]  # cap to keep fallback query tractable
 
 
-def fts_search(ts_input, ilike_terms=None):
+def fts_search(ts_input):
     """FTS leg of hybrid retrieval. Strong on proper nouns and rare terms;
-    weak on semantic/paraphrase match. ILIKE fallback when tsquery returns nothing."""
-    ilike_terms = ilike_terms or _tokenize_terms(ts_input)
+    weak on semantic/paraphrase match. Index-backed (GIN on tsvector), so this
+    stays in the low hundreds of milliseconds."""
     with db_cursor() as cur:
         cur.execute(
             """
@@ -196,24 +468,51 @@ def fts_search(ts_input, ilike_terms=None):
             """,
             [ts_input, ts_input],
         )
-        rows = cur.fetchall()
-        if not rows and ilike_terms:
-            where_clauses = [f"content ILIKE %s" for _ in ilike_terms]
+        return cur.fetchall()
+
+
+# Worst-case guard for the unindexed fallback below. Without it a single
+# pathological query can pin a connection for the whole request timeout.
+ILIKE_TIMEOUT_MS = int(os.getenv("ILIKE_TIMEOUT_MS", "4000"))
+
+
+def ilike_search(ilike_terms):
+    """Last-resort substring scan, used ONLY when both FTS and vector search
+    come back empty.
+
+    `content ILIKE '%term%'` cannot use the GIN index, so this is a sequential
+    scan of the whole table: measured at 11.7s against ~84k pages, returning
+    ~20k unranked rows for a query like "Kostikov Oswald Mexico City Soviet".
+    It then keeps the LONGEST of those, which is close to meaningless ranking.
+
+    Running it speculatively on every miss was costing ~33s per query-expansion
+    round (3 expansion queries, none of which match plainto_tsquery because
+    they are full sentences). It is kept only as a genuine safety net for when
+    we would otherwise return nothing at all.
+    """
+    if not ilike_terms:
+        return []
+    where_clauses = " OR ".join("content ILIKE %s" for _ in ilike_terms)
+    try:
+        with db_cursor() as cur:
+            cur.execute("SET LOCAL statement_timeout = %s", (ILIKE_TIMEOUT_MS,))
             cur.execute(
                 f"""
                 SELECT content, filename, page_number
                 FROM (
                     SELECT DISTINCT ON (left(content, 200)) content, filename, page_number
                     FROM jfk_pages
-                    WHERE ({' OR '.join(where_clauses)})
+                    WHERE ({where_clauses})
                 ) sub
                 ORDER BY length(content) DESC
                 LIMIT 30
                 """,
                 [f"%{t}%" for t in ilike_terms],
             )
-            rows = cur.fetchall()
-    return rows
+            return cur.fetchall()
+    except Exception as e:
+        print(f"[rag] ILIKE fallback skipped ({e})")
+        return []
 
 
 def _embed_query(text):
@@ -257,8 +556,15 @@ def hybrid_search(ts_input, semantic_query, ilike_terms=None):
     """Union of FTS + vector candidates, deduped on (filename, page_number).
     FTS gets keyword-only input; vector gets the full rewritten question —
     each leg is fed what it's best at."""
-    fts_rows = fts_search(ts_input, ilike_terms)
+    fts_rows = fts_search(ts_input)
     vec_rows = vector_search(semantic_query, limit=30)
+
+    # The substring fallback is a full table scan, so it only earns its cost
+    # when both indexed legs came back empty. Previously it fired whenever FTS
+    # alone missed -- which is the normal case for the full-sentence queries
+    # produced by expansion, even though the vector leg had already answered.
+    if not fts_rows and not vec_rows:
+        fts_rows = ilike_search(ilike_terms or _tokenize_terms(ts_input))
 
     merged, seen = [], set()
     # Interleave FTS-first so exact matches aren't drowned by semantic neighbors.
@@ -296,7 +602,31 @@ def final_event(answer, sources, query_type, timings=None):
 # ---------------------------------------------------------------------------
 # Text post-processing
 # ---------------------------------------------------------------------------
+# gpt-oss emits citations in the format it was trained on rather than the [6]
+# this pipeline expects. Two variants seen in production:
+#   【6】            -- CJK/full-width brackets
+#   【2†L31-L38】    -- OpenAI's file-citation form, with a dagger and a
+#                      line-range annotation invented from whole cloth
+# Every downstream consumer -- remap_citations, verify_citations, the
+# no-citation retry, and the frontend's link injection -- matches on ASCII
+# \[\d+\] only. An un-normalised answer therefore loses its entire citation
+# chain: verification is skipped, no link renders, and the grounding judge
+# reports "cites a source that is not provided" -- which triggers the
+# expensive expansion path on essentially every query.
+#
+# The \d{1,3} bound is deliberate: it keeps bracketed years such as [1963],
+# which are common in this archive, from being rewritten as citations.
+_CITE_BRACKETS = re.compile(
+    r'[【\[［〔]\s*(\d{1,3})\s*(?:†[^】\]］〕]*)?\s*[】\]］〕]'
+)
+
+
+def normalize_citations(text):
+    return _CITE_BRACKETS.sub(r'[\1]', text)
+
+
 def strip_artifacts(text):
+    text = normalize_citations(text)
     text = re.sub(r'\$\\boxed\{([^}]*)\}\$', r'\1', text)
     text = re.sub(r'(?m)^.*The final answer is:?.*$', '', text)
     text = re.sub(r'(?m)^#+?\s*Step \d+:.*$', '', text)
@@ -384,7 +714,7 @@ def route_query(query, history):
     analysis_prompt = load_prompt('router.txt').replace('{query}', query) + build_history_context(history)
     try:
         res = judge_client.chat.completions.create(
-            model=JUDGE_MODEL,
+            model=JUDGE_MODEL, **JUDGE_KW,
             messages=[{"role": "user", "content": analysis_prompt}],
             temperature=0,
             response_format={"type": "json_object"},
@@ -485,11 +815,31 @@ def rerank(candidates, rewritten_query, context_limit, search_terms=None):
         .replace('{snippets}', '\n'.join(snippets))
     )
     try:
-        res = judge_client.chat.completions.create(
-            model=JUDGE_MODEL,
+        # Rerank is the one stage that needs the larger model plus a hard
+        # schema. Under plain json_object mode gpt-oss serialises the ranking
+        # as a single concatenated string ("024681012...") instead of an array
+        # of integers, which this function then discards — silently falling
+        # back to raw FTS order on every query. The 20B fails even WITH the
+        # schema; the 120B satisfies it reliably.
+        res = client.chat.completions.create(
+            model=MODEL, **GEN_KW,
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
-            response_format={"type": "json_object"},
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "rerank",
+                    "strict": True,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "indices": {"type": "array", "items": {"type": "integer"}}
+                        },
+                        "required": ["indices"],
+                        "additionalProperties": False,
+                    },
+                },
+            },
         )
         raw = json.loads(res.choices[0].message.content)
         indices = list(raw.values())[0] if isinstance(raw, dict) else raw
@@ -530,7 +880,7 @@ def entity_brief(name):
     try:
         prompt = load_prompt('entity-brief.txt').replace('{name}', cleaned)
         res = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL, **GEN_KW,
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
             max_tokens=80,
@@ -596,7 +946,7 @@ def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research
 
     # Format reminder goes LAST because small models weight the tail of the
     # prompt far more than the head; the long system prompt's format rules
-    # are otherwise forgotten by the time llama starts generating.
+    # are otherwise forgotten by the time the model starts generating.
     format_reminder = load_prompt(
         'rag-format-simple.txt' if query_type == 'simple' else 'rag-format-research.txt'
     )
@@ -619,7 +969,7 @@ def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, q
     full_text = ""
     try:
         stream = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL, **GEN_KW,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
@@ -635,7 +985,7 @@ def generate_answer_stream(query, picked, system_prompt, prior_answer_summary, q
     except Exception as e:
         print(f"Streaming failed, falling back to non-streaming: {e}")
         res = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL, **GEN_KW,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
@@ -651,7 +1001,7 @@ def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary
     ctx = build_context(picked)
     user_prompt = build_rag_user_prompt(query, ctx, prior_answer_summary, query_type, background_block)
     res = client.chat.completions.create(
-        model=MODEL,
+        model=MODEL, **GEN_KW,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -666,7 +1016,7 @@ def generate_answer_nonstream(query, picked, system_prompt, prior_answer_summary
             .replace('{query}', query)
         )
         retry = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL, **GEN_KW,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": retry_prompt},
@@ -686,16 +1036,26 @@ def check_answer_grounded(answer, picked, rewritten_query, query_type):
     spot hallucinations/subject drift, not just refusals."""
     if query_type not in ("simple", "research"):
         return True, ""
-    sources_block = build_context(picked)[:4000]
+    # Cap each source individually rather than truncating the joined block.
+    # A global cap (this was build_context(picked)[:4000]) showed the judge
+    # only the first ~4 of 20 sources, so any citation past [4] looked like an
+    # invented reference and grounding failed on almost every research answer
+    # -- which then triggered the expensive expansion path every time.
+    # verify_citations already avoids this; the judge needs the same treatment.
+    per_source_cap = 1500
+    sources_block = "\n\n".join(
+        f"[{i}] Source: {r[1]}, Page {r[2]}\n{r[0][:per_source_cap]}"
+        for i, r in enumerate(picked, 1)
+    )
     judge_prompt = (
         load_prompt('grounding-judge.txt')
         .replace('{rewritten_query}', rewritten_query)
         .replace('{sources_block}', sources_block)
-        .replace('{answer}', answer[:3500])
+        .replace('{answer}', answer[:6000])
     )
     try:
         res = judge_client.chat.completions.create(
-            model=JUDGE_MODEL,
+            model=JUDGE_MODEL, **JUDGE_KW,
             messages=[{"role": "user", "content": judge_prompt}],
             temperature=0,
             response_format={"type": "json_object"},
@@ -707,10 +1067,47 @@ def check_answer_grounded(answer, picked, rewritten_query, query_type):
         return True, ""
 
 
+# The verifier judges each citation *instance* — "does source [N] support the
+# sentence it is attached to" — so its verdicts have to be applied at the same
+# granularity. Stripping every `[N]` in the answer because one attachment of N
+# was weak deleted whole documents from an answer (and, via remap_citations,
+# from the source panel) on the strength of a single marginal judgement. To
+# scope a verdict we need a stable address for each occurrence, so the answer
+# is split into numbered units and the verifier reports (unit, source) pairs.
+#
+# The split must be lossless: re.split with a capturing group keeps the
+# separators, so units[i] + seps[i] reassembles the original text byte for
+# byte. Over-splitting (abbreviations, "No." in a file reference) is harmless
+# — it only makes units smaller, never misaligns them.
+_CITE_UNIT_SPLIT = re.compile(r'(\n+|(?<=[.!?])\s+)')
+
+# Char budget for the answer as shown to the verifier. Sentences past this are
+# left unjudged and keep their citations — the failure mode is a citation that
+# should have been stripped surviving, never a good one being deleted.
+VERIFY_ANSWER_CHARS = int(os.getenv("VERIFY_ANSWER_CHARS", "4000"))
+
+
+def _split_cite_units(text):
+    """Split an answer into sentence/line units. Returns (units, separators)
+    such that _join_cite_units(units, separators) == text."""
+    parts = _CITE_UNIT_SPLIT.split(text)
+    return parts[0::2], parts[1::2]
+
+
+def _join_cite_units(units, seps):
+    out = []
+    for i, unit in enumerate(units):
+        out.append(unit)
+        if i < len(seps):
+            out.append(seps[i])
+    return "".join(out)
+
+
 def verify_citations(answer, picked):
-    """Per-citation check: does source [N] actually support the sentence that
-    cites it? Returns a list of unsupported citation numbers. Cheap safeguard
-    against the LLM attaching arbitrary [N] to fabricated claims."""
+    """Per-citation-instance check: does source [N] actually support the
+    sentence that cites it? Returns a list of (unit_index, source_num) pairs
+    identifying the individual occurrences to drop. Cheap safeguard against
+    the LLM attaching arbitrary [N] to fabricated claims."""
     if not picked or not re.search(r'\[\d+\]', answer):
         return []
     # Give the verifier every source, each capped so no single doc dominates.
@@ -722,24 +1119,73 @@ def verify_citations(answer, picked):
         for i, r in enumerate(picked, 1)
     ]
     sources_block = "\n\n".join(parts)
+
+    units, _ = _split_cite_units(answer)
+    numbered, budget = [], VERIFY_ANSWER_CHARS
+    for i, unit in enumerate(units):
+        stripped = unit.strip()
+        if not stripped:
+            continue
+        line = f"U{i}: {stripped}"
+        if len(line) > budget:
+            break
+        budget -= len(line)
+        numbered.append(line)
+
     prompt = (
         load_prompt('citation-verify.txt')
         .replace('{sources_block}', sources_block)
-        .replace('{answer}', answer[:3500])
+        .replace('{answer}', "\n".join(numbered))
     )
     try:
         res = judge_client.chat.completions.create(
-            model=JUDGE_MODEL,
+            model=JUDGE_MODEL, **JUDGE_KW,
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
             response_format={"type": "json_object"},
         )
         data = json.loads(res.choices[0].message.content)
-        bad = data.get("unsupported", [])
-        return [int(x) for x in bad if isinstance(x, (int, str)) and str(x).isdigit()]
+        bad = []
+        for item in data.get("unsupported", []):
+            # Bare numbers are the old, unscoped verdict form. They name a
+            # source but not which of its citations failed, and acting on one
+            # means deleting them all — the bug this scoping exists to fix. So
+            # ignore them: an unjudged citation is the safer outcome.
+            if not isinstance(item, dict):
+                print(f"[cite-verify] ignoring unscoped verdict: {item!r}")
+                continue
+            unit, src = item.get("unit"), item.get("source")
+            if str(unit).isdigit() and str(src).isdigit():
+                bad.append((int(unit), int(src)))
+        return bad
     except Exception as e:
         print(f"Citation verification skipped: {e}")
         return []
+
+
+def strip_unsupported_citations(answer, unsupported):
+    """Remove only the flagged [N] occurrences, each in the one unit where the
+    verifier judged it unsupported. Other citations of the same source, in
+    sentences it does support, are left alone."""
+    if not unsupported:
+        return answer
+    units, seps = _split_cite_units(answer)
+    by_unit = {}
+    for unit_idx, src in unsupported:
+        by_unit.setdefault(unit_idx, set()).add(src)
+    for unit_idx, nums in by_unit.items():
+        if not 0 <= unit_idx < len(units):
+            continue
+        text = units[unit_idx]
+        # Remove the marker only, leaving surrounding whitespace intact —
+        # eating the leading space turns "April [2][5]" into "April[5]" when
+        # the neighbouring citation survives. Tidy up afterwards instead.
+        for n in sorted(nums, reverse=True):
+            text = re.sub(rf'\[{n}\]', '', text)
+        text = re.sub(r' {2,}', ' ', text)
+        text = re.sub(r'[ \t]+([.,;:!?])', r'\1', text)
+        units[unit_idx] = text
+    return _join_cite_units(units, seps)
 
 
 def expand_and_retrieve(rewritten_query, reason, seed_results):
@@ -751,7 +1197,7 @@ def expand_and_retrieve(rewritten_query, reason, seed_results):
     )
     try:
         res = judge_client.chat.completions.create(
-            model=JUDGE_MODEL,
+            model=JUDGE_MODEL, **JUDGE_KW,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.4,
             response_format={"type": "json_object"},
@@ -782,14 +1228,37 @@ def expand_and_retrieve(rewritten_query, reason, seed_results):
 # ---------------------------------------------------------------------------
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     query = data.get('query')
-    history = data.get('history', [])
+    history = sanitize_history(data.get('history'))
 
-    if not query:
+    if not query or not isinstance(query, str) or not query.strip():
         return jsonify({"error": "No query provided"}), 400
+    query = query.strip()[:MAX_QUERY_CHARS]
     if not client:
         return jsonify({"error": "LLM client not configured"}), 500
+
+    # --- Gate: free trial for anonymous visitors, quota for signed-in users --
+    user = get_user()
+    allowed, reason, remaining = check_rate_limit(user)
+    if not allowed:
+        if reason == "burst":
+            return jsonify({
+                "error": "rate_limited",
+                "message": "Too many requests in a short time. Please wait a moment and try again.",
+            }), 429
+        if user:
+            return jsonify({
+                "error": "daily_limit",
+                "message": f"You've reached your daily limit of {USER_DAILY_LIMIT} requests. It resets at 00:00 UTC.",
+            }), 429
+        return jsonify({
+            "error": "trial_exhausted",
+            "message": (
+                f"You've reached the limit of {ANON_DAILY_LIMIT} unauthenticated "
+                "requests. Sign in to continue exploring the archive."
+            ),
+        }), 401
 
     def generate():
         timings = {}
@@ -824,7 +1293,7 @@ def chat():
                 full = ""
                 try:
                     stream = client.chat.completions.create(
-                        model=MODEL,
+                        model=MODEL, **GEN_KW,
                         messages=[
                             {"role": "system", "content": instructions},
                             {"role": "user", "content": f"DOCUMENT PAGES:\n{ctx}\n\nUSER INQUIRY: {query}"},
@@ -840,7 +1309,7 @@ def chat():
                 except Exception as e:
                     print(f"Doc streaming failed, using non-stream: {e}")
                     res = client.chat.completions.create(
-                        model=MODEL,
+                        model=MODEL, **GEN_KW,
                         messages=[
                             {"role": "system", "content": instructions},
                             {"role": "user", "content": f"DOCUMENT PAGES:\n{ctx}\n\nUSER INQUIRY: {query}"},
@@ -923,7 +1392,7 @@ def chat():
                     full = ""
                     try:
                         stream = client.chat.completions.create(
-                            model=MODEL,
+                            model=MODEL, **GEN_KW,
                             messages=[{"role": "user", "content": meta_prompt}],
                             temperature=0.3,
                             stream=True,
@@ -936,7 +1405,7 @@ def chat():
                     except Exception as e:
                         print(f"Meta streaming failed: {e}")
                         res = client.chat.completions.create(
-                            model=MODEL,
+                            model=MODEL, **GEN_KW,
                             messages=[{"role": "user", "content": meta_prompt}],
                             temperature=0.3,
                         )
@@ -975,7 +1444,7 @@ def chat():
                 full = ""
                 try:
                     stream = client.chat.completions.create(
-                        model=MODEL,
+                        model=MODEL, **GEN_KW,
                         messages=conv_messages,
                         temperature=0.5,
                         stream=True,
@@ -988,7 +1457,7 @@ def chat():
                 except Exception as e:
                     print(f"Conversational streaming failed: {e}")
                     res = client.chat.completions.create(
-                        model=MODEL, messages=conv_messages, temperature=0.5,
+                        model=MODEL, **GEN_KW, messages=conv_messages, temperature=0.5,
                     )
                     full = res.choices[0].message.content
                     yield sse("token", {"text": full})
@@ -1076,24 +1545,42 @@ def chat():
             unsupported = verify_citations(answer_text, final_results)
             timings["cite_verify_ms"] = int((time.time() - t_cv) * 1000)
             if unsupported:
-                print(f"[rag] unsupported citations: {unsupported}")
-                # Strip unsupported [N] markers from the text
-                for n in sorted(set(unsupported), reverse=True):
-                    answer_text = re.sub(rf'\s*\[{n}\]', '', answer_text)
+                print(f"[rag] unsupported citations (unit, source): {unsupported}")
+                # Scoped strip: only the flagged occurrences, so a source that
+                # is genuinely cited elsewhere keeps those citations.
+                answer_text = strip_unsupported_citations(answer_text, unsupported)
 
             all_sources = [{"filename": r[1], "page": r[2]} for r in final_results]
-            answer_text, _ = remap_citations(answer_text, all_sources)
-            # Always surface every reranked source in the panel, even if the
-            # generator cited only a subset (or none survived verification).
-            sources_out = all_sources
+            answer_text, cited_sources = remap_citations(answer_text, all_sources)
+            # remap_citations renumbers the [N] markers in the text to 1..N in
+            # citation order, so the panel MUST be reordered to match. Sending
+            # the original all_sources here meant every citation resolved to
+            # the wrong document: a model citing sources [2], [7], [8] has its
+            # markers rewritten to [1], [2], [3], which then pointed at sources
+            # 1, 2 and 3 in the unchanged panel.
+            #
+            # Uncited sources are appended after the cited ones, so the panel
+            # still surfaces everything that was retrieved while the numbering
+            # of cited entries stays exact.
+            extras = [s for s in all_sources if s not in cited_sources]
+            sources_out = cited_sources + extras
 
-            # Stream the final, verified answer to the frontend. Small delay per
-            # chunk so the UI animates in rather than arriving as one block.
+            # Stream the final, verified answer to the frontend. The answer is
+            # already complete at this point — this replay exists purely so the
+            # UI animates in rather than arriving as one block.
+            #
+            # A flat 15ms/token made that animation the single most expensive
+            # phase of the request: a ~800-token research answer spent 12s here
+            # against 7s of actual work, holding the connection almost 3x
+            # longer for zero informational gain. Budget the whole replay
+            # instead, so long answers speed up rather than dragging on.
             yield sse("stage", {"label": "Streaming answer..."})
             tokens_out = re.findall(r'\S+\s*', answer_text)
+            delay = min(REPLAY_MAX_DELAY_S, REPLAY_BUDGET_S / max(len(tokens_out), 1))
             for tok in tokens_out:
                 yield sse("token", {"text": tok})
-                time.sleep(0.015)
+                if delay > 0:
+                    time.sleep(delay)
 
             timings["total_ms"] = int((time.time() - t0) * 1000)
             print(f"[timing] {timings}")
@@ -1103,55 +1590,110 @@ def chat():
             print(f"Error in /api/chat stream: {e}")
             yield sse("error", {"message": str(e)})
 
-    return Response(stream_with_context(generate()), mimetype='text/event-stream')
+    return Response(
+        stream_with_context(generate()),
+        mimetype='text/event-stream',
+        headers={
+            # Frontend reads this to show "N unauthenticated requests left"
+            # before the sign-in prompt appears.
+            "X-Quota-Remaining": str(remaining),
+            "X-Quota-Authenticated": "1" if user else "0",
+            "Cache-Control": "no-cache",
+            # Stop intermediate proxies buffering the SSE stream.
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 # ---------------------------------------------------------------------------
 # Stats / analyze / pdf routes
 # ---------------------------------------------------------------------------
+# The archive is static, so these counts never change between deploys — but
+# the route was recomputing eight sequential aggregates over ~70k rows on
+# every page load (measured 8.7-19.4s in production). Cache aggressively and
+# collapse the whole thing into ONE query so a cold cache costs one scan, not
+# eight. Frontend calls this on mount, so this path is every visitor's path.
+_full_stats = {"ts": 0, "data": None}
+_FULL_STATS_TTL = int(os.getenv("STATS_TTL", "3600"))
+_full_stats_lock = threading.Lock()
+
+
+def compute_full_stats():
+    with db_cursor() as cur:
+        cur.execute("""
+            SELECT
+                COUNT(*),
+                COUNT(DISTINCT file_id),
+                COUNT(*) FILTER (WHERE content IS NOT NULL AND length(trim(content)) > 0),
+                COUNT(DISTINCT file_id) FILTER (WHERE content IS NOT NULL AND length(trim(content)) > 0),
+                COUNT(*) FILTER (WHERE includes_handwriting = true),
+                COUNT(*) FILTER (WHERE has_stamps = true),
+                COUNT(*) FILTER (WHERE has_redactions = true)
+            FROM jfk_pages
+        """)
+        (total_pages, total_docs, pages_with_content, docs_with_content,
+         handwritten_pages, stamped_pages, redacted_pages) = cur.fetchone()
+        cur.execute("""
+            SELECT document_type, COUNT(*) AS count FROM jfk_pages
+            GROUP BY document_type ORDER BY count DESC LIMIT 5
+        """)
+        doc_types = cur.fetchall()
+
+    page_pct = (pages_with_content / total_pages * 100) if total_pages else 0
+    doc_pct = (docs_with_content / total_docs * 100) if total_docs else 0
+    return {
+        "total_pages": total_pages, "total_docs": total_docs,
+        "pages_with_content": pages_with_content, "docs_with_content": docs_with_content,
+        "page_content_pct": round(page_pct, 1), "doc_content_pct": round(doc_pct, 1),
+        "handwritten_pages": handwritten_pages, "stamped_pages": stamped_pages,
+        "redacted_pages": redacted_pages,
+        "document_types": [{"type": r[0], "count": r[1]} for r in doc_types],
+    }
+
+
 @app.route('/api/stats', methods=['GET'])
 def stats_route():
+    now = time.time()
+    if _full_stats["data"] and now - _full_stats["ts"] < _FULL_STATS_TTL:
+        return jsonify(_full_stats["data"])
     try:
-        with db_cursor() as cur:
-            cur.execute("SELECT COUNT(*) FROM jfk_pages")
-            total_pages = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages")
-            total_docs = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
-            pages_with_content = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(DISTINCT file_id) FROM jfk_pages WHERE content IS NOT NULL AND length(trim(content)) > 0")
-            docs_with_content = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE includes_handwriting = true")
-            handwritten_pages = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_stamps = true")
-            stamped_pages = cur.fetchone()[0]
-            cur.execute("SELECT COUNT(*) FROM jfk_pages WHERE has_redactions = true")
-            redacted_pages = cur.fetchone()[0]
-            cur.execute("SELECT document_type, COUNT(*) as count FROM jfk_pages GROUP BY document_type ORDER BY count DESC LIMIT 5")
-            doc_types = cur.fetchall()
-        page_pct = (pages_with_content / total_pages * 100) if total_pages > 0 else 0
-        doc_pct = (docs_with_content / total_docs * 100) if total_docs > 0 else 0
-        return jsonify({
-            "total_pages": total_pages, "total_docs": total_docs,
-            "pages_with_content": pages_with_content, "docs_with_content": docs_with_content,
-            "page_content_pct": round(page_pct, 1), "doc_content_pct": round(doc_pct, 1),
-            "handwritten_pages": handwritten_pages, "stamped_pages": stamped_pages,
-            "redacted_pages": redacted_pages,
-            "document_types": [{"type": r[0], "count": r[1]} for r in doc_types],
-        })
+        with _full_stats_lock:
+            # Re-check inside the lock: under a traffic spike on a cold cache,
+            # only the first request should hit the database. Without this,
+            # a thundering herd runs the scan once per concurrent visitor.
+            if _full_stats["data"] and time.time() - _full_stats["ts"] < _FULL_STATS_TTL:
+                return jsonify(_full_stats["data"])
+            data = compute_full_stats()
+            _full_stats.update({"ts": time.time(), "data": data})
+        return jsonify(data)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"[stats] refresh failed: {e}")
+        # Serve stale rather than erroring — the numbers are cosmetic.
+        if _full_stats["data"]:
+            return jsonify(_full_stats["data"])
+        return jsonify({"error": "stats unavailable"}), 503
 
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze():
-    data = request.json
+    data = request.get_json(silent=True) or {}
     action = data.get('action')
     text = data.get('text')
-    if not text:
+    if not text or not isinstance(text, str) or not text.strip():
         return jsonify({"error": "No text provided"}), 400
+    # Unbounded text straight into an LLM call was the softest cost-drain
+    # target on the API — cap it and rate-limit it like /api/chat.
+    text = text[:MAX_ANALYZE_CHARS]
     if not client:
         return jsonify({"error": "LLM client not configured"}), 500
+
+    user = get_user()
+    allowed, reason, _ = check_rate_limit(user)
+    if not allowed:
+        return jsonify({
+            "error": "rate_limited",
+            "message": "Rate limit reached. Please wait a moment or sign in.",
+        }), 429
     if action == 'names':
         prompt = load_prompt('analyze-names.txt').replace('{text}', text)
     elif action == 'summarize':
@@ -1160,7 +1702,7 @@ def analyze():
         return jsonify({"error": "Invalid action"}), 400
     try:
         completion = client.chat.completions.create(
-            model=MODEL,
+            model=MODEL, **GEN_KW,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
         )

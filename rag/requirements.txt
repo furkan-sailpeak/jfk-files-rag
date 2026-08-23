@@ -5,3 +5,6 @@ groq
 openai
 python-dotenv
 gunicorn
+gevent
+psycogreen
+PyJWT[crypto]

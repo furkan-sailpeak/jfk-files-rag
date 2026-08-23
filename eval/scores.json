@@ -1,0 +1,262 @@
+[
+  {
+    "id": "factual_oswald_marine_clearance",
+    "category": "factual",
+    "question": "What level of security clearance did Lee Harvey Oswald hold during his Marine Corps service?",
+    "answer": "**Lee Harvey Oswald held a “confidential” level security clearance during his Marine Corps service.**\n\n- The Marine Corps fact sheet lists Oswald’s security clearance as “confidential” [1].  \n- An interview with a Marine supervisor notes that Oswald’s unit required a “confidential” clearance for its radar work [2].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": true,
+    "evidence": {
+      "evidence_recall_at_k": 0.5,
+      "k": 20,
+      "hits": [
+        [
+          "180-10104-10354.pdf",
+          13
+        ]
+      ],
+      "missed": [
+        [
+          "180-10078-10492.pdf",
+          5
+        ]
+      ]
+    },
+    "judge": {
+      "faithfulness": 0.98,
+      "completeness": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "clarity": 5,
+      "rationale": "The answer is fully grounded in source [1], and its extra note about the unit’s clearance is also supported by source [2]."
+    }
+  },
+  {
+    "id": "factual_ruby_real_name",
+    "category": "factual",
+    "question": "What was Jack Ruby's original family name before he changed it?",
+    "answer": "**Jack Ruby’s original family name was Rubenstein.**\n\n- A CIA memo lists him as “RUBY, Jack aka Jack RUBENSTEIN”[2].  \n- An interview transcript notes “Jack Ruby, I understand that his real name was Rubenstein”[1].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": true,
+    "evidence": {
+      "evidence_recall_at_k": 1.0,
+      "k": 20,
+      "hits": [
+        [
+          "135-10001-10288.pdf",
+          18
+        ]
+      ],
+      "missed": []
+    },
+    "judge": {
+      "faithfulness": 0.98,
+      "completeness": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "clarity": 5,
+      "rationale": "The answer is fully grounded by the retrieved interview transcript, and the CIA memo also supports the Rubenstein alias; no substantive claim is unsupported."
+    }
+  },
+  {
+    "id": "factual_oswald_mexico_cuban_embassy",
+    "category": "factual",
+    "question": "On what date did Oswald visit the Cuban Embassy in Mexico City to request a transit visa?",
+    "answer": "**Lee Harvey Oswald visited the Cuban Embassy in Mexico City to request a transit visa on 27 September 1963.**\n\n- The record notes that “OSWALD went to Cuban Embassy, Mexico City and made appoint for visa to Cuba on way to USSR” on 27 September 63[1].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": false,
+    "evidence": {
+      "evidence_recall_at_k": 0.5,
+      "k": 20,
+      "hits": [
+        [
+          "104-10413-10306.pdf",
+          35
+        ]
+      ],
+      "missed": [
+        [
+          "144-10001-10125.pdf",
+          18
+        ]
+      ]
+    },
+    "judge": {
+      "faithfulness": 1.0,
+      "completeness": 0.75,
+      "hallucination": false,
+      "over_commits": false,
+      "clarity": 5,
+      "rationale": "The answer’s date and visa-request claim are directly supported by source [1]; it omits the Soviet Embassy visit/refusal detail from the reference, but it does not introduce any unsupported factual claim."
+    }
+  },
+  {
+    "id": "factual_ruby_fbi_flynn_1959",
+    "category": "factual",
+    "question": "Which FBI agent contacted Jack Ruby in 1959, and on what date?",
+    "answer": "**Special Agent Charles N. Flynn contacted Jack Ruby on March 11, 1959.**\n\n- The FBI record notes that Ruby was contacted by Special Agent Charles N. Flynn of the Dallas Office on March 11, 1959, to determine whether he had knowledge of the criminal element in Dallas [1].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": false,
+    "evidence": {
+      "evidence_recall_at_k": 1.0,
+      "k": 20,
+      "hits": [
+        [
+          "157-10014-10242.pdf",
+          441
+        ]
+      ],
+      "missed": []
+    },
+    "judge": {
+      "faithfulness": 0.8,
+      "completeness": 0.5,
+      "hallucination": false,
+      "over_commits": true,
+      "clarity": 5,
+      "rationale": "The date and Dallas Office contact are supported by source [1], but the agent's middle initial is given as 'N' in the answer while the source text shows 'W.' and the added purpose of determining criminal-element knowledge is grounded."
+    }
+  },
+  {
+    "id": "factual_oswald_marine_discharge_1959",
+    "category": "factual",
+    "question": "When did Oswald's Marine Corps hardship or dependency discharge board convene to consider his case?",
+    "answer": "**The Marine Corps Hardship/Dependency Discharge Board convened on 27 August 1959 to consider Private First Class Lee H. Oswald’s case.**  \n\n- The board met at 1530 on 27 August 1959 to review Oswald’s dependency discharge request[1].  \n- A prior notice dated 26 August 1959 instructed that the board be convened “as soon as practicable” for Oswald’s case[2].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": true,
+    "evidence": {
+      "evidence_recall_at_k": 1.0,
+      "k": 20,
+      "hits": [
+        [
+          "180-10072-10186.pdf",
+          46
+        ]
+      ],
+      "missed": []
+    },
+    "judge": {
+      "faithfulness": 0.98,
+      "completeness": 1.0,
+      "hallucination": false,
+      "over_commits": false,
+      "clarity": 5,
+      "rationale": "The answer is fully supported by source [1], including the 27 August 1959 date, 1530 time, and Oswald’s rank; the extra note about the prior notice is also grounded in source [2]."
+    }
+  },
+  {
+    "id": "factual_cia_mexico_city_cable_date",
+    "category": "factual",
+    "question": "When did CIA Headquarters send the Mexico City Station information responding to Oswald's initial reported contact?",
+    "answer": "**CIA Headquarters sent the response to Mexico City Station on 11 October 1963.**\n\n- The Mexico City Station received a cable from CIA Headquarters on 11 October 1963 containing information about Lee Oswald, following the station’s earlier report of his contact with the Soviet Embassy [1].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": false,
+    "evidence": {
+      "evidence_recall_at_k": 0.5,
+      "k": 20,
+      "hits": [
+        [
+          "180-10110-10484.pdf",
+          92
+        ]
+      ],
+      "missed": [
+        [
+          "180-10110-10484.pdf",
+          172
+        ]
+      ]
+    },
+    "judge": {
+      "faithfulness": 1.0,
+      "completeness": 0.75,
+      "hallucination": false,
+      "over_commits": false,
+      "clarity": 5,
+      "rationale": "The answer is fully supported by source [1] for the date and the fact that CIA Headquarters responded to Mexico City Station, but it omits the detail that Headquarters suggested Oswald might be 'Lee Henry (sic) Oswald' and the later P-file opening."
+    }
+  },
+  {
+    "id": "biographical_jack_ruby",
+    "category": "biographical",
+    "question": "Who was Jack Ruby?",
+    "answer": "**Jack Ruby was a Dallas nightclub owner who shot and killed Lee Harvey Oswald, the alleged assassin of President John F. Kennedy.**\n\n- Ruby was described as having “substantial ties to the Mafia” and was involved in gambling and narcotics activities [1].\n- The Warren Commission recorded that Ruby drove a woman friend to the H.L. Hunt Oil Company offices in Dallas on the afternoon of November 21, 1963, the day before the assassination [2][3].\n- FBI records show that Special Agent Charles N. Flynn contacted Ruby in March 1959 to determine whether he possessed knowledge of criminal elements in Dallas; Ruby expressed willingness to provide information, but no useful intelligence was obtained [4].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": true,
+    "evidence": {
+      "evidence_recall_at_k": 1.0,
+      "k": 20,
+      "hits": [
+        [
+          "135-10001-10288.pdf",
+          18
+        ],
+        [
+          "157-10014-10242.pdf",
+          441
+        ]
+      ],
+      "missed": []
+    },
+    "judge": {
+      "faithfulness": 0.86,
+      "completeness": 0.67,
+      "hallucination": false,
+      "over_commits": true,
+      "clarity": 4,
+      "rationale": "The answer is mostly grounded by the retrieved FBI memo and other documents, but it overstates contested allegations about Mafia ties and Oswald-shooting as settled fact, while omitting the corpus-grounded detail that Ruby's real name was Rubenstein."
+    }
+  },
+  {
+    "id": "biographical_oswald",
+    "category": "biographical",
+    "question": "Who was Lee Harvey Oswald?",
+    "answer": "**Lee Harvey Oswald was a former United States Marine who later became a suspect in the assassination of President John F. Kennedy.**\n\n- He was born in New Orleans on October 18, 1939, and his Social Security number was 433‑54‑3937[2].  \n- He served in the U.S. Marine Corps from 24 Oct 1956 to 11 Sept 1959, bearing service number 1653230, and received an “undesirable” discharge on 13 Sept 1960[2][3].  \n- During his Marine service he held a “confidential” security clearance, as noted by a fellow Marine who supervised him[4].  \n- CIA records state that Oswald was never an informant or directly connected with the Agency, and the number 110669 cited in other contexts does not refer to him[1].",
+    "query_type_seen": "simple",
+    "has_citations": true,
+    "no_bulk_cite": true,
+    "structure_ok": true,
+    "evidence": {
+      "evidence_recall_at_k": 0.3333333333333333,
+      "k": 20,
+      "hits": [
+        [
+          "180-10104-10354.pdf",
+          13
+        ]
+      ],
+      "missed": [
+        [
+          "104-10332-10014.pdf",
+          56
+        ],
+        [
+          "180-10072-10186.pdf",
+          46
+        ]
+      ]
+    },
+    "judge": {
+      "faithfulness": 0.9,
+      "completeness": 0.75,
+      "hallucination": false,
+      "over_commits": true,
+      "clarity": 4,
+      "rationale": "Most cited claims are supported by the retrieved records, but the opening frames Oswald as only a 'suspect' rather than the Warren Commission's identified assassin, and the answer omits the Soviet defection/return and Mexico City embassy contacts."
+    }
+  }
+]
