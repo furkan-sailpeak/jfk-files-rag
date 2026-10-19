@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// TEMPORARILY DISABLED (see todo.md): the sign-in UI and the quota gate are
+// TEMPORARILY DISABLED (see admin/todo.md): the sign-in UI and the quota gate are
 // switched off for now. Set VITE_AUTH_ENABLED=true to bring them back — the
 // Auth component and all call sites are still wired up.
 const AUTH_FLAG = import.meta.env.VITE_AUTH_ENABLED === 'true';

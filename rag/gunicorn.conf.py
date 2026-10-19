@@ -13,14 +13,17 @@ import os
 
 # Default matches the Dockerfile's EXPOSE so the image listens where the
 # platform expects even if PORT is unset. Local dev does not use gunicorn
-# (app.py's __main__ runs Flask on 5001, which the Vite proxy targets).
+# (`python -m app.main` runs Flask on 5001, which the Vite proxy targets).
 bind = f"0.0.0.0:{os.getenv('PORT', '8080')}"
 
 worker_class = "gevent"
 # Each greenlet is cheap; the real ceiling is upstream API rate limits, not
 # this number.
 worker_connections = int(os.getenv("WORKER_CONNECTIONS", "200"))
-workers = int(os.getenv("WEB_CONCURRENCY", str(min(4, multiprocessing.cpu_count() * 2 + 1))))
+# Capped at 2: each worker holds its own copy of the in-process query-embedding
+# model (~150-250MB), and gevent already gives each worker many concurrent
+# requests.
+workers = int(os.getenv("WEB_CONCURRENCY", str(min(2, multiprocessing.cpu_count() * 2 + 1))))
 
 # Long timeout so a slow LLM roundtrip is never killed mid-stream. With gevent
 # a hung request no longer blocks other traffic, so this is safe to raise.

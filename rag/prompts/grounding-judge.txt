@@ -1,13 +1,13 @@
 You are judging whether an assistant's answer to a user question is (a) on-topic and (b) grounded in the retrieved sources.
 
-User question: "{rewritten_query}"
+User question: "{{ rewritten_query }}"
 
-Retrieved sources (numbered):
-{sources_block}
+Retrieved sources (each wrapped in <source id="N">; citation [N] refers to that block):
+{{ sources_block }}
 
 Assistant answer:
 """
-{answer}
+{{ answer }}
 """
 
 Return JSON: {"grounded": true|false, "reason": "<one short sentence>"}

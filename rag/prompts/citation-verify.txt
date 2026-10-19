@@ -1,11 +1,11 @@
 You are auditing citations. The answer is split into numbered units (one sentence or line each, labelled U0, U1, U2, ...). For each [N] citation inside a unit, decide whether source [N] reasonably supports that unit.
 
 Retrieved sources (numbered):
-{sources_block}
+{{ sources_block }}
 
 Answer, split into numbered units:
 """
-{answer}
+{{ answer }}
 """
 
 JUDGING RULES — be LENIENT, not strict:
@@ -21,8 +21,13 @@ SCOPE — judge each citation WHERE IT APPEARS:
 - If a unit contains two citations and only one fails, flag only the failing one.
 - Only report citations you can actually see in a numbered unit above.
 
-Return JSON with a single key "unsupported", whose value is a list of objects, each naming the unit and the source number to drop:
+Each source is wrapped in <source id="N" ...> ... </source id="N">. Judge a citation [N] ONLY against the text inside source N's tags.
 
-{"unsupported": [{"unit": 4, "source": 7}, {"unit": 11, "source": 2}]}
+Return JSON with a single key "unsupported", whose value is a list of objects, one per unsupported citation:
+- "unit": the unit number
+- "source": the cited source number that does not support the unit
+- "correct_source": the number of another listed source whose text clearly does contain the unit's claim, or null if none does
 
-Return {"unsupported": []} if all citations are reasonable. Do NOT return bare numbers — every entry must be an object with both "unit" and "source".
+{"unsupported": [{"unit": 4, "source": 7, "correct_source": 2}, {"unit": 11, "source": 2, "correct_source": null}]}
+
+Return {"unsupported": []} if all citations are reasonable. Do NOT return bare numbers — every entry must be an object with "unit", "source" and "correct_source".

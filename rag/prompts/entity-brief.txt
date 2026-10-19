@@ -14,5 +14,5 @@ Rules:
 - If you are uncertain, return NONE rather than guessing.
 - Do not include citations, brackets, or quotation marks.
 
-Entity: {name}
+Entity: {{ name }}
 Identification:

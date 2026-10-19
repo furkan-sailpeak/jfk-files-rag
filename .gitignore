@@ -1,6 +1,7 @@
 # Environment
 .env
 .env.*
+!.env.example
 
 # Python
 __pycache__/
@@ -8,6 +9,14 @@ __pycache__/
 *.pyo
 venv/
 .venv/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
 
 # Node
 node_modules/
@@ -27,5 +36,7 @@ Thumbs.db
 
 ocr_output/
 
-# Local notes
-todo.md
+# Local-only admin material (kept on disk, not in the repo)
+admin/todo.md
+admin/eval/
+admin/database/
