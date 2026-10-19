@@ -1,3 +1,8 @@
+# check=skip=SecretsUsedInArgOrEnv
+# ^ The only ARGs are VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY: public client
+#   values that Vite inlines into the browser bundle by design (Supabase relies
+#   on row-level security, not on hiding the anon key). Server secrets never
+#   enter the build; they are runtime env vars only.
 # Stage 1: Build React frontend
 FROM node:20-alpine AS frontend-build
 WORKDIR /app/frontend

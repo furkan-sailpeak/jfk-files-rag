@@ -27,6 +27,26 @@ else:
 if config.DATABASE_URL and config.RUN_SCHEMA_BOOTSTRAP:
     db.ensure_schema()
 
+_SECURITY_HEADERS = {
+    # TLS is terminated by Railway; tell browsers to never use plain HTTP for
+    # this host. No includeSubDomains: that would also pin every current and
+    # future subdomain to HTTPS for a year.
+    "Strict-Transport-Security": "max-age=31536000",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
+}
+
+
+@app.after_request
+def security_headers(response):
+    for name, value in _SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
+    csp_header = "Content-Security-Policy" if config.CSP_ENFORCE else "Content-Security-Policy-Report-Only"
+    response.headers.setdefault(csp_header, config.CSP)
+    return response
+
 
 def _rate_limited_response(user, reason):
     if reason == "burst":
