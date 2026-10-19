@@ -32,6 +32,7 @@ ENV FASTEMBED_CACHE_PATH=/app/models
 RUN python -c "from fastembed import TextEmbedding; TextEmbedding('BAAI/bge-small-en-v1.5', cache_dir='/app/models')"
 
 COPY app/ ./app/
+COPY corpus.toml ./
 COPY gunicorn.conf.py ./
 COPY prompts/ ./prompts/
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist

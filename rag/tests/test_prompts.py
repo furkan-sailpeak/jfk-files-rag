@@ -32,9 +32,22 @@ def test_every_prompt_file_is_used():
 
 @pytest.mark.parametrize("name", PROMPT_FILES)
 def test_templates_parse_and_use_only_jinja_placeholders(name):
-    source = prompts.load(name)
+    source = prompts.source(name)
     prompts._env.parse(source)  # raises on a syntax error
     assert not re.search(r"(?<!\{)\{[a-z_]+\}(?!\})", source), "old-style {placeholder} left in template"
+
+
+def test_prompts_are_corpus_neutral():
+    # Everything archive-specific comes from rag/corpus.toml.
+    for name in PROMPT_FILES:
+        assert not re.search(r"\bJFK\b|Oswald|Kennedy|Warren Commission", prompts.source(name)), name
+
+
+def test_corpus_values_reach_rendered_prompts():
+    router = prompts.render("router.txt", query="q")
+    assert config.CORPUS["short_name"] in router
+    assert all(ex["query"] in router for ex in config.CORPUS["router_examples"])
+    assert config.CORPUS["entity_brief"]["examples"][0] in prompts.render("entity-brief.txt", name="X")
 
 
 def test_missing_variable_raises():
@@ -44,7 +57,7 @@ def test_missing_variable_raises():
 
 @pytest.mark.parametrize("name", PROMPT_FILES)
 def test_render_calls_pass_exactly_the_template_variables(name):
-    variables = meta.find_undeclared_variables(prompts._env.parse(prompts.load(name)))
+    variables = meta.find_undeclared_variables(prompts._env.parse(prompts.source(name))) - set(prompts._env.globals)
     for call in re.findall(rf'prompts\.render\(\s*["\']{re.escape(name)}["\'](.*?)\)\s*(?:\+|$|\n)', APP_SOURCE, re.S):
         passed = set(re.findall(r"(\w+)\s*=", call))
         assert variables <= passed, f"{name}: missing {variables - passed}"
@@ -52,15 +65,15 @@ def test_render_calls_pass_exactly_the_template_variables(name):
 
 @pytest.mark.parametrize("name", PROMPT_FILES)
 def test_prompts_use_the_exact_refusal_line(name):
-    for line in re.findall(r"The retrieved documents do not contain[^\n\"]*", prompts.load(name)):
+    for line in re.findall(r"The retrieved documents do not contain[^\n\"]*", prompts.source(name)):
         assert line.rstrip(".") == config.REFUSAL_LINE.rstrip("."), name
 
 
 @pytest.mark.parametrize("name", PROMPT_FILES)
 def test_prompts_do_not_promise_a_category_input(name):
-    assert not re.search(r"\bcategory\b", prompts.load(name), re.I)
+    assert not re.search(r"\bcategory\b", prompts.source(name), re.I)
 
 
 def test_answer_prompts_agree_on_timeline_table():
     for name in ("rag-simple.txt", "rag-research.txt", "rag-format-simple.txt", "rag-format-research.txt"):
-        assert "Date | Event | Source" in prompts.load(name), name
+        assert "Date | Event | Source" in prompts.source(name), name

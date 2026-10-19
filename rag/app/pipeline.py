@@ -40,7 +40,7 @@ from .retrieval import (
 )
 from .verification import check_answer_grounded, verify_citations
 
-DOC_ID = re.compile(r'\b(\d{3}-\d{5}-\d{5})\b')
+DOC_ID = config.DOC_ID_PATTERN  # from corpus.toml
 
 
 # --- SSE helpers ------------------------------------------------------------------
