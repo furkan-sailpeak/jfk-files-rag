@@ -128,3 +128,20 @@ def test_document_path_truncates_and_tells_the_model(mocker):
     user_msg = stream.call_args.args[0][1]["content"]
     assert "Only the first 2 of 5 pages" in user_msg and "page 3" not in user_msg
     assert [s["page"] for s in done["sources"]] == [1, 2]
+
+
+# --- Security headers -------------------------------------------------------------
+def test_security_headers_on_api_and_spa(http, mocker):
+    mocker.patch.object(main.config, "CSP_ENFORCE", False)
+    for res in (http.get("/api/pdf/x.pdf"), http.post("/api/chat", json={})):
+        assert res.headers["X-Content-Type-Options"] == "nosniff"
+        assert res.headers["X-Frame-Options"] == "DENY"
+        assert "max-age=" in res.headers["Strict-Transport-Security"]
+        assert "frame-ancestors 'none'" in res.headers["Content-Security-Policy-Report-Only"]
+        assert "Content-Security-Policy" not in res.headers
+
+
+def test_csp_enforced_when_flag_set(http, mocker):
+    mocker.patch.object(main.config, "CSP_ENFORCE", True)
+    res = http.get("/api/pdf/x.pdf")
+    assert "img-src 'self' data:" in res.headers["Content-Security-Policy"]

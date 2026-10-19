@@ -22,6 +22,25 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # fall back to permissive only when ALLOWED_ORIGINS is unset (local dev).
 ALLOWED_ORIGINS = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
 
+# --- Security headers -------------------------------------------------------------
+# Content-Security-Policy ships as Report-Only (violations appear in the
+# browser console) until CSP_ENFORCE=1, so a missed origin cannot break the
+# live site. img-src excludes third-party hosts on purpose: a model-emitted
+# markdown image to an attacker URL would otherwise load automatically.
+CSP_ENFORCE = _flag("CSP_ENFORCE")
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",  # export window uses a <style> block
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data:",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+])
+
 # --- Auth (Supabase JWT) --------------------------------------------------------
 # Supabase supports two token-signing schemes and which one a project uses
 # depends on when it was created:

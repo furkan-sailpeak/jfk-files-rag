@@ -218,7 +218,6 @@ function downloadChat(messages) {
 <h1>JFK Files Research — Chat Export</h1>
 <div class="meta">Exported: ${escapeHtml(exportedAt)}</div>
 ${sections}
-<script>window.addEventListener('load', () => { setTimeout(() => window.print(), 250); });</script>
 </body></html>`;
 
   const w = window.open('', '_blank');
@@ -231,6 +230,9 @@ ${sections}
   w.document.open();
   w.document.write(doc);
   w.document.close();
+  // Print from here rather than an inline <script> in the export: the
+  // about:blank window inherits the app's CSP, which allows no inline script.
+  setTimeout(() => w.print(), 250);
 }
 
 function escapeHtml(s) {
@@ -286,7 +288,9 @@ function App() {
   };
 
   useEffect(() => {
-    fetchStats();
+    axios.get(`${API_BASE}/stats`)
+      .then((res) => setStats(res.data))
+      .catch((err) => console.error("Error fetching stats:", err));
   }, []);
 
   // Track the Supabase session. detectSessionInUrl handles the magic-link
@@ -321,15 +325,6 @@ function App() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  const fetchStats = async () => {
-    try {
-      const res = await axios.get(`${API_BASE}/stats`);
-      setStats(res.data);
-    } catch (err) {
-      console.error("Error fetching stats:", err);
-    }
-  };
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -613,7 +608,8 @@ function App() {
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      a: ({ node, children, href, title, ...props }) => (
+                      // `node` is pulled out so it is not spread onto the DOM element.
+                      a: ({ node: _node, children, href, title, ...props }) => (
                         <a href={href} title={title} target="_blank" rel="noopener noreferrer" {...props}>
                           {children}
                         </a>
