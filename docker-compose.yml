@@ -1,0 +1,19 @@
+# Local one-click run: `docker compose up -d --build` once, then start/stop
+# the "jfk-rag" stack from Docker Desktop. Same image as the Railway deploy.
+name: jfk-rag
+
+services:
+  app:
+    build:
+      context: ./rag
+      # Vite inlines these at build time, so they are build args, not runtime
+      # env. Compose reads them from the repo-root .env.
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:?add VITE_SUPABASE_URL to .env}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:?add VITE_SUPABASE_ANON_KEY to .env}
+    env_file: .env
+    environment:
+      PORT: "8080"
+      WEB_CONCURRENCY: "2"
+    ports:
+      - "8080:8080"

@@ -1,8 +1,8 @@
 The previous answer had NO citations. This is unacceptable.
 
-RETRIEVED DOCUMENTS:
-{ctx}
+RETRIEVED DOCUMENTS (each wrapped in <source id="N">; cite a fact as [N] using the id of the block it appears in):
+{{ ctx }}
 
-USER INQUIRY: {query}
+USER INQUIRY: {{ query }}
 
 You MUST rewrite your answer using ONLY the documents above. Every factual sentence MUST end with a citation like [1], [2], etc.

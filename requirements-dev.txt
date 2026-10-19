@@ -1,0 +1,5 @@
+-r rag/requirements.txt
+pre-commit
+pytest
+pytest-mock
+ruff

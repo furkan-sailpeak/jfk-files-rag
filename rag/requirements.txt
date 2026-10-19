@@ -8,3 +8,6 @@ gunicorn
 gevent
 psycogreen
 PyJWT[crypto]
+fastembed
+pydantic
+jinja2

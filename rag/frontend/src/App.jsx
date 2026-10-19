@@ -44,6 +44,12 @@ function chatTitle(messages) {
   return text.length > 40 ? text.slice(0, 40) + '...' : text;
 }
 
+// Link schemes the export may emit. Escaping alone does not stop a
+// `javascript:` URL, and the export is written into a same-origin window, so
+// anything else is rendered as plain text -- the same policy react-markdown's
+// default urlTransform applies in the chat view.
+const SAFE_LINK = /^(https?:|mailto:|#)/i;
+
 // Inline markdown -> HTML. Input is already HTML-escaped, so quotes inside
 // link titles arrive as &quot; and are matched as such.
 function mdInline(escaped) {
@@ -55,7 +61,9 @@ function mdInline(escaped) {
     .replace(
       /\[((?:\\.|[^\]\\])*)\]\(([^)\s]+)(?:\s+&quot;(.*?)&quot;)?\)/g,
       (_m, text, url, title) =>
-        `<a href="${url}"${title ? ` title="${title}"` : ''}>${text}</a>`
+        SAFE_LINK.test(url)
+          ? `<a href="${url}"${title ? ` title="${title}"` : ''} target="_blank" rel="noopener noreferrer">${text}</a>`
+          : text
     )
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>')
@@ -170,7 +178,7 @@ function downloadChat(messages) {
       html += '<div class="sources"><h3>Sources</h3><ol>';
       msg.sources.forEach((s) => {
         const url = getNaraUrl(s.filename) + `#page=${s.page}`;
-        html += `<li><a href="${url}">${escapeHtml(s.filename)}, p. ${s.page}</a></li>`;
+        html += `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.filename)}, p. ${escapeHtml(String(s.page))}</a></li>`;
       });
       html += '</ol></div>';
     }
@@ -218,6 +226,8 @@ ${sections}
     alert('Pop-up blocked. Please allow pop-ups to export PDF.');
     return;
   }
+  // The export window needs no handle back to the app tab.
+  w.opener = null;
   w.document.open();
   w.document.write(doc);
   w.document.close();

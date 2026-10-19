@@ -25,7 +25,13 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY app.py ./
+# Query-embedding model (BAAI/bge-small-en-v1.5, ~130MB ONNX), baked into the
+# image so production needs no embedding API and no download at boot. Must be
+# the model that filled jfk_pages.embedding_bge (backfill_embeddings_bge.py).
+ENV FASTEMBED_CACHE_PATH=/app/models
+RUN python -c "from fastembed import TextEmbedding; TextEmbedding('BAAI/bge-small-en-v1.5', cache_dir='/app/models')"
+
+COPY app/ ./app/
 COPY gunicorn.conf.py ./
 COPY prompts/ ./prompts/
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
@@ -36,4 +42,4 @@ COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 # an instant connection-refused 502 against a container reporting healthy.
 EXPOSE 8080
 
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "app:app"]
+CMD ["gunicorn", "--config", "gunicorn.conf.py", "app.main:app"]

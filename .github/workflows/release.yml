@@ -1,0 +1,55 @@
+# One GitHub release per production deploy: when CI passes on main (the
+# commit Railway deploys to prod), tag it with a date version and publish
+# notes generated from the commits/PRs since the previous release.
+name: Release
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Only green pushes to main; PR runs and failed builds never release.
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # all tags, to pick the next free version
+
+      - name: Pick version
+        id: version
+        run: |
+          if git tag --points-at "$SHA" | grep -q '^v'; then
+            echo "Commit $SHA is already released; nothing to do."
+            echo "tag=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          base="v$(date -u +%Y.%m.%d)"
+          tag="$base"; n=2
+          while git rev-parse -q --verify "refs/tags/$tag" >/dev/null; do
+            tag="$base.$n"; n=$((n + 1))
+          done
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        if: steps.version.outputs.tag != ''
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$TAG" \
+            --target "$SHA" \
+            --title "$TAG" \
+            --generate-notes
