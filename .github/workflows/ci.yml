@@ -1,0 +1,51 @@
+# Lint + tests on every push and PR to dev/main. Railway's "Wait for CI"
+# uses this run's status to decide whether to deploy a commit.
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (ruff + pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"  # same as the Docker image
+          cache: pip
+          cache-dependency-path: |
+            requirements-dev.txt
+            rag/requirements.txt
+      - run: pip install -r requirements-dev.txt
+      - run: ruff check rag
+      # Offline: rag/tests/conftest.py blanks every credential and the suite
+      # mocks the LLM, embeddings and database.
+      - run: pytest
+
+  frontend:
+    name: Frontend (build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rag/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"  # same as the Docker build stage
+          cache: npm
+          cache-dependency-path: rag/frontend/package-lock.json
+      - run: npm ci --legacy-peer-deps
+      - run: npm run build

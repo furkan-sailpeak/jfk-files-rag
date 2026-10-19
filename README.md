@@ -4,7 +4,7 @@ A Retrieval-Augmented Generation (RAG) system for querying the 2025 declassified
 
 > *"Topic Modeling and Thematic Analysis of JFK Assassination Files Using NLP"*
 
-Live demo: https://jfk-files-rag-production.up.railway.app/
+Live: **https://jfk-files.org** (also served at https://jfk-files-rag-production.up.railway.app/)
 Thesis repo: https://github.com/furkan-sailpeak/jfk-thesis
 
 ![JFK Files Research System](admin/screenshot.png)
@@ -115,6 +115,17 @@ python rag/backfill_embeddings_bge.py --index  # build the HNSW index once
 ```
 
 The earlier OpenAI embeddings are still in the `embedding` column (`EMBED_PROVIDER=openai` switches back); their backfill script is in `rag/archive/`.
+
+## Deployment and releases
+
+| Branch | Environment | URL |
+|---|---|---|
+| `main` | production (Railway) | https://jfk-files.org |
+| `dev` | staging (Railway) | the staging service's Railway domain |
+
+- **CI** (`.github/workflows/ci.yml`) runs ruff + pytest and a frontend build on every push and PR to `dev`/`main`. Railway's "Wait for CI" holds a deploy until it passes.
+- **Releases** (`.github/workflows/release.yml`): every green push to `main` (= a production deploy) gets a GitHub release, tagged by date (`v2026.10.19`, then `v2026.10.19.2` for a second release that day), with notes generated from the commits and PRs since the previous release.
+- Ship to production by merging `dev` into `main` (via PR).
 
 ## API endpoints
 
