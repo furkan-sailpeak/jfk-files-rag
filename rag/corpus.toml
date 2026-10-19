@@ -1,0 +1,51 @@
+# Everything specific to the archive being searched. Porting the system to a
+# different document collection means: ingest it into a pages table with the
+# same columns, run the backfill scripts, and edit this file. No prompt or
+# code changes. Prompts read these values as {{ corpus.<key> }}.
+
+# Shown to users and used in the conversational prompt.
+name = "JFK Files Research System"
+# What the collection is, completing "questions about ...".
+description = "the declassified JFK assassination records (2025 release)"
+# One short phrase used inside prompts ("a RAG system searching <short_name>").
+short_name = "the JFK files"
+# The expert voice answers are written in.
+persona = "research historian"
+# What a single item in the collection is called.
+document_kind = "declassified document"
+# Topics that are IN scope for the router; anything else is out_of_scope.
+scope = "the JFK assassination and its investigations (Warren Commission, HSCA, Church Committee), Cold War intelligence (CIA, FBI, KGB), Cuba, and the people, places and events surrounding them, including JFK's presidency and family"
+# Vocabulary hint for query expansion ("... likely to appear in <search_vocabulary>").
+search_vocabulary = "CIA, FBI and Warren Commission files"
+
+# Document identifiers: a query containing one is answered from that whole document.
+doc_id_pattern = '\d{3}-\d{5}-\d{5}'
+doc_id_example = "104-10433-10209"
+
+# Storage. pages_table must be a plain SQL identifier (checked at startup).
+pages_table = "jfk_pages"
+# Built by extract_entities.py (people, organizations, places, dates per page).
+entities_table = "jfk_entities"
+pdf_base_url = "https://storage.googleapis.com/jfkweb-prod"
+
+# Few-shot examples for the router's keyword extraction.
+[[router_examples]]
+query = "What role did Jack Ruby play according to the files?"
+keywords = ["Jack Ruby"]
+
+[[router_examples]]
+query = "Analyze the CIA's surveillance activities related to the assassination"
+keywords = ["CIA surveillance", "assassination"]
+
+[[router_examples]]
+query = "Did Oswald visit the Soviet embassy in Mexico City?"
+keywords = ["Oswald", "Soviet embassy", "Mexico City"]
+
+# Few-shot examples for the one-sentence BACKGROUND identification of an entity.
+[entity_brief]
+context = "the assassination of President John F. Kennedy"
+examples = [
+  "Lee Harvey Oswald (1939–1963) was a former U.S. Marine and the alleged lone assassin of President John F. Kennedy on November 22, 1963, in Dallas.",
+  "Jack Ruby was a Dallas nightclub owner who shot and killed Lee Harvey Oswald on November 24, 1963, in the basement of Dallas Police Headquarters.",
+  "The Warren Commission was the U.S. presidential commission established in November 1963 to investigate the assassination of President Kennedy.",
+]

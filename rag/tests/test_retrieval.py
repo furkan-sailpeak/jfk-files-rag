@@ -41,6 +41,7 @@ def test_vector_search_sets_index_params_and_uses_configured_column(mocker, mock
     sqls = [c.args[0] for c in cur.execute.call_args_list]
     assert any("ivfflat.probes" in s for s in sqls) and any("hnsw.ef_search" in s for s in sqls)
     assert f"ORDER BY {config.EMBED_COLUMN} <=>" in sqls[-1]
+    assert f"FROM {config.PAGES_TABLE}" in sqls[-1] and "{" not in sqls[-1]
 
 
 def test_vector_search_skips_db_when_embedding_fails(mocker):

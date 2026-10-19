@@ -77,13 +77,13 @@ def ensure_schema():
     """One-time migration: FTS index + the rate-limit counter table.
 
     Opt-in via RUN_SCHEMA_BOOTSTRAP=1. It used to run on every boot, and with
-    every gunicorn worker issuing CREATE INDEX on jfk_pages at once they
+    every gunicorn worker issuing CREATE INDEX on the pages table at once they
     serialized behind the same table lock and the service 502'd."""
     try:
         with cursor() as cur:
-            cur.execute("""
-                CREATE INDEX IF NOT EXISTS idx_jfk_pages_content_fts
-                ON jfk_pages USING GIN (to_tsvector('english', content))
+            cur.execute(f"""
+                CREATE INDEX IF NOT EXISTS idx_{config.PAGES_TABLE}_content_fts
+                ON {config.PAGES_TABLE} USING GIN (to_tsvector('english', content))
             """)
             # Rate-limit counters live in Postgres rather than process memory
             # so the limit is shared across gunicorn workers. An in-memory

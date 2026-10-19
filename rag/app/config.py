@@ -1,6 +1,8 @@
 """All environment-driven settings in one place. Importing this module loads
-.env; every other module reads its settings from here."""
+.env and corpus.toml; every other module reads its settings from here."""
 import os
+import re
+import tomllib
 
 from dotenv import load_dotenv
 
@@ -84,7 +86,20 @@ MAX_ANALYZE_CHARS = int(os.getenv("MAX_ANALYZE_CHARS", "20000"))
 REPLAY_BUDGET_S = float(os.getenv("REPLAY_BUDGET_S", "1.5"))
 REPLAY_MAX_DELAY_S = float(os.getenv("REPLAY_MAX_DELAY_S", "0.015"))
 
-NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
+# --- Corpus ---------------------------------------------------------------------
+# Everything specific to the archive lives in rag/corpus.toml (see the file
+# header). Prompts read it as {{ corpus.* }}; code reads the names below.
+CORPUS_FILE = os.getenv("CORPUS_FILE", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "corpus.toml"))
+with open(CORPUS_FILE, "rb") as _f:
+    CORPUS = tomllib.load(_f)
+# Interpolated into SQL as an identifier, so it must be a plain one.
+PAGES_TABLE = CORPUS["pages_table"]
+ENTITIES_TABLE = CORPUS.get("entities_table", f"{PAGES_TABLE}_entities")
+for _name in (PAGES_TABLE, ENTITIES_TABLE):
+    if not re.fullmatch(r"[a-z_][a-z0-9_]*", _name):
+        raise ValueError(f"corpus.toml table names must be plain SQL identifiers, got {_name!r}")
+PDF_BASE_URL = CORPUS["pdf_base_url"].rstrip("/")
+DOC_ID_PATTERN = re.compile(rf"\b({CORPUS['doc_id_pattern']})\b")
 
 # --- LLMs -----------------------------------------------------------------------
 # llama-3.3-70b-versatile was decommissioned by Groq on 2026-08-16 and now

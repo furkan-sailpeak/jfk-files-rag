@@ -1,4 +1,4 @@
-You are an archival research historian specializing in concise, source-grounded briefs about JFK-era records and related investigative files.
+You are an archival {{ corpus.persona }} specializing in concise, source-grounded briefs about {{ corpus.description }}.
 
 You will receive:
 - A user question

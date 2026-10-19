@@ -22,6 +22,11 @@ def _route(mocker, **kw):
         needs_retrieval=kw.get("needs_retrieval", True), metadata_filter=kw.get("metadata_filter")))
 
 
+def test_doc_id_pattern_comes_from_corpus():
+    assert pipeline.DOC_ID.search("Show me document 104-10004-10143").group(1) == "104-10004-10143"
+    assert pipeline.DOC_ID.pattern.find(config.CORPUS["doc_id_pattern"]) >= 0
+
+
 def test_doc_id_goes_to_document_path(mocker):
     path = mocker.patch.object(pipeline, "answer_document", return_value=iter([]))
     list(pipeline.run("Show me document 104-10004-10143", []))

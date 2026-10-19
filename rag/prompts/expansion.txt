@@ -2,6 +2,6 @@ The user asked: "{{ rewritten_query }}"
 
 A first-pass answer was unsatisfactory because: {{ reason }}.
 
-Generate 3 ALTERNATIVE search queries likely to find relevant documents in a JFK-assassination archive. Use synonyms, related entities, and domain vocabulary likely to appear in CIA/FBI/Warren Commission files.
+Generate 3 ALTERNATIVE search queries likely to find relevant documents in an archive of {{ corpus.description }}. Use synonyms, related entities, and domain vocabulary likely to appear in {{ corpus.search_vocabulary }}.
 
 Return JSON: {"queries": ["query 1", "query 2", "query 3"]}
