@@ -104,6 +104,30 @@ make test          # offline tests only: LLM, embeddings and DB are mocked
 make prompt-check  # live: every LLM stage 3× on fixed questions, reports contract + run-to-run consistency (needs `make up`)
 ```
 
+### Evaluation (LangSmith)
+
+Datasets live in `rag/eval/datasets/` as `dataset_{project}_{YYYY-MM-DD}.json` (the current one: `dataset_jfk_2026-11-22.json`, 120 plain-language questions). Every dataset has the same fields:
+
+| Field | Meaning |
+|---|---|
+| `id` | `q001`… (assigned on save) |
+| `question` | what a user would type |
+| `category` | fact, person, explanation, timeline, not_in_files, archive_stats, off_topic, chit_chat |
+| `ground_truth_answer` | the reference answer, or the expected behaviour |
+| `expected_sources` | pages the answer should cite: `[{"file": "104-10218-10032.pdf", "page": 165}]`; empty when no citation is expected |
+| `validated` | a person has checked the answer and opened the sources |
+
+```bash
+make eval-install    # streamlit + langsmith into .venv
+make eval-app        # editor: pick or create a dataset; edits save to the file, outside edits appear within ~2s;
+                     # the review panel links every expected source straight to its page in the NARA PDF
+make eval-sync       # push the newest dataset to LangSmith as "{project}-{date}" (matched on id)
+make eval            # sync, then run every question through the pipeline as a LangSmith experiment
+make eval ARGS="--dataset dataset_jfk_2026-11-22 --validated-only --category fact --description 'new reranker prompt'"
+```
+
+Needs `LANGSMITH_API_KEY` in `.env` plus the app's own keys (the pipeline runs in-process: no server, no rate limiter). Evaluators: `correctness` (yes/no LLM judge vs. the ground truth; Groq `gpt-oss-20b` by default, `EVAL_JUDGE_PROVIDER=ollama|openai` and `EVAL_JUDGE_MODEL` to switch; `--no-judge` skips it), `source_recall` (share of the expected files the answer actually cites with [N]), `retrieval_recall` (share of the expected files among all retrieved pages; high retrieval + low source recall = found but not cited), `refusal_correct` (exact refusal line on off_topic only) and `has_citations` (document-answer categories). Experiments are named after the git commit (`rag-<sha>[-dirty]`), so runs before and after a change line up in LangSmith's comparison view.
+
 ### Embedding backfill (one-time)
 
 After loading `jfk_pages` from OCR, embed every page so the vector leg has data. A GPU makes this ~20 min instead of ~2.5 h (Apple MPS or CUDA is picked up automatically):
@@ -151,18 +175,18 @@ The earlier OpenAI embeddings are still in the `embedding` column (`EMBED_PROVID
 │   │   ├── schemas.py           #   pydantic models for every LLM JSON reply
 │   │   ├── llm.py · prompts.py  #   Groq calls; Jinja2 prompt rendering
 │   │   └── config.py · db.py · auth.py
-│   ├── prompts/                 # prompt templates (Jinja2); archive/ = optimizer history
+│   ├── prompts/                 # prompt templates (Jinja2)
 │   ├── tests/                   # offline pytest suite, one file per module
 │   ├── frontend/                # React UI
 │   ├── backfill_embeddings_bge.py
 │   ├── prompt_check.py          # live prompt consistency check
 │   └── Dockerfile
-├── admin/                       # architecture diagram, screenshot; eval/, database/ and todo.md are local-only
+├── admin/                       # architecture diagram, screenshot; database/ and todo.md are local-only
 ├── docker-compose.yml · Makefile · pyproject.toml · .pre-commit-config.yaml
 └── .env.example
 ```
 
-`admin/eval/` (the thesis evaluation harness and GEPA prompt-optimisation runs) and `admin/database/` (OCR ingestion scripts) are kept locally but no longer tracked; they are in the git history up to this change. The evaluation numbers were produced with the earlier Llama 3.3 + OpenAI-embedding setup and have not been re-run on the current pipeline.
+`admin/database/` (OCR ingestion scripts) is kept locally but not tracked. The old thesis evaluation harness (`eval/`, GEPA prompt-optimisation runs) and the archived prompt versions (`rag/prompts/archive/`) were removed in favour of `rag/eval/`; both are in the git history (harness up to commit `42b6291`).
 
 See [admin/rag-architecture-diagram.html](admin/rag-architecture-diagram.html) for the architecture diagram.
 

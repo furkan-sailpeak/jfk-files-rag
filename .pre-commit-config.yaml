@@ -1,7 +1,6 @@
 # Checks cover the backend in rag/ only. The frontend has its own tooling, and
-# rag/prompts/archive holds optimizer outputs kept verbatim as a record.
 files: ^(rag/|pyproject\.toml$|Makefile$|\.pre-commit-config\.yaml$)
-exclude: ^rag/(frontend|prompts/archive)/
+exclude: ^rag/frontend/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0

@@ -3,7 +3,7 @@ PY     := $(VENV)/bin/python
 BIN    := $(VENV)/bin
 
 .DEFAULT_GOAL := help
-.PHONY: help install hooks precommit lint test check up down rebuild logs prompt-check
+.PHONY: help install hooks precommit lint test check up down rebuild logs prompt-check eval-install eval-app eval-sync eval
 
 help:  ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -43,3 +43,15 @@ logs:  ## Tail the Docker app logs
 
 prompt-check:  ## Re-run every LLM stage 3x and report contract/consistency (needs `make up`, uses Groq)
 	docker compose exec -T app python - < rag/prompt_check.py
+
+eval-install: install  ## Add the eval tools (streamlit, langsmith) to .venv
+	$(BIN)/pip install -q -r rag/eval/requirements.txt
+
+eval-app:  ## Open the eval dataset editor (rag/eval/datasets/, edits save live)
+	$(BIN)/streamlit run rag/eval/dataset_editor.py
+
+eval-sync:  ## Push a dataset to LangSmith (ARGS="--dataset dataset_jfk_2026-11-22", default newest)
+	$(PY) rag/eval/langsmith_eval.py sync $(ARGS)
+
+eval:  ## Sync + run a LangSmith experiment (ARGS="--validated-only --category fact")
+	$(PY) rag/eval/langsmith_eval.py run $(ARGS)
