@@ -20,7 +20,7 @@ def check_answer_grounded(answer, picked, rewritten_query, query_type):
     # so any citation past [4] looked invented and grounding failed on almost
     # every research answer.
     prompt = prompts.render(
-        "grounding-judge.txt",
+        "grounding-judge.j2",
         rewritten_query=rewritten_query,
         sources_block=build_context(picked, cap=config.JUDGE_SOURCE_CHARS),
         answer=answer[:6000],
@@ -51,7 +51,7 @@ def verify_citations(answer, picked):
         numbered.append(line)
 
     prompt = prompts.render(
-        "citation-verify.txt",
+        "citation-verify.j2",
         sources_block=build_context(picked, cap=config.JUDGE_SOURCE_CHARS),
         answer="\n".join(numbered),
     )

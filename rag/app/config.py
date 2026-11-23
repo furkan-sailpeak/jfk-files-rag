@@ -1,8 +1,11 @@
 """All environment-driven settings in one place. Importing this module loads
 .env; every other module reads its settings from here."""
 import os
+import re
 
 from dotenv import load_dotenv
+
+from . import corpus as _corpus
 
 load_dotenv()
 
@@ -65,7 +68,13 @@ MAX_ANALYZE_CHARS = int(os.getenv("MAX_ANALYZE_CHARS", "20000"))
 REPLAY_BUDGET_S = float(os.getenv("REPLAY_BUDGET_S", "1.5"))
 REPLAY_MAX_DELAY_S = float(os.getenv("REPLAY_MAX_DELAY_S", "0.015"))
 
-NARA_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
+# --- Corpus ---------------------------------------------------------------------
+# Everything specific to one document collection lives in corpora/<CORPUS>.toml
+# (see app/corpus.py). Prompts read it as {{ corpus.* }}; the backend uses:
+CORPUS = _corpus.load(os.getenv("CORPUS") or "jfk")
+PAGES_TABLE = CORPUS["database"]["table"]          # validated as a plain SQL identifier
+DOC_ID = re.compile(CORPUS["documents"]["id_pattern"])
+SOURCE_URL = CORPUS["documents"]["source_url"]      # format with file_id=...
 
 # --- LLMs -----------------------------------------------------------------------
 # llama-3.3-70b-versatile was decommissioned by Groq on 2026-08-16 and now
@@ -128,7 +137,7 @@ CONTEXT_LIMIT_RESEARCH = 20
 # request into hundreds of concurrent entity-brief calls.
 MAX_SEARCH_TERMS = int(os.getenv("MAX_SEARCH_TERMS", "6"))
 MAX_ENTITY_BRIEFS = int(os.getenv("MAX_ENTITY_BRIEFS", "3"))
-# Document lookups ("show me 104-...") send whole documents to the model;
+# Document lookups (a document ID in the question) send whole documents to the model;
 # cap the page text so a large record cannot exceed the context window or
 # cost a whole document's tokens per request (~120k chars = ~30k tokens).
 DOC_CONTEXT_CHARS = int(os.getenv("DOC_CONTEXT_CHARS", "120000"))
@@ -151,8 +160,6 @@ VERIFY_ANSWER_CHARS = int(os.getenv("VERIFY_ANSWER_CHARS", "8000"))
 # checks all match on this string.
 REFUSAL_LINE = "The retrieved documents do not contain sufficient information to answer this query."
 
-# Columns the router may filter on for archive-level (metadata) questions.
-METADATA_COLUMNS = {
-    "has_redactions", "includes_handwriting", "has_stamps",
-    "has_tables", "has_forms", "is_typewritten", "document_type",
-}
+# Columns the router may filter on for archive-level (metadata) questions
+# (from the corpus config; validated as plain SQL identifiers).
+METADATA_COLUMNS = set(CORPUS["database"]["metadata_columns"])

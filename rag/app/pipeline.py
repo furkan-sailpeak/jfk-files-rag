@@ -40,8 +40,6 @@ from .retrieval import (
 )
 from .verification import check_answer_grounded, verify_citations
 
-DOC_ID = re.compile(r'\b(\d{3}-\d{5}-\d{5})\b')
-
 
 # --- SSE helpers ------------------------------------------------------------------
 def sse(event, payload):
@@ -108,7 +106,7 @@ def _source_refs(pages):
 def run(query, history):
     t0, timings = time.time(), {}
     try:
-        doc_id = DOC_ID.search(query)
+        doc_id = config.DOC_ID.search(query)
         if doc_id:
             yield from answer_document(query, doc_id.group(1), t0)
             return
@@ -151,7 +149,7 @@ def answer_document(query, doc_id, t0):
     note = "" if len(pages) == total else (
         f"\n\n(Only the first {len(pages)} of {total} pages fit; say so if the answer may be in later pages.)")
     ctx = build_context(pages)
-    instructions = prompts.render("document-agent.txt", filename=filename)
+    instructions = prompts.render("document-agent.j2", filename=filename)
     messages = [
         {"role": "system", "content": instructions},
         {"role": "user", "content": f"DOCUMENT PAGES:\n{ctx}{note}\n\nUSER INQUIRY: {query}"},
@@ -177,7 +175,7 @@ def answer_metadata(query, metadata_filter, t0, timings):
         build_context([(r[0] or "(no content)", r[1], r[2]) for r in samples], cap=500),
     ])
     yield stage("Generating...")
-    messages = [{"role": "user", "content": prompts.render("metadata.txt", ctx=ctx, query=query)}]
+    messages = [{"role": "user", "content": prompts.render("metadata.j2", ctx=ctx, query=query)}]
     full = yield from _stream_to_client(messages, config.GEN_TEMPERATURE)
     yield done(strip_artifacts(full), _source_refs(samples), "metadata", {"total_ms": _ms_since(t0), **timings})
 
@@ -193,7 +191,7 @@ def answer_out_of_scope(t0, timings):
 def answer_conversational(query, history, t0, timings):
     """Greetings and questions about the tool itself; no retrieval."""
     yield stage("Responding...")
-    messages = [{"role": "system", "content": prompts.load("conversational.txt")}]
+    messages = [{"role": "system", "content": prompts.load("conversational.j2")}]
     messages += [{"role": m["role"], "content": m["content"]} for m in history[-20:]]
     messages.append({"role": "user", "content": query})
     full = yield from _stream_to_client(messages, temperature=0.5)

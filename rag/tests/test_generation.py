@@ -119,7 +119,7 @@ def test_user_prompt_is_fully_rendered_with_reminder_last(query_type):
     user = generation.build_rag_user_prompt("Who was Jack Ruby?", "<source id=\"1\">text</source id=\"1\">", "prior", query_type, "BG\n\n")
     assert "{{" not in user and "}}" not in user
     # The format reminder must be the tail of the prompt, after the sources.
-    reminder = prompts.load(f"rag-format-{query_type}.txt")
+    reminder = prompts.load(f"rag-format-{query_type}.j2")
     assert user.rstrip().endswith(reminder.rstrip())
     assert user.index("RETRIEVED DOCUMENTS") < user.index("FORMAT REMINDER")
 

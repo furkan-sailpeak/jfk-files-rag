@@ -14,14 +14,17 @@ import json
 import os
 import re
 import tempfile
+import tomllib
 from datetime import date
 from pathlib import Path
 
 DATASETS_DIR = Path(__file__).with_name("datasets")
 NAME = re.compile(r"^dataset_(?P<project>[a-z0-9][a-z0-9-]*)_(?P<date>\d{4}-\d{2}-\d{2})\.json$")
 FIELDS = ["id", "question", "category", "ground_truth_answer", "expected_sources", "validated"]
-# Same PDF host the chat UI links citations to (config.NARA_BASE_URL).
-PDF_BASE_URL = "https://storage.googleapis.com/jfkweb-prod"
+# Source links come from the corpus config with the dataset's project name
+# (rag/corpora/<project>.toml, documents.source_url), so a dataset for another
+# corpus links to that corpus's documents.
+CORPORA_DIR = Path(__file__).resolve().parent.parent / "corpora"
 CATEGORIES = [
     "fact", "person", "explanation", "timeline",
     "not_in_files", "archive_stats", "off_topic", "chit_chat",
@@ -85,9 +88,15 @@ def _pdf(name):
     return name if name.lower().endswith(".pdf") else name + ".pdf"
 
 
-def source_url(src):
-    """Direct link to the page in the National Archives PDF."""
-    return f"{PDF_BASE_URL}/{src['file'][:-4]}.pdf#page={src['page']}"
+def source_url(src, project):
+    """Direct link to the page in the source PDF, or None when the project has
+    no corpus config to take the link format from."""
+    path = CORPORA_DIR / f"{project}.toml"
+    if not path.is_file():
+        return None
+    with open(path, "rb") as f:
+        template = tomllib.load(f)["documents"]["source_url"]
+    return template.format(file_id=src["file"][:-4]) + f"#page={src['page']}"
 
 
 def _sources(value):

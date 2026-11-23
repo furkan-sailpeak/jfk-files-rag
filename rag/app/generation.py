@@ -67,7 +67,7 @@ def route_query(query, history):
     words. Search terms are capped at MAX_SEARCH_TERMS either way: each one
     can cost an LLM call downstream, and neither the router reply nor the raw
     query is a trustworthy bound."""
-    prompt = prompts.render("router.txt", query=query) + build_history_context(history)
+    prompt = prompts.render("router.j2", query=query) + build_history_context(history)
     try:
         reply = llm.complete_json(prompt, RouterReply)
     except Exception as e:
@@ -112,7 +112,7 @@ _entity_brief_cache = {}
 
 
 def entity_brief(name):
-    """One-sentence canonical identification of a JFK-context entity, or None
+    """One-sentence canonical identification of an entity in the corpus's domain, or None
     for generic terms, ambiguous names, or anything the model is unsure of.
     Cached in-process so a given name is only resolved once per worker."""
     cleaned = (name or "").strip()
@@ -124,7 +124,7 @@ def entity_brief(name):
         return _entity_brief_cache[key]
     try:
         out = llm.complete(
-            [{"role": "user", "content": prompts.render("entity-brief.txt", name=cleaned)}],
+            [{"role": "user", "content": prompts.render("entity-brief.j2", name=cleaned)}],
             max_tokens=80,
         ).strip()
         # Strip a leading "Identification:" if the model echoes it.
@@ -166,8 +166,8 @@ def build_background_block(search_terms):
 
 # --- Answer prompts ---------------------------------------------------------------
 def build_rag_system_prompt(query_type):
-    instructions = prompts.load('rag-simple.txt' if query_type == 'simple' else 'rag-research.txt')
-    return f"{instructions}\n{prompts.load('rag-system-suffix.txt')}\n"
+    instructions = prompts.load('rag-simple.j2' if query_type == 'simple' else 'rag-research.j2')
+    return f"{instructions}\n{prompts.load('rag-system-suffix.j2')}\n"
 
 
 def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research", background_block=""):
@@ -180,9 +180,9 @@ def build_rag_user_prompt(query, ctx, prior_answer_summary, query_type="research
     # Format reminder goes LAST because small models weight the tail of the
     # prompt far more than the head; tested: without it the model writes
     # non-ASCII citation brackets ~2x as often and simple answers run ~60% long.
-    format_reminder = prompts.load('rag-format-simple.txt' if query_type == 'simple' else 'rag-format-research.txt')
+    format_reminder = prompts.load('rag-format-simple.j2' if query_type == 'simple' else 'rag-format-research.j2')
     return prompts.render(
-        "rag-user-template.txt",
+        "rag-user-template.j2",
         prior_block=prior_block, background_block=background_block or "",
         ctx=ctx, query=query, format_reminder=format_reminder,
     )
@@ -205,7 +205,7 @@ def retry_if_uncited(text, query, picked, system_prompt, ctx=None):
     [N] at all. The refusal line is left alone: it is meant to be uncited."""
     if not picked or HAS_CITATION.search(text) or is_refusal(text):
         return text
-    retry_prompt = prompts.render("rag-retry-nocite.txt", ctx=ctx or build_context(picked), query=query)
+    retry_prompt = prompts.render("rag-retry-nocite.j2", ctx=ctx or build_context(picked), query=query)
     try:
         retry_text = strip_artifacts(llm.complete(
             [{"role": "system", "content": system_prompt}, {"role": "user", "content": retry_prompt}],

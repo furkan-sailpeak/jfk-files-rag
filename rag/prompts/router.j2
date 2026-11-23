@@ -1,0 +1,24 @@
+Analyze this user query for a RAG system searching {{ corpus.collection.short_name }}: '{{ query }}'
+
+If conversation history is provided below, use it to resolve references in the query. For example, if the user previously asked about "{{ corpus.examples.history_subject }}" and now asks "{{ corpus.examples.history_followup }}", the keywords should include "{{ corpus.examples.history_subject }}" and "{{ corpus.examples.history_followup_keyword }}", not just "{{ corpus.examples.history_followup_keyword }}".
+
+Return a valid JSON object with these keys:
+1. "rewritten_query": A standalone version of the user's question with ALL pronouns and references resolved from conversation history. If the user asks "{{ corpus.examples.rewrite_question }}" after discussing {{ corpus.examples.rewrite_topic }}, rewrite as "{{ corpus.examples.rewrite_result }}". If there is nothing to resolve, copy the query as-is. This must be a full sentence/question, not a keyword list.
+2. "keywords": A list of 1-3 most distinctive search terms, drawn from the rewritten_query, used for full-text search. Empty list if not a search/metadata query.
+   - PREFER: proper nouns (people, places, organizations), specific events, dates, document identifiers, and rare/domain-specific terms. Multi-word proper nouns stay as one string ({% for t in corpus.examples.multiword_terms %}"{{ t }}"{% if not loop.last %}, {% endif %}{% endfor %}).
+   - SKIP: question words (who/what/when/where/why/how), stopwords (the, of, in, and, to, a, is, was), generic relational verbs and nouns (role, played, involved, connection, relationship, discuss, describe, mention, analyze, summary, details, information, files, documents, records), and vague adjectives (important, main, key, various).
+   - Rule of thumb: if the word could appear in almost any query to this archive, it's filler — drop it. Keep only terms that narrow the search.
+   - Examples:
+{%- for ex in corpus.examples.keywords %}
+     - "{{ ex.question }}" → [{% for t in ex.terms %}"{{ t }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+{%- endfor %}
+3. "type": one of "simple", "research", "conversational", "metadata", or "out_of_scope".
+   - "conversational" = ONLY greetings ("hi", "thanks"), small talk, or questions about the system/tool itself ("what can you do?", "how does this work?"). Nothing that asks for a factual answer about the outside world.
+   - "simple" = asking for a specific name, date, fact, a yes/no question, or single document verification, WHERE THE SUBJECT is {{ corpus.scope.subject }} related.
+   - "research" = asking for analysis, summary, relationships, motives or causes ("why ..."), or details on a broad topic, WHERE THE SUBJECT is {{ corpus.scope.subject }} related.
+   - "metadata" = asking about document properties like {{ corpus.scope.metadata_properties }}. Examples: {% for t in corpus.scope.metadata_examples %}"{{ t }}"{% if not loop.last %}, {% endif %}{% endfor %}.
+   - "out_of_scope" = ANY substantive factual, creative, or advice question whose subject is NOT {{ corpus.scope.out_of_scope_subject }}. This includes general trivia ("capital of Latvia", "who won the 1964 World Series", "chemical formula for caffeine"), creative writing ("write a poem about the ocean"), how-to advice ("how do I change a tire"), literary plot summaries ("summarize Hamlet"), math problems, weather, shopping, etc. If the query is a real question but its subject is unrelated to {{ corpus.scope.related_terms }}, it is out_of_scope — NOT conversational. Be generous on the IN-scope side: anything plausibly related to {{ corpus.scope.generous }} is IN scope even if the archive may not contain the answer.
+4. "needs_retrieval": true if the query requires searching documents or metadata, false if it's just conversational.
+5. "metadata_filter": (only if type is "metadata") An object with the column to filter on. Valid columns: {% for t in corpus.database.metadata_columns %}"{{ t }}"{% if not loop.last %}, {% endif %}{% endfor %}. Example: {{ corpus.scope.metadata_filter_examples | join(" or ") }}.
+
+Reply ONLY with the JSON.

@@ -135,7 +135,7 @@ table = pd.DataFrame(
     [{
         **r,
         "expected_sources": [store.source_text(s) for s in r["expected_sources"]],
-        "first_source": store.source_url(r["expected_sources"][0]) if r["expected_sources"] else None,
+        "first_source": store.source_url(r["expected_sources"][0], project) if r["expected_sources"] else None,
     } for r in shown],
     columns=[*store.FIELDS[:-1], "first_source", "validated"],
 ).astype({"validated": bool})
@@ -208,7 +208,11 @@ with st.container(border=True):
     if cur["expected_sources"]:
         with st.container(horizontal=True):
             for s in cur["expected_sources"]:
-                st.link_button(store.source_text(s), store.source_url(s), icon=":material/description:")
+                url = store.source_url(s, project)
+                if url:
+                    st.link_button(store.source_text(s), url, icon=":material/description:")
+                else:
+                    st.caption(f"{store.source_text(s)} (no corpora/{project}.toml to build a link from)")
     else:
         st.caption("None: no citation is expected for this question.")
 

@@ -34,6 +34,7 @@ RUN python -c "from fastembed import TextEmbedding; TextEmbedding('BAAI/bge-smal
 COPY app/ ./app/
 COPY gunicorn.conf.py ./
 COPY prompts/ ./prompts/
+COPY corpora/ ./corpora/
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
 # Must match the port gunicorn actually binds. Railway injects PORT=8080 and
