@@ -1,0 +1,1660 @@
+[
+  {
+    "id": "q001",
+    "question": "when did oswald go to mexico city?",
+    "category": "fact",
+    "ground_truth_answer": "Oswald arrived in Mexico City by bus on September 27, 1963 and left on October 2, 1963.",
+    "expected_sources": [
+      {
+        "file": "144-10001-10213.pdf",
+        "page": 5
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 247
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q002",
+    "question": "who did the cia put in charge of investigating the assassination?",
+    "category": "fact",
+    "ground_truth_answer": "Richard Helms, then head of the CIA's clandestine services, put John Scelso (head of the branch for Mexico and Central America) in charge of the agency's assassination investigation. Scelso later testified that James Angleton ignored Helms's order and dealt with the FBI and the Warren Commission himself.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10014.pdf",
+        "page": 55
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q003",
+    "question": "who was in charge of the cia station in mexico city in 1963?",
+    "category": "fact",
+    "ground_truth_answer": "Winston (Win) Scott was the CIA Chief of Station in Mexico City in 1963.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 278
+      },
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 23
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q004",
+    "question": "what gun did oswald use?",
+    "category": "fact",
+    "ground_truth_answer": "A 6.5 mm Italian Mannlicher-Carcano rifle, serial number C2766, bought by mail order from Klein's Sporting Goods in Chicago in March 1963 under the name \"A. Hidell\".",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 115
+      },
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 254
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q005",
+    "question": "what fake names did oswald use?",
+    "category": "fact",
+    "ground_truth_answer": "He used the alias \"Alek James Hidell\" (A. J. Hidell), including to order the rifle and revolver, and registered at his Dallas rooming house as \"O. H. Lee\".",
+    "expected_sources": [
+      {
+        "file": "180-10091-10228.pdf",
+        "page": 4
+      },
+      {
+        "file": "135-10001-10276.pdf",
+        "page": 7
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 137
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q006",
+    "question": "where did oswald work when kennedy was shot?",
+    "category": "fact",
+    "ground_truth_answer": "At the Texas School Book Depository in Dallas, as an order filler. He started there on October 16, 1963.",
+    "expected_sources": [
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 34
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q007",
+    "question": "when did oswald move to the soviet union?",
+    "category": "fact",
+    "ground_truth_answer": "He arrived in Moscow on October 16, 1959, and on October 31, 1959 went to the U.S. Embassy to say he wanted to renounce his U.S. citizenship.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10023.pdf",
+        "page": 61
+      },
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 59
+      },
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 24
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q008",
+    "question": "which city did oswald live in while he was in russia?",
+    "category": "fact",
+    "ground_truth_answer": "Minsk, in the Byelorussian SSR, where he worked at a radio and electronics factory from January 1960 until he left in 1962.",
+    "expected_sources": [
+      {
+        "file": "104-10227-10000.pdf",
+        "page": 122
+      },
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 24
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q009",
+    "question": "when did oswald come back to the us?",
+    "category": "fact",
+    "ground_truth_answer": "In June 1962. He arrived in the U.S. on June 13, 1962 with his wife Marina and their baby daughter June, and settled in the Fort Worth / Dallas area.",
+    "expected_sources": [
+      {
+        "file": "104-10150-10136.pdf",
+        "page": 314
+      },
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 24
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q010",
+    "question": "who killed oswald?",
+    "category": "fact",
+    "ground_truth_answer": "Jack Ruby shot Oswald on November 24, 1963 in the basement of Dallas Police Headquarters while Oswald was being moved to the county jail. Oswald died at Parkland Hospital.",
+    "expected_sources": [
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 199
+      },
+      {
+        "file": "104-10302-10022.pdf",
+        "page": 5
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q011",
+    "question": "which police officer got killed the same day as kennedy?",
+    "category": "fact",
+    "ground_truth_answer": "Dallas police officer J. D. Tippit was shot and killed in the Oak Cliff area at about 1:15 pm on November 22, 1963. Oswald was charged with his murder.",
+    "expected_sources": [
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 255
+      },
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 172
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q012",
+    "question": "who is kostikov and why did the cia care about him?",
+    "category": "fact",
+    "ground_truth_answer": "Valeriy Kostikov was a Soviet consular officer in Mexico City whom Oswald spoke with in September 1963. The CIA and FBI believed he was a KGB officer linked to Department 13, the KGB unit responsible for sabotage and assassination.",
+    "expected_sources": [
+      {
+        "file": "104-10218-10032.pdf",
+        "page": 165
+      },
+      {
+        "file": "104-10218-10032.pdf",
+        "page": 164
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q013",
+    "question": "where did they arrest oswald?",
+    "category": "fact",
+    "ground_truth_answer": "In the Texas Theatre, a movie theater in Oak Cliff, Dallas, at about 1:50 pm on November 22, 1963.",
+    "expected_sources": [
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 199
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q014",
+    "question": "where did oswald first hand out his pro castro flyers?",
+    "category": "fact",
+    "ground_truth_answer": "On June 16, 1963, near the aircraft carrier USS Wasp at the Dumaine Street wharf in New Orleans. He had printed \"Hands Off Cuba\" handbills under the name Lee Osborne in late May / early June 1963.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 137
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q015",
+    "question": "what did oswald do in the marines?",
+    "category": "fact",
+    "ground_truth_answer": "He was trained as a radar / aviation electronics operator and served at air bases including Atsugi, Japan (a U-2 base) and in California. He held a \"confidential\" security clearance and left the Marines in September 1959.",
+    "expected_sources": [
+      {
+        "file": "104-10305-10005.pdf",
+        "page": 6
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 92
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q016",
+    "question": "what was the fair play for cuba committee?",
+    "category": "fact",
+    "ground_truth_answer": "A pro-Castro U.S. organization. In New Orleans in the summer of 1963 Oswald set up his own \"chapter\" of it, of which he was effectively the only member, and handed out pro-Castro leaflets.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 137
+      },
+      {
+        "file": "180-10091-10228.pdf",
+        "page": 4
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q017",
+    "question": "what address was on oswald's pro castro leaflets?",
+    "category": "fact",
+    "ground_truth_answer": "544 Camp Street, New Orleans, a building that also housed the office of former FBI agent Guy Banister (whose entrance was at 531 Lafayette Street).",
+    "expected_sources": [
+      {
+        "file": "135-10001-10276.pdf",
+        "page": 8
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q018",
+    "question": "when did they pass the law to release the jfk files?",
+    "category": "fact",
+    "ground_truth_answer": "The President John F. Kennedy Assassination Records Collection Act was passed in 1992. It required the records to be released by 2017 unless the President postponed release.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10011.pdf",
+        "page": 19
+      },
+      {
+        "file": "104-10332-10023.pdf",
+        "page": 35
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q019",
+    "question": "by when did all the jfk records have to be made public?",
+    "category": "fact",
+    "ground_truth_answer": "The JFK Records Act of 1992 required all assassination records to be opened by October 26, 2017, unless the President certified that a record's release should be postponed further. The Act also created a five-person Assassination Records Review Board.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 120
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q020",
+    "question": "which fbi agent was watching oswald in dallas?",
+    "category": "fact",
+    "ground_truth_answer": "FBI Special Agent James P. Hosty Jr. of the Dallas office. Oswald left a note for Hosty at the FBI office shortly before the assassination; Hosty destroyed the note after Oswald was killed, on instructions from his superior.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 445
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q021",
+    "question": "what was the number of oswald's cia file?",
+    "category": "fact",
+    "ground_truth_answer": "Oswald's CIA 201 (personality) file was number 201-289248. The CIA's Office of Security also kept separate files on him.",
+    "expected_sources": [
+      {
+        "file": "104-10335-10014.pdf",
+        "page": 12
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q022",
+    "question": "how many shots did the warren commission say were fired?",
+    "category": "fact",
+    "ground_truth_answer": "Three shots, all fired by Oswald from the sixth-floor southeast window of the Texas School Book Depository. One shot is thought to have missed.",
+    "expected_sources": [
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 199
+      },
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 115
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q023",
+    "question": "what is the magic bullet?",
+    "category": "fact",
+    "ground_truth_answer": "The nickname for the \"single bullet theory\": the Warren Commission's conclusion that one bullet (Commission Exhibit 399) went through President Kennedy and caused all of Governor John Connally's wounds.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 116
+      },
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 115
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q024",
+    "question": "who was on the warren commission?",
+    "category": "fact",
+    "ground_truth_answer": "Chief Justice Earl Warren (chair), Senator Richard Russell, Senator John Sherman Cooper, Representative Hale Boggs, Representative Gerald Ford, former CIA Director Allen Dulles and John J. McCloy. J. Lee Rankin was general counsel.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 109
+      },
+      {
+        "file": "144-10001-10122.pdf",
+        "page": 2
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q025",
+    "question": "did the hsca think there was a conspiracy?",
+    "category": "fact",
+    "ground_truth_answer": "Yes. In 1979 the House Select Committee on Assassinations concluded Kennedy was \"probably assassinated as a result of a conspiracy\", mainly because of acoustic evidence of a fourth shot from the grassy knoll. It still found that Oswald fired the shots that hit Kennedy, and it could not identify any other gunman.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 120
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q026",
+    "question": "what's the dictabelt recording?",
+    "category": "fact",
+    "ground_truth_answer": "A Dallas police radio recording, made through a motorcycle microphone that was stuck open, which the HSCA analysed as acoustic evidence of four shots. A 1982 National Academy of Sciences panel concluded the sounds were recorded about a minute after the shooting.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 76
+      },
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 68
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q027",
+    "question": "which soviet defector talked about oswald?",
+    "category": "fact",
+    "ground_truth_answer": "Yuri Nosenko, a KGB officer who defected to the U.S. in February 1964. He said the KGB had no operational interest in Oswald.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 61
+      },
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 54
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q028",
+    "question": "did oswald try to kill someone before kennedy?",
+    "category": "fact",
+    "ground_truth_answer": "Yes. On April 10, 1963 he fired a rifle shot at retired Major General Edwin Walker through a window of Walker's Dallas home, and missed.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 70
+      },
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 22
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q029",
+    "question": "what is amlash?",
+    "category": "fact",
+    "ground_truth_answer": "AMLASH was the CIA code name for Rolando Cubela, a Cuban official the CIA recruited to kill Castro. A CIA officer met him in Paris on November 22, 1963 and offered him a poison pen.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 475
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 410
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q030",
+    "question": "what was zr rifle?",
+    "category": "fact",
+    "ground_truth_answer": "ZR/RIFLE was a CIA \"executive action\" program in the early 1960s, run by William Harvey, to develop the capability to assassinate foreign leaders. It was tied to plots against Fidel Castro.",
+    "expected_sources": [
+      {
+        "file": "157-10005-10297.pdf",
+        "page": 94
+      },
+      {
+        "file": "157-10014-10109.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q031",
+    "question": "who is marina oswald?",
+    "category": "person",
+    "ground_truth_answer": "Marina Nikolayevna Prusakova, the Russian wife of Lee Harvey Oswald. They married in Minsk in April 1961, moved to the U.S. in 1962, and she testified before the Warren Commission.",
+    "expected_sources": [
+      {
+        "file": "180-10072-10186.pdf",
+        "page": 2
+      },
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 60
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q032",
+    "question": "who was silvia duran?",
+    "category": "person",
+    "ground_truth_answer": "A Mexican employee of the Cuban Consulate in Mexico City who dealt with Oswald's request for a transit visa to Cuba in September 1963. She was arrested and questioned by Mexican authorities after the assassination at the CIA's request.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 307
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 248
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q033",
+    "question": "who was david ferrie?",
+    "category": "person",
+    "ground_truth_answer": "A New Orleans pilot (formerly with Eastern Air Lines) and anti-Castro activist. Jim Garrison named him as a conspirator with Oswald and Clay Shaw; Ferrie died in February 1967 before he could be charged.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 385
+      },
+      {
+        "file": "124-10273-10289_redacted.pdf",
+        "page": 480
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q034",
+    "question": "who was clay shaw?",
+    "category": "person",
+    "ground_truth_answer": "A New Orleans businessman and director of the International Trade Mart. Jim Garrison charged him in 1967 with conspiring to kill Kennedy; a jury acquitted him on March 1, 1969.",
+    "expected_sources": [
+      {
+        "file": "124-10273-10289_redacted.pdf",
+        "page": 480
+      },
+      {
+        "file": "104-10333-10006.pdf",
+        "page": 8
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q035",
+    "question": "who was jim garrison?",
+    "category": "person",
+    "ground_truth_answer": "The New Orleans District Attorney who started his own JFK assassination investigation in late 1966 and prosecuted Clay Shaw, who was acquitted in 1969.",
+    "expected_sources": [
+      {
+        "file": "124-10273-10289_redacted.pdf",
+        "page": 480
+      },
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 254
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q036",
+    "question": "who is yuri nosenko?",
+    "category": "person",
+    "ground_truth_answer": "A KGB officer who defected to the U.S. in 1964 and said the KGB had nothing to do with Oswald. The CIA doubted he was a genuine defector and held him in isolation for about three years.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 61
+      },
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 23
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q037",
+    "question": "who was george de mohrenschildt?",
+    "category": "person",
+    "ground_truth_answer": "A Russian-born petroleum geologist in Dallas who befriended Oswald and Marina in 1962-63. He died of a gunshot wound, ruled a suicide, in March 1977, on the day an HSCA investigator tried to contact him.",
+    "expected_sources": [
+      {
+        "file": "104-10326-10057.pdf",
+        "page": 2
+      },
+      {
+        "file": "180-10096-10399.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q038",
+    "question": "who was james angleton?",
+    "category": "person",
+    "ground_truth_answer": "James Jesus Angleton was the CIA's chief of counterintelligence from 1954 to 1974. His staff held CIA records on Oswald and handled the agency's counterintelligence side of the assassination investigation.",
+    "expected_sources": [
+      {
+        "file": "124-10271-10033_multirif_redacted.pdf",
+        "page": 70
+      },
+      {
+        "file": "104-10332-10014.pdf",
+        "page": 55
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q039",
+    "question": "who was guy banister?",
+    "category": "person",
+    "ground_truth_answer": "A former FBI agent who ran a private detective agency in New Orleans involved with anti-Castro activities. His office was at 531 Lafayette Street, the same building as the 544 Camp Street address on Oswald's leaflets.",
+    "expected_sources": [
+      {
+        "file": "135-10001-10276.pdf",
+        "page": 8
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q040",
+    "question": "who is ruth paine?",
+    "category": "person",
+    "ground_truth_answer": "A woman in Irving, Texas, who befriended the Oswalds. Marina lived with her in the fall of 1963, and a tip from Paine's neighbour led to Oswald getting his job at the Texas School Book Depository.",
+    "expected_sources": [
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 34
+      },
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 23
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q041",
+    "question": "who was carlos bringuier?",
+    "category": "person",
+    "ground_truth_answer": "A Cuban exile in New Orleans and delegate of the anti-Castro student group DRE. He got into a street fight with Oswald on August 9, 1963 while Oswald was handing out leaflets, and debated him on the radio later that month.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 138
+      },
+      {
+        "file": "180-10091-10228.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q042",
+    "question": "who was santos trafficante?",
+    "category": "person",
+    "ground_truth_answer": "A Mafia boss based in Tampa, Florida, who had casinos in Cuba before Castro. He was one of the mob figures involved in the CIA-Mafia plots to kill Castro.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 91
+      },
+      {
+        "file": "157-10014-10109.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q043",
+    "question": "who was johnny roselli?",
+    "category": "person",
+    "ground_truth_answer": "A Mafia figure who was the CIA's main go-between in the plots to kill Castro in the early 1960s. He testified to the Church Committee and was murdered in 1976.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 352
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 450
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q044",
+    "question": "who was sam giancana?",
+    "category": "person",
+    "ground_truth_answer": "The boss of the Chicago Mafia, involved with Johnny Roselli in the CIA's plots against Castro. He was murdered in June 1975, shortly before he was due to testify to the Church Committee.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 91
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 450
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q045",
+    "question": "who was carlos marcello?",
+    "category": "person",
+    "ground_truth_answer": "The Mafia boss of New Orleans. The HSCA said he had the motive, means and opportunity to be involved in the assassination but found no direct evidence that he was.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 45
+      },
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 107
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q046",
+    "question": "who was william harvey?",
+    "category": "person",
+    "ground_truth_answer": "A CIA officer who ran Task Force W, the agency's anti-Castro operations unit, and the ZR/RIFLE assassination program, and who worked with Johnny Roselli on plots against Castro.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10109.pdf",
+        "page": 6
+      },
+      {
+        "file": "157-10008-10246.pdf",
+        "page": 4
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q047",
+    "question": "who was david atlee phillips?",
+    "category": "person",
+    "ground_truth_answer": "A senior CIA officer at the Mexico City station in 1963 who handled anti-Cuban covert operations. The HSCA questioned him about Oswald's Mexico City visit and about claims that he was \"Maurice Bishop\".",
+    "expected_sources": [
+      {
+        "file": "180-10110-10100.pdf",
+        "page": 7
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q048",
+    "question": "who was george joannides?",
+    "category": "person",
+    "ground_truth_answer": "A CIA officer who in 1963 was the case officer for the anti-Castro student group DRE, which had contact with Oswald. In 1978 he was the CIA's liaison to the HSCA without the committee being told about his earlier role.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 46
+      },
+      {
+        "file": "104-10332-10023.pdf",
+        "page": 212
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q049",
+    "question": "who was e howard hunt?",
+    "category": "person",
+    "ground_truth_answer": "A CIA officer involved in anti-Castro operations, including the Bay of Pigs, who was later convicted for his role in Watergate. Claims that he was in Dallas on November 22, 1963 were looked at by the Rockefeller Commission, which found no evidence of it.",
+    "expected_sources": [
+      {
+        "file": "135-10001-10243.pdf",
+        "page": 5
+      },
+      {
+        "file": "135-10001-10243.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q050",
+    "question": "who was j edgar hoover?",
+    "category": "person",
+    "ground_truth_answer": "The Director of the FBI from 1924 to 1972. The FBI led the investigation into the assassination for the Warren Commission, and Hoover pushed early on for the conclusion that Oswald acted alone.",
+    "expected_sources": [
+      {
+        "file": "157-10002-10152.pdf",
+        "page": 15
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q051",
+    "question": "who was general walker?",
+    "category": "person",
+    "ground_truth_answer": "Edwin Walker was a retired U.S. Army major general and right-wing activist in Dallas. Oswald fired a rifle shot at him through a window of his home on April 10, 1963 and missed.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 70
+      },
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 22
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q052",
+    "question": "who is robert blakey?",
+    "category": "person",
+    "ground_truth_answer": "G. Robert Blakey was chief counsel and staff director of the House Select Committee on Assassinations (1977-79). He later said the CIA had misled the committee, including about George Joannides.",
+    "expected_sources": [
+      {
+        "file": "104-10145-10047.pdf",
+        "page": 1
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q053",
+    "question": "what did the cia know about oswald before the assassination?",
+    "category": "explanation",
+    "ground_truth_answer": "The CIA opened a 201 file on Oswald in December 1960 after his defection. It knew he had served in the Marines, defected to the USSR and come back in 1962, and in October 1963 its Mexico City station reported his contacts with the Soviet Embassy (including with Valeriy Kostikov). Headquarters replied with background on him. He was not flagged as a threat to the President.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 92
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 134
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q054",
+    "question": "was oswald working for the cia?",
+    "category": "explanation",
+    "ground_truth_answer": "The files do not show that Oswald was a CIA agent or asset. The CIA denied any relationship, and neither the Warren Commission nor the HSCA found evidence of one, although some gaps and inconsistencies in the CIA's records have kept the question open for critics.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10016.pdf",
+        "page": 10
+      },
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 43
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q055",
+    "question": "why do people think someone pretended to be oswald in mexico city?",
+    "category": "explanation",
+    "ground_truth_answer": "The CIA's Mexico City station sent photos of a man it linked to Oswald who was clearly not Oswald (the \"mystery man\"), and there are questions about whether the voice on intercepted phone calls was really his. The HSCA said it could not rule out that someone impersonated Oswald in Mexico City.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 313
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 134
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q056",
+    "question": "what was operation mongoose?",
+    "category": "explanation",
+    "ground_truth_answer": "A Kennedy administration covert program started in November 1961, led by Edward Lansdale, to overthrow Fidel Castro through sabotage, propaganda and other operations against Cuba. It was wound down after the Cuban Missile Crisis in late 1962.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10151.pdf",
+        "page": 149
+      },
+      {
+        "file": "157-10014-10151.pdf",
+        "page": 150
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q057",
+    "question": "did the cia try to kill castro?",
+    "category": "explanation",
+    "ground_truth_answer": "Yes. From 1960 to about 1965 the CIA ran several plots to kill Castro, including working with Mafia figures (Johnny Roselli, Sam Giancana, Santos Trafficante) on poison pills and later with the Cuban official Rolando Cubela (AMLASH). These were made public by the Church Committee in 1975.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 352
+      },
+      {
+        "file": "157-10014-10109.pdf",
+        "page": 6
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 129
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q058",
+    "question": "what was oswald up to in new orleans in summer 63?",
+    "category": "explanation",
+    "ground_truth_answer": "He moved to New Orleans in April 1963, set up a one-man Fair Play for Cuba Committee \"chapter\", handed out pro-Castro leaflets (some stamped with 544 Camp Street), got into a fight with anti-Castro exile Carlos Bringuier on August 9 and was arrested, and appeared on a radio debate on August 21. He left for Mexico City in late September.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 137
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 138
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q059",
+    "question": "what did the fbi know about oswald before the shooting?",
+    "category": "explanation",
+    "ground_truth_answer": "The FBI had a file on Oswald since his defection, interviewed him after his return in 1962, knew about his Fair Play for Cuba activities in New Orleans and was told about his Mexico City contacts. Agent James Hosty in Dallas was trying to locate him and visited Ruth Paine's home in November 1963, but the FBI did not tell the Secret Service he was a risk.",
+    "expected_sources": [
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 34
+      },
+      {
+        "file": "104-10423-10337.pdf",
+        "page": 18
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q060",
+    "question": "why didn't the warren commission know about the castro plots?",
+    "category": "explanation",
+    "ground_truth_answer": "The CIA did not tell the Warren Commission about its plots to kill Castro, even though commission member Allen Dulles had been CIA Director when they started. The Church Committee in 1975-76 found that the CIA and FBI had held back information that was relevant to the investigation.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 401
+      },
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 119
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q061",
+    "question": "what did the church committee find?",
+    "category": "explanation",
+    "ground_truth_answer": "The Senate Select Committee on Intelligence (Church Committee, 1975-76) revealed CIA plots to assassinate foreign leaders including Castro. Its report on the JFK assassination found that the CIA and FBI investigations had been deficient and that agencies had withheld information from the Warren Commission.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 119
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q062",
+    "question": "why did it take so long to release these files?",
+    "category": "explanation",
+    "ground_truth_answer": "Agencies kept the records classified to protect intelligence sources, methods and informants. The 1992 JFK Records Act set up a review board (1994-98) and a 2017 deadline, but releases were repeatedly postponed by presidents at the agencies' request until the 2025 executive order and the March 2025 release.",
+    "expected_sources": [
+      {
+        "file": "104-10337-10014.pdf",
+        "page": 46
+      },
+      {
+        "file": "104-10331-10370.pdf",
+        "page": 32
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q063",
+    "question": "what's the deal with the mexico city phone tapes?",
+    "category": "explanation",
+    "ground_truth_answer": "The CIA's Mexico City station tapped phones at the Soviet and Cuban embassies and recorded calls by a man identifying himself as Oswald in late September and early October 1963. The original tapes were reportedly not kept, and there are conflicting accounts of whether anyone compared the voice with Oswald's after the assassination.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 9
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 176
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q064",
+    "question": "why was so much of this redacted?",
+    "category": "explanation",
+    "ground_truth_answer": "Redactions mostly protected intelligence sources and methods, the names of informants and agents, cooperation with foreign governments, and ongoing operations. The 2025 release removed most of the remaining redactions.",
+    "expected_sources": [
+      {
+        "file": "104-10337-10014.pdf",
+        "page": 41
+      },
+      {
+        "file": "104-10337-10014.pdf",
+        "page": 42
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q065",
+    "question": "what did the cia do right after kennedy was killed?",
+    "category": "explanation",
+    "ground_truth_answer": "The CIA reviewed its files on Oswald, sent cables about his Mexico City contacts, worried about possible Soviet or Cuban involvement, and asked Mexican authorities to arrest and question Silvia Duran. Its counterintelligence staff under James Angleton handled the agency's side of the investigation.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 248
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 250
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q066",
+    "question": "how did the fbi and warren commission work together?",
+    "category": "explanation",
+    "ground_truth_answer": "The FBI did most of the investigative work for the Warren Commission. Hoover concluded early that Oswald acted alone, and the FBI did not tell the commission everything, for example about the Hosty note that was destroyed.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 445
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q067",
+    "question": "did cuba have anything to do with it?",
+    "category": "explanation",
+    "ground_truth_answer": "The investigations found no evidence that the Cuban government was involved. The Warren Commission and the HSCA both rejected Cuban government involvement, although Lyndon Johnson later said he suspected Castro might have acted in retaliation for U.S. plots against him.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 397
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q068",
+    "question": "were the russians involved?",
+    "category": "explanation",
+    "ground_truth_answer": "The Warren Commission and the HSCA found no evidence that the Soviet government was involved. The defector Yuri Nosenko said the KGB saw Oswald as unstable and had no operational interest in him, though the CIA doubted Nosenko.",
+    "expected_sources": [
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 54
+      },
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 61
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q069",
+    "question": "what was the dre and why does it matter?",
+    "category": "explanation",
+    "ground_truth_answer": "The DRE (Directorio Revolucionario Estudiantil) was an anti-Castro Cuban student group funded by the CIA. Its New Orleans delegate Carlos Bringuier clashed with Oswald in August 1963, and right after the assassination the DRE publicised Oswald's pro-Castro activities. Its CIA case officer was George Joannides.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 46
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 138
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q070",
+    "question": "did the mafia have something to do with it?",
+    "category": "explanation",
+    "ground_truth_answer": "The HSCA concluded that organized crime as a group was not involved but could not rule out that individual members were, naming Carlos Marcello and Santos Trafficante as having motive and opportunity. The files also document the CIA's use of Mafia figures in plots against Castro. No direct evidence of mob involvement was established.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 107
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 45
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q071",
+    "question": "why did the hsca say there was probably a conspiracy?",
+    "category": "explanation",
+    "ground_truth_answer": "Mainly because of acoustic analysis of the Dallas police dictabelt recording, which experts said showed four shots, one of them from the grassy knoll. A 1982 National Academy of Sciences review disputed that analysis.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 116
+      },
+      {
+        "file": "104-10332-10009.pdf",
+        "page": 76
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q072",
+    "question": "what was jim garrison's case about?",
+    "category": "explanation",
+    "ground_truth_answer": "Garrison claimed that Clay Shaw, David Ferrie, Oswald and anti-Castro Cubans conspired to kill Kennedy, and later said it was a CIA operation. He brought Clay Shaw to trial in 1969 and the jury acquitted Shaw in under an hour.",
+    "expected_sources": [
+      {
+        "file": "124-10273-10289_redacted.pdf",
+        "page": 480
+      },
+      {
+        "file": "104-10305-10000.pdf",
+        "page": 69
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q073",
+    "question": "can you give me a timeline of oswald's mexico city trip?",
+    "category": "timeline",
+    "ground_truth_answer": "Sep 26, 1963: leaves Houston by bus. Sep 27: arrives in Mexico City; visits the Cuban Consulate and the Soviet Embassy about a visa. Sep 28: goes back to both. Oct 1: calls the Soviet Embassy (intercepted by the CIA). Oct 2: leaves by bus. Oct 3: back in Texas. Oct 8: CIA Mexico City station cables Headquarters about him; Oct 10: Headquarters replies.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 247
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 92
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q074",
+    "question": "timeline of what happened to oswald after the shooting until he died",
+    "category": "timeline",
+    "ground_truth_answer": "Nov 22, 12:30 pm: shots fired. ~12:33: Oswald leaves the Book Depository. ~1:15: Officer Tippit is shot. ~1:50: Oswald is arrested in the Texas Theatre. That evening he is charged with Tippit's murder, and around 1:30 am Nov 23 with the President's. Nov 24, 11:21 am: Jack Ruby shoots him in the police basement; he dies at Parkland Hospital at 1:07 pm.",
+    "expected_sources": [
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 199
+      },
+      {
+        "file": "104-10433-10209.pdf",
+        "page": 255
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q075",
+    "question": "what were all the investigations into the assassination and when?",
+    "category": "timeline",
+    "ground_truth_answer": "Warren Commission (1963-64); Jim Garrison's New Orleans investigation (1966-69); Rockefeller Commission (1975); Church Committee (1975-76); House Select Committee on Assassinations (1976-79); then the 1992 JFK Records Act and the Assassination Records Review Board (1994-98), followed by record releases in 2017-2023 and March 2025.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10001.pdf",
+        "page": 119
+      },
+      {
+        "file": "104-10337-10001.pdf",
+        "page": 166
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q076",
+    "question": "give me oswald's life from the marines up to dallas",
+    "category": "timeline",
+    "ground_truth_answer": "1956: joins the Marines. 1957-58: serves in Japan. Sep 1959: leaves the Marines. Oct 1959: defects to the USSR. 1960-62: lives in Minsk; marries Marina in April 1961. June 1962: returns to Texas. March 1963: buys the rifle. April 10, 1963: shoots at General Walker. April-Sept 1963: New Orleans. Sep 27-Oct 2: Mexico City. Oct 16: starts at the Book Depository. Nov 22: assassination.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 24
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 92
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q077",
+    "question": "timeline of oswald in new orleans",
+    "category": "timeline",
+    "ground_truth_answer": "April 24, 1963: moves to New Orleans. May-June: writes to the Fair Play for Cuba Committee and starts handing out leaflets (June 16 at the Dumaine Street wharf). Aug 5: visits Carlos Bringuier's store. Aug 9: street fight with Bringuier, arrested. Aug 16: leaflets outside the Trade Mart. Aug 21: radio debate on WDSU. Sep 23: Marina leaves with Ruth Paine. Sep 25: Oswald leaves for Mexico.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 137
+      },
+      {
+        "file": "180-10091-10228.pdf",
+        "page": 6
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q078",
+    "question": "what happened with silvia duran, in order?",
+    "category": "timeline",
+    "ground_truth_answer": "Sep 27, 1963, ~11 am: Oswald asks Duran at the Cuban Consulate for a transit visa; she sends him for photos and he returns ~1 pm with four. Sep 28, 11:51 am: Duran calls the Soviet Consulate and puts Oswald on the phone. After the assassination: the CIA Mexico City station, without Headquarters' approval, asks the Mexican government to arrest her; Headquarters (John Scelso) asks Win Scott to stop it, but it is too late. Nov 24: she is released. Nov 27: she is re-arrested when Mexico says she was trying to leave for Havana; her 10-page signed statement is sent to Headquarters. Nov 28: Headquarters cables that the Mexican authorities should take responsibility for the arrest.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 307
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 248
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 250
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q079",
+    "question": "when did the cia plots against castro happen?",
+    "category": "timeline",
+    "ground_truth_answer": "1960: the CIA approaches the Mafia (through Robert Maheu and Johnny Roselli). 1961: poison pills passed to Cuba; Bay of Pigs invasion (April). Nov 1961: Operation Mongoose begins. 1962: William Harvey revives the Roselli plot. 1963: meetings with AMLASH (Rolando Cubela), including Paris on Nov 22. 1965: AMLASH dropped. 1967: CIA Inspector General report. 1975: made public by the Church Committee.",
+    "expected_sources": [
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 352
+      },
+      {
+        "file": "157-10014-10242.pdf",
+        "page": 129
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q080",
+    "question": "timeline of when the jfk files were released",
+    "category": "timeline",
+    "ground_truth_answer": "1964: Warren Commission report and 26 volumes. 1992: JFK Records Act. 1994-98: Assassination Records Review Board releases most records, some still redacted. 2017-2023: further releases with postponements under Trump and Biden. Jan 23, 2025: executive order to declassify the rest. March 18, 2025: the release this archive comes from.",
+    "expected_sources": [
+      {
+        "file": "104-10333-10011.pdf",
+        "page": 19
+      },
+      {
+        "file": "104-10337-10014.pdf",
+        "page": 48
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q081",
+    "question": "timeline of oswald's defection to russia",
+    "category": "timeline",
+    "ground_truth_answer": "Sep 11, 1959: leaves the Marines. Sep 20: sails from New Orleans. Oct 16: arrives in Moscow. Oct 21: attempts suicide after being told to leave. Oct 31: tells the U.S. Embassy he wants to renounce his citizenship. Jan 1960: sent to Minsk. Feb 1961: writes to the Embassy asking to return. April 30, 1961: marries Marina. Feb 1962: daughter June born. June 1962: leaves for the U.S.",
+    "expected_sources": [
+      {
+        "file": "104-10332-10022.pdf",
+        "page": 24
+      },
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 59
+      },
+      {
+        "file": "104-10210-10068.pdf",
+        "page": 56
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q082",
+    "question": "what happened to the recording of oswald's voice from mexico city, step by step?",
+    "category": "timeline",
+    "ground_truth_answer": "Sep 28, 1963: the CIA Mexico City station records a call in which Silvia Duran puts Oswald on the phone with the Soviet Consulate. Nov 23: CIA Headquarters asks for the transcripts and \"original tapes if available\"; the station replies that it could not compare the voice because the first tape was erased, and at 7:30 pm the FBI's Dallas office (SAC Shanklin) tells Hoover the tape has been erased. Nov 24: the station reports that a full recheck shows the tapes for that period were already erased. Nov 25: the FBI's legal attaché in Mexico City says only typewritten transcripts, not tapes, went to Dallas. The HSCA later found the station's account inconsistent with its own procedures and testimony.",
+    "expected_sources": [
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 307
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 176
+      },
+      {
+        "file": "180-10110-10484.pdf",
+        "page": 9
+      }
+    ],
+    "validated": false
+  },
+  {
+    "id": "q083",
+    "question": "what was oswald's favorite food?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain nothing about Oswald's favorite food (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: naming a food.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q084",
+    "question": "who really killed kennedy?",
+    "category": "not_in_files",
+    "ground_truth_answer": "The files do not settle this. The Warren Commission concluded Oswald acted alone; the HSCA agreed Oswald fired the fatal shots but said there was probably a conspiracy. The answer should report these findings without claiming a definitive answer beyond them.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q085",
+    "question": "was lbj behind it?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain no evidence that Lyndon Johnson was involved (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: presenting the theory as supported.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q086",
+    "question": "was there a second shooter on the grassy knoll?",
+    "category": "not_in_files",
+    "ground_truth_answer": "It was never established. The HSCA's acoustic evidence suggested a shot from the grassy knoll, but the National Academy of Sciences later disputed it and no second gunman was ever identified. The answer should present it as contested.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q087",
+    "question": "did marilyn monroe have anything to do with it?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain nothing linking Marilyn Monroe to the assassination (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: suggesting a link.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q088",
+    "question": "how much was oswald paid by the cia?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files do not show the CIA ever paid Oswald (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: giving an amount or saying he was paid.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q089",
+    "question": "what was the name of oswald's dog?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain nothing about this (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: naming a dog.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q090",
+    "question": "did kennedy know he was going to be killed?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain no evidence that Kennedy knew of a plot against him (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: claiming he knew.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q091",
+    "question": "which cia agent pulled the trigger?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain no evidence that any CIA officer shot Kennedy (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: naming an agent or accepting the premise.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q092",
+    "question": "what did the second gunman look like?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say no second gunman was ever identified, so there is no description (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: describing a second gunman.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q093",
+    "question": "what did the 2025 files prove about the conspiracy?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the 2025 release did not prove a conspiracy; it mostly removed redactions from records that were already partly public (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: claiming the 2025 files proved a conspiracy.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q094",
+    "question": "is it true a secret service agent shot kennedy by accident?",
+    "category": "not_in_files",
+    "ground_truth_answer": "Expected behaviour: say the files contain no evidence that a Secret Service agent shot Kennedy; the Warren Commission and HSCA found no indication of it (the standard line \"The retrieved documents do not contain sufficient information to answer this query.\" also counts). Wrong: presenting the claim as supported.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q095",
+    "question": "how many pages are in this archive?",
+    "category": "archive_stats",
+    "ground_truth_answer": "83,619 pages, from 2,566 documents.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q096",
+    "question": "how many documents do you have?",
+    "category": "archive_stats",
+    "ground_truth_answer": "2,566 documents, totalling 83,619 pages.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q097",
+    "question": "how many pages have handwriting on them?",
+    "category": "archive_stats",
+    "ground_truth_answer": "38,078 pages contain handwriting.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q098",
+    "question": "how many pages are redacted?",
+    "category": "archive_stats",
+    "ground_truth_answer": "9,172 pages have redactions.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q099",
+    "question": "how many pages have tables?",
+    "category": "archive_stats",
+    "ground_truth_answer": "11,546 pages contain tables.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q100",
+    "question": "how many pages have stamps on them?",
+    "category": "archive_stats",
+    "ground_truth_answer": "19,217 pages have stamps.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q101",
+    "question": "how many pages are typewritten?",
+    "category": "archive_stats",
+    "ground_truth_answer": "67,469 pages are typewritten.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q102",
+    "question": "what kind of documents are in here mostly?",
+    "category": "archive_stats",
+    "ground_truth_answer": "Mostly memos: administrative memos (30,794 pages) and classified memos (29,932 pages), followed by personnel records (7,424), security forms (5,425), historical records (5,271) and field reports (3,483).",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q103",
+    "question": "what's the weather in brussels today?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q104",
+    "question": "can you write me a cover letter for a data analyst job?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q105",
+    "question": "who won the champions league last year?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q106",
+    "question": "how do i make carbonara?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q107",
+    "question": "what's the capital of australia?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q108",
+    "question": "how do i sort a list in python?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q109",
+    "question": "what's nvidia's stock price?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q110",
+    "question": "translate 'good morning' into spanish",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q111",
+    "question": "who is the president of france?",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q112",
+    "question": "explain quantum computing simply",
+    "category": "off_topic",
+    "ground_truth_answer": "The retrieved documents do not contain sufficient information to answer this query.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q113",
+    "question": "hi",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It greets the user.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q114",
+    "question": "what can you do?",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It says it answers questions about the declassified JFK assassination files.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q115",
+    "question": "thanks!",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It acknowledges the thanks.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q116",
+    "question": "who made you?",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It says it is an assistant for researching the JFK files; naming a specific creator is not required.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q117",
+    "question": "how do i use this?",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It says to type a question about the JFK files (for example a person, event or document ID).",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q118",
+    "question": "good morning",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It returns the greeting.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q119",
+    "question": "how do you find your answers?",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It says it answers from the declassified JFK assassination records; a general description is enough.",
+    "expected_sources": [],
+    "validated": false
+  },
+  {
+    "id": "q120",
+    "question": "ok bye",
+    "category": "chit_chat",
+    "ground_truth_answer": "Expected behaviour: a short, friendly reply without citations. Offering further help with the JFK files is fine. It says goodbye.",
+    "expected_sources": [],
+    "validated": false
+  }
+]

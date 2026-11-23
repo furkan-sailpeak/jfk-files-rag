@@ -38,5 +38,12 @@ ocr_output/
 
 # Local-only admin material (kept on disk, not in the repo)
 admin/todo.md
-admin/eval/
 admin/database/
+
+# Eval: local embedding model cache
+rag/eval/.models/
+
+.agents/
+# Eval: Reddit question collector (parked) and its raw posts (other users' content)
+rag/eval/reddit_raw/
+rag/eval/reddit_questions.py
