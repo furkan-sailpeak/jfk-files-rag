@@ -47,3 +47,6 @@ rag/eval/.models/
 # Eval: Reddit question collector (parked) and its raw posts (other users' content)
 rag/eval/reddit_raw/
 rag/eval/reddit_questions.py
+
+# Prompt optimization runs (page cache holds full page text)
+rag/eval/optimization/

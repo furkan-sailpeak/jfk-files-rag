@@ -300,6 +300,12 @@ def run(client, path, args):
         if (not args.validated_only or ex.metadata.get("validated"))
         and (not args.category or ex.metadata.get("category") in args.category)
     ]
+    if args.split:
+        split_file = path.with_name(path.stem.replace("dataset_", "split_") + ".json")
+        if not split_file.exists():
+            sys.exit(f"No split file {split_file.name}; optimize_prompts.py creates it.")
+        keep = set(json.loads(split_file.read_text())[args.split])
+        examples = [ex for ex in examples if ex.metadata.get("id") in keep]
     examples.sort(key=lambda ex: ex.metadata.get("id", ""))
     if args.limit:
         examples = examples[: args.limit]
@@ -316,7 +322,7 @@ def run(client, path, args):
         evaluators=[*([] if args.no_judge else [correctness]), refusal, cited, source_recall, retrieval_recall],
         experiment_prefix=args.prefix or f"rag-{rev}",
         description=args.description,
-        metadata={"dataset_file": path.name, "commit": rev, "model": config.MODEL, "judge": f"{JUDGE_PROVIDER}:{JUDGE_MODEL}", "validated_only": args.validated_only, "categories": args.category or "all"},
+        metadata={"dataset_file": path.name, "split": args.split or "all", "commit": rev, "model": config.MODEL, "judge": f"{JUDGE_PROVIDER}:{JUDGE_MODEL}", "validated_only": args.validated_only, "categories": args.category or "all"},
         max_concurrency=args.concurrency,
         client=client,
     )
@@ -340,6 +346,8 @@ def main():
     p.add_argument("--dataset", help="file name or stem in rag/eval/datasets/ (default: the newest)")
     p.add_argument("--no-judge", action="store_true",
                    help="skip the correctness LLM judge (e.g. when it runs as a LangSmith UI evaluator)")
+    p.add_argument("--split", choices=["train", "val", "test", "other"],
+                   help="only the questions of this part of the split (split_*.json next to the dataset)")
     p.add_argument("--validated-only", action="store_true", help="only examples ticked as validated")
     p.add_argument("--category", action="append", choices=store.CATEGORIES, help="repeatable")
     p.add_argument("--limit", type=int, help="first N examples (by id)")
