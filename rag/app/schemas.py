@@ -14,7 +14,7 @@ class MetadataFilter(BaseModel):
 
 
 class RouterReply(BaseModel):
-    """router.txt"""
+    """router.j2"""
     rewritten_query: str = ""
     keywords: list[str] | None = None
     type: QueryType = "research"
@@ -38,13 +38,13 @@ class Route(BaseModel):
 
 
 class GroundingVerdict(BaseModel):
-    """grounding-judge.txt"""
+    """grounding-judge.j2"""
     grounded: bool = True
     reason: str = ""
 
 
 class UnsupportedCitation(BaseModel):
-    """One entry of citation-verify.txt's "unsupported" list."""
+    """One entry of citation-verify.j2's "unsupported" list."""
     unit: int
     source: int
     correct_source: int | None = None
@@ -57,11 +57,11 @@ class CitationAudit(BaseModel):
 
 
 class ExpansionReply(BaseModel):
-    """expansion.txt"""
+    """expansion.j2"""
     queries: list[str] = Field(default_factory=list)
 
 
-# reranker.txt. Also sent to the model as a strict JSON schema, so no
+# reranker.j2. Also sent to the model as a strict JSON schema, so no
 # docstring: pydantic would ship it to the model as the schema description.
 class RerankReply(BaseModel):
     model_config = ConfigDict(extra="forbid", title="rerank")

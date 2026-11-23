@@ -92,7 +92,7 @@ _stats_lock = threading.Lock()
 
 def compute_full_stats():
     with db.cursor() as cur:
-        cur.execute("""
+        cur.execute(f"""
             SELECT
                 COUNT(*),
                 COUNT(DISTINCT file_id),
@@ -101,12 +101,12 @@ def compute_full_stats():
                 COUNT(*) FILTER (WHERE includes_handwriting = true),
                 COUNT(*) FILTER (WHERE has_stamps = true),
                 COUNT(*) FILTER (WHERE has_redactions = true)
-            FROM jfk_pages
+            FROM {config.PAGES_TABLE}
         """)
         (total_pages, total_docs, pages_with_content, docs_with_content,
          handwritten_pages, stamped_pages, redacted_pages) = cur.fetchone()
-        cur.execute("""
-            SELECT document_type, COUNT(*) AS count FROM jfk_pages
+        cur.execute(f"""
+            SELECT document_type, COUNT(*) AS count FROM {config.PAGES_TABLE}
             GROUP BY document_type ORDER BY count DESC LIMIT 5
         """)
         doc_types = cur.fetchall()
@@ -162,7 +162,7 @@ def analyze():
     allowed, _, _ = check_rate_limit(get_user())
     if not allowed:
         return jsonify({"error": "rate_limited", "message": "Rate limit reached. Please wait a moment or sign in."}), 429
-    templates = {"names": "analyze-names.txt", "summarize": "analyze-summarize.txt"}
+    templates = {"names": "analyze-names.j2", "summarize": "analyze-summarize.j2"}
     if action not in templates:
         return jsonify({"error": "Invalid action"}), 400
     try:
@@ -178,7 +178,7 @@ def analyze():
 @app.route('/api/pdf/<filename>', methods=['GET'])
 def get_pdf(filename):
     file_id = filename.replace('.pdf', '').replace('.PDF', '')
-    return redirect(f"{config.NARA_BASE_URL}/{file_id}.pdf")
+    return redirect(config.SOURCE_URL.format(file_id=file_id))
 
 
 @app.route('/')

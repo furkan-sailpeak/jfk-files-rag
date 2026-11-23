@@ -1,0 +1,89 @@
+# Corpus config: everything specific to ONE document collection. The prompts in
+# rag/prompts/ are generic templates and read these values as {{ corpus.* }};
+# the backend reads [database] and [documents].
+#
+# Select a corpus with CORPUS=<file name without .toml> (default: jfk).
+# To add a corpus, copy this file and change every value; keys are validated on
+# startup (app/corpus.py), so a missing one fails loudly instead of leaving a
+# blank in a prompt.
+
+# --- Backend ------------------------------------------------------------------
+[database]
+# Postgres table with one row per page (columns: content, filename, file_id,
+# page_number, embedding columns, and the metadata columns below).
+table = "jfk_pages"
+# Boolean/text columns the router may filter on for archive-level questions,
+# in the order the router prompt lists them.
+metadata_columns = [
+    "has_redactions", "includes_handwriting", "has_stamps",
+    "has_tables", "has_forms", "is_typewritten", "document_type",
+]
+
+[documents]
+# A document ID in a user's question triggers a whole-document lookup.
+# Regex with one capture group for the ID.
+id_pattern = '\b(\d{3}-\d{5}-\d{5})\b'
+id_example = "104-10433-10209"
+# Where a source document opens; {file_id} is the file name without ".pdf".
+source_url = "https://storage.googleapis.com/jfkweb-prod/{file_id}.pdf"
+
+# --- Prompts: who the assistant is ----------------------------------------------
+[assistant]
+name = "JFK Files Research System"                           # conversational
+# Persona phrases include their article ("a"/"an"); they follow "You are ...".
+persona = "a research historian"                              # metadata, rag-system-suffix
+persona_title = "a senior Research Historian"                 # rag-simple, document-agent
+research_persona = "an archival research historian"           # rag-research
+
+# --- Prompts: what the collection is --------------------------------------------
+[collection]
+short_name = "JFK files"                                      # router, conversational
+description = "declassified JFK assassination documents"      # conversational
+archive_name = "JFK document archive"                         # metadata
+answer_topic = "JFK assassination-related archival files"     # rag-simple
+research_topic = "JFK-era records and related investigative files"  # rag-research
+search_description = "JFK-assassination archive"              # expansion
+vocabulary_sources = "CIA/FBI/Warren Commission files"        # expansion
+document_noun = "declassified document"                       # document-agent
+# Administrative text the reranker should rank last (reranker).
+boilerplate = "declassification cover page"
+boilerplate_example = "Documents concerning X were declassified"
+
+# --- Prompts: what is in scope (router) -----------------------------------------
+[scope]
+subject = "JFK/assassination/Cold War"
+out_of_scope_subject = "the JFK archive, assassination investigations, Cold War intelligence, or the people/events surrounding them"
+related_terms = "JFK/assassination/Cold War/CIA/FBI/Cuba/Oswald/Warren Commission"
+generous = "JFK, his presidency, his family, or the Cold War context"
+# Archive-level questions the router sends to the metadata path.
+metadata_properties = "redactions, handwriting, stamps, tables, forms, typewritten pages, document types, or document quality/condition"
+metadata_examples = ["which documents are redacted?", "how many pages have handwriting?", "show me documents with tables", "what types of documents are there?"]
+metadata_filter_examples = ['{"column": "has_redactions", "value": true}', '{"column": "document_type", "value": "memo"}']
+
+# --- Prompts: domain examples (router) ------------------------------------------
+[examples]
+# Follow-up resolution: after "subject", the user asks "followup".
+history_subject = "Oswald"
+history_followup = "What about his wife?"
+history_followup_keyword = "wife"
+# Rewriting a pronoun after discussing "topic".
+rewrite_question = "who did he trust?"
+rewrite_topic = "JFK"
+rewrite_result = "who did John F. Kennedy trust the most?"
+multiword_terms = ["Jack Ruby", "Mexico City"]
+keywords = [
+    { question = "What role did Jack Ruby play according to the files?", terms = ["Jack Ruby"] },
+    { question = "Analyze the CIA's surveillance activities related to the assassination", terms = ["CIA surveillance", "assassination"] },
+    { question = "Did Oswald visit the Soviet embassy in Mexico City?", terms = ["Oswald", "Soviet embassy", "Mexico City"] },
+]
+
+# --- Prompts: background identifications (entity-brief) ---------------------------
+[entities]
+context = "JFK assassination historical context"
+source = "declassified records related to the assassination of President John F. Kennedy"
+scope = "JFK assassination context"
+examples = [
+    "Lee Harvey Oswald (1939–1963) was a former U.S. Marine and the alleged lone assassin of President John F. Kennedy on November 22, 1963, in Dallas.",
+    "Jack Ruby was a Dallas nightclub owner who shot and killed Lee Harvey Oswald on November 24, 1963, in the basement of Dallas Police Headquarters.",
+    "The Warren Commission was the U.S. presidential commission established in November 1963 to investigate the assassination of President Kennedy.",
+]

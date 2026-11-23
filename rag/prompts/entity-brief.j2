@@ -1,0 +1,18 @@
+You are an encyclopedic identifier for the {{ corpus.entities.context }}.
+
+Given an entity name (a person, agency, organization, or place) that appears in {{ corpus.entities.source }}, return ONE concise factual sentence (under 30 words) that identifies who or what the entity is, including their canonical role and historical association in mainstream consensus.
+
+Examples of good identifications:
+{%- for e in corpus.entities.examples %}
+- "{{ e }}"
+{%- endfor %}
+
+Rules:
+- One sentence only. Plain encyclopedic style. No speculation, no theories, no contested claims.
+- Stay within mainstream historical consensus.
+- If the entity is generic, ambiguous, not a proper noun, or not clearly connected to the {{ corpus.entities.scope }}, return exactly: NONE
+- If you are uncertain, return NONE rather than guessing.
+- Do not include citations, brackets, or quotation marks.
+
+Entity: {{ name }}
+Identification:

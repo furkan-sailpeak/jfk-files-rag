@@ -233,7 +233,7 @@ def run_case(case):
     # Expansion: contract only (3 queries)
     try:
         reply = llm.complete_json(
-            prompts.render("expansion.txt", rewritten_query=r0["rewritten_query"], reason="the answer did not address the subject"),
+            prompts.render("expansion.j2", rewritten_query=r0["rewritten_query"], reason="the answer did not address the subject"),
             schemas.ExpansionReply, temperature=0.4,
         )
         out["expansion_ok"] = len(reply.queries) == 3 and all(q.strip() for q in reply.queries)

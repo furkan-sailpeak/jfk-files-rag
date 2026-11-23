@@ -37,7 +37,7 @@ def _fts_query(cur, tsquery_sql, params):
         FROM (
             SELECT DISTINCT ON (left(content, 200)) content, filename, page_number,
                 ts_rank_cd(to_tsvector('english', content), {tsquery_sql}, 2) AS rank_score
-            FROM jfk_pages
+            FROM {config.PAGES_TABLE}
             WHERE to_tsvector('english', content) @@ {tsquery_sql}
         ) sub
         ORDER BY rank_score DESC, length(content) ASC
@@ -89,7 +89,7 @@ def ilike_search(ilike_terms):
                 SELECT content, filename, page_number
                 FROM (
                     SELECT DISTINCT ON (left(content, 200)) content, filename, page_number
-                    FROM jfk_pages
+                    FROM {config.PAGES_TABLE}
                     WHERE ({where_clauses})
                 ) sub
                 ORDER BY length(content) DESC
@@ -159,7 +159,7 @@ def vector_search(query_text, limit=30):
         cur.execute(
             f"""
             SELECT content, filename, page_number
-            FROM jfk_pages
+            FROM {config.PAGES_TABLE}
             WHERE {config.EMBED_COLUMN} IS NOT NULL
             ORDER BY {config.EMBED_COLUMN} <=> %s::halfvec
             LIMIT %s
@@ -240,7 +240,7 @@ def rerank(candidates, rewritten_query, context_limit, search_terms=None):
         for idx, r in enumerate(candidates)
     ]
     prompt = prompts.render(
-        "reranker.txt",
+        "reranker.j2",
         context_limit=context_limit, rewritten_query=rewritten_query, snippets="\n".join(snippets),
     )
     try:
@@ -260,7 +260,7 @@ def rerank(candidates, rewritten_query, context_limit, search_terms=None):
 # --- Query expansion --------------------------------------------------------------
 def expand_and_retrieve(rewritten_query, reason, seed_results):
     """Generate 3 alternative phrasings, retrieve, merge with seed_results."""
-    prompt = prompts.render("expansion.txt", rewritten_query=rewritten_query, reason=reason)
+    prompt = prompts.render("expansion.j2", rewritten_query=rewritten_query, reason=reason)
     try:
         reply = llm.complete_json(prompt, ExpansionReply, temperature=0.4)
         expanded = [q for q in reply.queries if q.strip()]
@@ -285,7 +285,7 @@ def expand_and_retrieve(rewritten_query, reason, seed_results):
 
 # --- Direct lookups (no ranking) ----------------------------------------------------
 def fetch_document(doc_id):
-    """All pages of one document, by NARA record number ("104-10004-10143").
+    """All pages of one document, by its document ID (corpus documents.id_pattern).
     Returns (filename, pages); pages is empty if no such document.
 
     ~2% of file_ids carry a suffix ("_redacted", "_multirif", " (C06931192)"),
@@ -293,8 +293,8 @@ def fetch_document(doc_id):
     otherwise take the first suffixed variant."""
     with db.cursor() as cur:
         cur.execute(
-            """
-            SELECT file_id FROM jfk_pages
+            f"""
+            SELECT file_id FROM {config.PAGES_TABLE}
             WHERE file_id = %s OR file_id LIKE %s
             GROUP BY file_id
             ORDER BY (file_id = %s) DESC, file_id
@@ -306,7 +306,7 @@ def fetch_document(doc_id):
         if not match:
             return f"{doc_id}.pdf", []
         cur.execute(
-            "SELECT content, filename, page_number FROM jfk_pages WHERE file_id = %s ORDER BY page_number",
+            f"SELECT content, filename, page_number FROM {config.PAGES_TABLE} WHERE file_id = %s ORDER BY page_number",
             (match[0],),
         )
         return f"{match[0]}.pdf", cur.fetchall()
@@ -321,11 +321,11 @@ def metadata_query(column, value, n_samples=10):
     # Booleans match exactly; strings (document_type) match as a substring.
     cond, param = (f"{column} = %s", value) if isinstance(value, bool) else (f"{column} ILIKE %s", f"%{value}%")
     with db.cursor() as cur:
-        cur.execute(f"SELECT COUNT(*), COUNT(DISTINCT file_id) FROM jfk_pages WHERE {cond}", (param,))
+        cur.execute(f"SELECT COUNT(*), COUNT(DISTINCT file_id) FROM {config.PAGES_TABLE} WHERE {cond}", (param,))
         total_pages, total_docs = cur.fetchone()
         cur.execute(f"""
             SELECT DISTINCT ON (file_id) content, filename, page_number
-            FROM jfk_pages WHERE {cond} AND content IS NOT NULL
+            FROM {config.PAGES_TABLE} WHERE {cond} AND content IS NOT NULL
             ORDER BY file_id, page_number LIMIT %s
         """, (param, n_samples))
         return total_pages, total_docs, cur.fetchall()

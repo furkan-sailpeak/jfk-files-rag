@@ -63,6 +63,22 @@ The answer is generated in full and checked before anything is streamed, so the 
 - **Format reminder at the tail.** Repeating the output format at the end of the prompt halves non-standard citation brackets and keeps simple answers to 2–5 bullets (tested with gpt-oss-120b).
 - **Lenient verifier.** A wrongly deleted citation is worse for a researcher than a slightly imprecise one, so the verifier only flags clear mismatches, and re-points rather than deletes where it can.
 
+## Corpus config
+
+The pipeline is not tied to the JFK files. Everything specific to one document collection lives in **`rag/corpora/<name>.toml`**, selected with `CORPUS=<name>` (default `jfk`):
+
+| Section | Used by | Holds |
+|---|---|---|
+| `[database]` | backend | page table name, metadata columns the router may filter on |
+| `[documents]` | backend | document-ID regex (triggers whole-document lookups), an example ID, source URL template (`{file_id}`) |
+| `[assistant]`, `[collection]` | prompts | assistant name and persona, how the collection is described |
+| `[scope]` | router prompt | what is in scope vs. out of scope, metadata questions |
+| `[examples]`, `[entities]` | router, entity-brief prompts | domain examples for keyword extraction, follow-up resolution and background identifications |
+
+The prompts in `rag/prompts/*.j2` are generic Jinja2 templates that read these values as `{{ corpus.* }}`; with the JFK corpus they render exactly the prompts used before the split. The corpus file is validated at startup (missing keys, non-identifier table/column names, an ID regex without one capture group, a URL without `{file_id}` all fail with a clear error), and `rag/tests/test_corpus.py` renders every prompt with an unrelated placeholder corpus to check no JFK text is hard-coded.
+
+To add a corpus: copy `rag/corpora/jfk.toml`, change every value, load the pages into the table it names, and start the app with `CORPUS=<name>`. Not covered yet: the React frontend (titles, example questions, PDF links), `/api/stats` (expects the JFK metadata columns), the embedding backfill script and `rag/prompt_check.py` (JFK test questions).
+
 ## Setup
 
 ### Prerequisites
@@ -175,7 +191,8 @@ The earlier OpenAI embeddings are still in the `embedding` column (`EMBED_PROVID
 │   │   ├── schemas.py           #   pydantic models for every LLM JSON reply
 │   │   ├── llm.py · prompts.py  #   Groq calls; Jinja2 prompt rendering
 │   │   └── config.py · db.py · auth.py
-│   ├── prompts/                 # prompt templates (Jinja2)
+│   ├── prompts/                 # generic prompt templates (Jinja2, *.j2)
+│   ├── corpora/                 # corpus configs (jfk.toml): everything collection-specific
 │   ├── tests/                   # offline pytest suite, one file per module
 │   ├── frontend/                # React UI
 │   ├── backfill_embeddings_bge.py
